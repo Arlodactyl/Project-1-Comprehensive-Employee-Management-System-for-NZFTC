@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- This section controls how the app compiles and which framework it targets -->
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<!-- build a Windows desktop app -->
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<!-- .NET 9 -->
+		<UseWPF>true</UseWPF>
+		<!-- turn on WPF/XAML support -->
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<!-- Packages get added here automatically when you install them via NuGet -->
+	<!-- If you already installed them, they'll appear as <PackageReference> lines -->
+	<!-- Otherwise, install them in Step 4 and this file will update. -->
+
+</Project>
