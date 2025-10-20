@@ -1,62 +1,15 @@
-﻿<Window x:Class="NZFTC_EmployeeSystem.Views.LoginWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="NZFTC Employee System — Sign In"
-        Width="520" Height="360"
-        WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="Segoe UI">
-
-    <Grid Margin="24">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <!-- This section controls the header text -->
-        <StackPanel>
-            <TextBlock Text="Welcome"
-                 Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
-            <TextBlock Text="Sign in to continue"
-                 Margin="0,6,0,0"
-                 Foreground="{DynamicResource MaterialDesignBodyMediumBrush}" />
-        </StackPanel>
-
-        <!-- This section controls the login card -->
-        <materialDesign:Card Grid.Row="1" Padding="24" UniformCornerRadius="16">
-            <StackPanel>
-
-                <!-- Username -->
-                <TextBox x:Name="UserNameBox"
-                 materialDesign:HintAssist.Hint="Username" />
-
-                <!-- Password -->
-                <PasswordBox x:Name="PasswordBox"
-                     Margin="0,8,0,0"
-                     materialDesign:HintAssist.Hint="Password" />
-
-                <!-- Buttons -->
-                <StackPanel Orientation="Horizontal" Margin="0,16,0,0" HorizontalAlignment="Right">
-                    <Button Content="Cancel"
-                  Style="{StaticResource MaterialDesignOutlinedButton}"
-                  Margin="0,0,8,0"
-                  Click="Cancel_Click" />
-                    <Button Content="Sign in"
-                  Style="{StaticResource MaterialDesignRaisedButton}"
-                  IsDefault="True"
-                  Click="SignIn_Click" />
-                </StackPanel>
-
-            </StackPanel>
-        </materialDesign:Card>
-
-        <!-- Footer -->
-        <TextBlock Grid.Row="2"
-               Text="© NZFTC • Employee Management System"
-               HorizontalAlignment="Center"
-               Foreground="{DynamicResource MaterialDesignBodySmallBrush}"
-               Margin="0,12,0,0"/>
-    </Grid>
-</Window>
+<Application x:Class="NZFTC_EmployeeSystem.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             StartupUri="Views/LoginWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
