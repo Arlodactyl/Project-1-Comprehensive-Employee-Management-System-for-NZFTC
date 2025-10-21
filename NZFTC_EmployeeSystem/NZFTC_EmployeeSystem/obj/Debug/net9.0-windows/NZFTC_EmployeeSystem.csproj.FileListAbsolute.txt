@@ -1,0 +1,7 @@
+D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.csproj.AssemblyReference.cache
+D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.baml
+D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.baml
+D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.g.cs
+D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.g.cs
+D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_Content.g.cs
+D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_MarkupCompile.cache
