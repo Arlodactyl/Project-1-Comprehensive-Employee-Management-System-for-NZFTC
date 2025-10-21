@@ -37,13 +37,9 @@ namespace NZFTC_EmployeeSystem
                 {
                     // Check if database exists, if not create it
                     // This also creates all tables defined in AppDbContext
-                    db.Database.EnsureCreated();
-
-                    // Optional: Run any pending migrations
-                    // Migrations are database schema updates
-                    // db.Database.Migrate();
-
-                    // Show success message (you can remove this later)
+                   //  db.Database.EnsureCreated();
+                  // Apply pending migrations to update the database schemachem
+                  db.Database.Migrate();
                     // MessageBox.Show(
                     //     "Database initialized successfully!",
                     //     "Database Status",
