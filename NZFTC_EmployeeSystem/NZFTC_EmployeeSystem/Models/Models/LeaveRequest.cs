@@ -1,12 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NZFTC_EmployeeSystem.Models.Models
+namespace NZFTC_EmployeeSystem.Models
 {
-    internal class LeaveRequest
+    // This class represents a leave request in the system
+    // Demonstrates ENCAPSULATION and data validation
+    public class LeaveRequest
     {
+        // Primary key
+        public int Id { get; set; }
+
+        // Foreign key to Employee
+        public int EmployeeId { get; set; }
+
+        // Navigation property - shows ASSOCIATION
+        public Employee? Employee { get; set; }
+
+        // Leave details
+        public string LeaveType { get; set; } = string.Empty; // Annual, Sick, Unpaid
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int DaysRequested { get; set; }
+        public string Reason { get; set; } = string.Empty;
+
+        // Status tracking
+        public string Status { get; set; } = "Pending"; // Pending, Approved, Rejected
+
+        // Approval information
+        public int? ApprovedByUserId { get; set; }
+        public DateTime? ApprovedDate { get; set; }
+
+        // Audit field
+        public DateTime RequestDate { get; set; } = DateTime.Now;
     }
 }
