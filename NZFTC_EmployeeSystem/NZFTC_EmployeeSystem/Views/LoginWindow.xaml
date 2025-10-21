@@ -1,73 +1,303 @@
-<Window x:Class="NZFTC_EmployeeSystem.Views.LoginWindow"
+<!-- 
+    DashboardWindow.xaml - Main Dashboard Window
+    This is the main window that shows after login
+    It has a top bar, left menu, and content area
+-->
+<Window x:Class="NZFTC_EmployeeSystem.Views.DashboardWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="NZFTC Employee System - Sign In"
-        Width="520" Height="360"
-        WindowStartupLocation="CenterScreen"
-        Background="White"
-        FontFamily="Segoe UI"
-        ResizeMode="NoResize">
-    <Grid Margin="24">
+        Title="NZFTC Employee Management System"
+        Width="1200" Height="700"
+        WindowStartupLocation="CenterScreen">
+
+    <!-- Main grid divides the window into 2 rows: top bar and content -->
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <!-- Row 0: Top bar (60 pixels high) -->
+            <RowDefinition Height="60"/>
+            <!-- Row 1: Content area (takes remaining space) -->
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- header -->
-        <StackPanel>
-            <TextBlock Text="Welcome" FontSize="32" FontWeight="Bold" />
-            <TextBlock Text="Sign in to continue" Margin="0,6,0,0"
-                       Foreground="Gray" FontSize="14" />
-        </StackPanel>
+        <!-- ============================================ -->
+        <!-- TOP BAR - Shows welcome message and logout  -->
+        <!-- ============================================ -->
+        <Border Grid.Row="0" Background="#2196F3">
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <!-- Left side: Welcome message -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Right side: Logout button -->
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- form -->
-        <Border Grid.Row="1" 
-                Padding="24" 
-                Margin="0,20,0,0"
-                Background="#F5F5F5"
-                CornerRadius="8">
-            <StackPanel>
-                <TextBlock Text="Username" Margin="0,0,0,5" FontWeight="SemiBold"/>
-                <TextBox x:Name="UserNameBox"
-                         Height="35"
-                         Padding="8"
-                         FontSize="14"/>
+                <!-- Welcome message section -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <!-- App title -->
+                    <TextBlock Text="NZFTC Employee System"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="White"
+                               VerticalAlignment="Center"/>
 
-                <TextBlock Text="Password" Margin="0,16,0,5" FontWeight="SemiBold"/>
-                <PasswordBox x:Name="PasswordBox" 
-                             Height="35"
-                             Padding="8"
-                             FontSize="14"/>
-
-                <StackPanel Orientation="Horizontal" Margin="0,24,0,0" HorizontalAlignment="Right">
-                    <Button Content="Cancel" 
-                            Width="100"
-                            Height="35"
-                            Margin="0,0,8,0" 
-                            Click="Cancel_Click"
-                            Background="Gray"
-                            Foreground="White"
-                            BorderThickness="0"/>
-                    <Button Content="Sign in" 
-                            Width="100"
-                            Height="35"
-                            IsDefault="True" 
-                            Click="SignIn_Click"
-                            Background="#3498DB"
-                            Foreground="White"
-                            BorderThickness="0"/>
+                    <!-- Welcome text with user name -->
+                    <!-- x:Name allows us to access this in C# code -->
+                    <TextBlock x:Name="WelcomeText"
+                               Text="Welcome, User"
+                               FontSize="16"
+                               Foreground="White"
+                               Margin="20,0,0,0"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
-            </StackPanel>
+
+                <!-- Logout button -->
+                <Button Grid.Column="1"
+                        Content="LOGOUT"
+                        Click="Logout_Click"
+                        Background="Transparent"
+                        Foreground="White"
+                        BorderThickness="1"
+                        BorderBrush="White"
+                        Padding="15,5"
+                        Cursor="Hand"
+                        FontSize="14"
+                        FontWeight="Bold">
+                    <!-- Style for hover effect -->
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <!-- When mouse hovers, change background -->
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1976D2"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </Border>
 
-        <!-- footer -->
-        <TextBlock Grid.Row="2" 
-                   Text="© NZFTC • Employee Management System"
-                   HorizontalAlignment="Center"
-                   Foreground="Gray"
-                   FontSize="12"
-                   Margin="0,12,0,0"/>
+        <!-- ============================================ -->
+        <!-- MAIN CONTENT AREA - Menu and content frame  -->
+        <!-- ============================================ -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <!-- Left side: Navigation menu (250 pixels wide) -->
+                <ColumnDefinition Width="250"/>
+                <!-- Right side: Content area (takes remaining space) -->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ============================================ -->
+            <!-- LEFT NAVIGATION MENU                        -->
+            <!-- ============================================ -->
+            <Border Grid.Column="0" 
+                    Background="#1976D2" 
+                    BorderBrush="#E0E0E0" 
+                    BorderThickness="0,0,1,0">
+                <StackPanel Margin="0,20,0,0">
+
+                    <!-- Dashboard button -->
+                    <Button Content="Dashboard"
+                            Click="Dashboard_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
+                            Height="50"
+                            FontSize="16"
+                            Cursor="Hand">
+                        <!-- Hover effect -->
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- My Profile button -->
+                    <Button Content="My Profile"
+                            Click="MyProfile_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
+                            Height="50"
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Leave Management button -->
+                    <Button Content="Leave Management"
+                            Click="LeaveManagement_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
+                            Height="50"
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Payroll button -->
+                    <Button Content="Payroll"
+                            Click="Payroll_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
+                            Height="50"
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Holidays button -->
+                    <Button Content="Holidays"
+                            Click="Holidays_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
+                            Height="50"
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Grievances button -->
+                    <Button Content="Grievances"
+                            Click="Grievances_Click"
+                            Background="Transparent"
+                            Foreground="White"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
+                            Height="50"
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- ============================================ -->
+                    <!-- ADMIN ONLY SECTION                          -->
+                    <!-- This section is hidden by default            -->
+                    <!-- It only shows if the user is an Admin       -->
+                    <!-- ============================================ -->
+                    <StackPanel x:Name="AdminMenuPanel"
+                                Visibility="Collapsed"
+                                Margin="0,20,0,0">
+
+                        <!-- "ADMIN" label -->
+                        <TextBlock Text="ADMIN"
+                                   Foreground="LightGray"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Margin="16,0,0,10"/>
+
+                        <!-- Manage Employees button (Admin only) -->
+                        <Button Content="Manage Employees"
+                                Click="ManageEmployees_Click"
+                                Background="Transparent"
+                                Foreground="White"
+                                BorderThickness="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Padding="20,0,0,0"
+                                Height="50"
+                                FontSize="16"
+                                Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1565C0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- RIGHT CONTENT AREA - Where pages display    -->
+            <!-- ============================================ -->
+            <!-- 
+                This Frame is where different pages will show
+                When you click "Leave Management", the LeavePage shows here
+                NavigationUIVisibility="Hidden" hides the back/forward buttons
+            -->
+            <Frame x:Name="ContentFrame"
+                   Grid.Column="1"
+                   NavigationUIVisibility="Hidden"
+                   Background="White"/>
+        </Grid>
     </Grid>
 </Window>

@@ -1,145 +1,165 @@
-﻿using System.Windows;
+﻿// Import necessary libraries for WPF (Windows Presentation Foundation)
+using System.Windows;
 using System.Windows.Controls;
 using NZFTC_EmployeeSystem.Models;
 
+// This is the namespace - it organizes our code
 namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
-    /// DashboardWindow - Main application window after login
-   
+    /// DashboardWindow - This is the main window that shows after login
+    /// It displays the navigation menu and content area
+    /// </summary>
     public partial class DashboardWindow : Window
     {
-        // ENCAPSULATION: Private field to store logged-in user
-        // Only this class can directly access this field
+        // Private field to store the currently logged-in user
+        // 'readonly' means it can only be set in the constructor
+        // The underscore (_) is a naming convention for private fields
         private readonly User _currentUser;
 
         /// <summary>
-        /// Constructor - Called when creating new DashboardWindow
-        /// Accepts the logged-in user and initializes the window
+        /// Constructor - This runs when a new DashboardWindow is created
+        /// It receives the logged-in user as a parameter
         /// </summary>
         /// <param name="currentUser">The user who just logged in</param>
         public DashboardWindow(User currentUser)
         {
-            // Initialize all XAML components (buttons, text, etc.)
+            // Initialize all XAML components (buttons, text boxes, etc.)
+            // This MUST be called first before accessing any controls
             InitializeComponent();
 
-            // ENCAPSULATION: Store user in private field
+            // Store the current user so we can use it throughout the class
             _currentUser = currentUser;
 
-            // Set the welcome message with user's name
-           
-            // If Employee or FullName is null, use Username instead
+            // Set the welcome message at the top of the window
+            // The ?? operator means "if Employee.FullName is null, use Username instead"
+            // The $ before the string allows us to insert variables using {}
             WelcomeText.Text = $"Welcome, {_currentUser.Employee?.FullName ?? _currentUser.Username}";
 
-            //
-            // This demonstrates different behavior based on user role
+            // Check if the user is an Admin
+            // If they are, show the Admin menu section
             if (_currentUser.Role == "Admin")
             {
-                // Make admin menu visible
+                // Make the admin menu visible
+                // By default it's collapsed (hidden)
                 AdminMenuPanel.Visibility = Visibility.Visible;
             }
-            // If not admin, menu stays collapsed (hidden)
+            // If not admin, the menu stays collapsed (default)
         }
 
-        // ========================================
-        // NAVIGATION METHODS
-        // These methods handle button clicks and navigate to different pages
-        // ========================================
-
         /// <summary>
-        /// Dashboard button clicked - Navigate to main dashboard
+        /// Dashboard button clicked - clears the content frame
         /// </summary>
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
-            // Clear content frame to show blank dashboard
-            // TODO: Create a DashboardPage to show statistics
+            // Clear any page that's currently showing in the content frame
+            // This shows a blank dashboard area
             ContentFrame.Content = null;
         }
 
         /// <summary>
-        /// My Profile button clicked - Show user's profile
+        /// My Profile button clicked - shows a "coming soon" message
+        /// TODO: Create a ProfilePage.xaml and navigate to it
         /// </summary>
         private void MyProfile_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Create ProfilePage.xaml and ProfilePage.xaml.cs
-            // For now, show a message box
-            MessageBox.Show("Profile page - To be implemented",
-                          "Coming Soon",
-                          MessageBoxButton.OK,
-                          MessageBoxImage.Information);
+            // Show a popup message box
+            // MessageBoxButton.OK means it only has an OK button
+            // MessageBoxImage.Information shows the blue "i" icon
+            MessageBox.Show(
+                "Profile page - To be implemented",
+                "Coming Soon",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
         /// <summary>
-        /// Leave Management button clicked - Navigate to leave page
+        /// Leave Management button clicked - navigates to the leave page
+        /// This is a working page that shows leave requests
         /// </summary>
         private void LeaveManagement_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to LeavePage and pass current user
-            // LeavePage will show different options based on user role
+            // Navigate to the LeavePage
+            // We pass the current user so the page knows who's logged in
             ContentFrame.Navigate(new LeavePage(_currentUser));
         }
 
         /// <summary>
-        /// Payroll button clicked - Navigate to payroll page
+        /// Payroll button clicked - shows a "coming soon" message
+        /// TODO: Create a PayrollPage.xaml and navigate to it
         /// </summary>
         private void Payroll_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Create PayrollPage.xaml and PayrollPage.xaml.cs
-            MessageBox.Show("Payroll page - To be implemented",
-                          "Coming Soon",
-                          MessageBoxButton.OK,
-                          MessageBoxImage.Information);
+            // Show a popup message box
+            MessageBox.Show(
+                "Payroll page - To be implemented",
+                "Coming Soon",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
         /// <summary>
-        /// Holidays button clicked - Navigate to holidays page
+        /// Holidays button clicked - shows a "coming soon" message
+        /// TODO: Create a HolidaysPage.xaml and navigate to it
         /// </summary>
         private void Holidays_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Create HolidaysPage.xaml and HolidaysPage.xaml.cs
-            MessageBox.Show("Holidays page - To be implemented",
-                          "Coming Soon",
-                          MessageBoxButton.OK,
-                          MessageBoxImage.Information);
+            // Show a popup message box
+            MessageBox.Show(
+                "Holidays page - To be implemented",
+                "Coming Soon",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
         /// <summary>
-        /// Grievances button clicked - Navigate to grievances page
+        /// Grievances button clicked - shows a "coming soon" message
+        /// TODO: Create a GrievancesPage.xaml and navigate to it
         /// </summary>
         private void Grievances_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Create GrievancesPage.xaml and GrievancesPage.xaml.cs
-            MessageBox.Show("Grievances page - To be implemented",
-                          "Coming Soon",
-                          MessageBoxButton.OK,
-                          MessageBoxImage.Information);
+            // Show a popup message box
+            MessageBox.Show(
+                "Grievances page - To be implemented",
+                "Coming Soon",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
         /// <summary>
-        /// Manage Employees button clicked - Navigate to employee management
-        /// ADMIN ONLY FEATURE - demonstrates POLYMORPHISM
+        /// Manage Employees button clicked (ADMIN ONLY)
+        /// Shows a "coming soon" message
+        /// TODO: Create an EmployeeManagementPage.xaml and navigate to it
         /// </summary>
         private void ManageEmployees_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Create EmployeeManagementPage.xaml and EmployeeManagementPage.xaml.cs
-            MessageBox.Show("Employee Management page - To be implemented",
-                          "Coming Soon",
-                          MessageBoxButton.OK,
-                          MessageBoxImage.Information);
+            // Show a popup message box
+            MessageBox.Show(
+                "Employee Management page - To be implemented",
+                "Coming Soon",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
         /// <summary>
-        /// Logout button clicked - Return to login screen
+        /// Logout button clicked - returns to the login window
+        /// This closes the dashboard and shows the login screen
         /// </summary>
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            // Create new login window
+            // Create a new instance of the LoginWindow
             var loginWindow = new LoginWindow();
 
-            // Show login window
+            // Show the login window
             loginWindow.Show();
 
-            // Close current dashboard window
+            // Close this dashboard window
+            // 'this' refers to the current DashboardWindow
             this.Close();
         }
     }
