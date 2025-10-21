@@ -1,39 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Page Include="App.xaml" />
-    <Page Include="Views/LoginWindow.xaml" />
-    <Page Include="Views/DashboardWindow.xaml" />
-    <Page Include="Views/LeavePage.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="App.xaml.cs" />
-    <Compile Include="Views/LoginWindow.xaml.cs" />
-    <Compile Include="Views/DashboardWindow.xaml.cs" />
-    <Compile Include="Views/LeavePage.xaml.cs" />
-    <Compile Include="Data/AppDbContext.cs" />
-    <Compile Include="Models/Models/Employee.cs" />
-    <Compile Include="Models/Models/User.cs" />
-    <Compile Include="Models/Models/LeaveRequest.cs" />
-    <Compile Include="Models/Models/Holiday.cs" />
-    <Compile Include="Models/Models/Payslip.cs" />
-    <Compile Include="Models/Models/Grievance.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
-    <PackageReference Include="MaterialDesignColors" Version="5.3.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
+		<PackageReference Include="MaterialDesignColors" Version="5.3.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+			<!-- keep EF Design tools private so they don't flow to consumers -->
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+	</ItemGroup>
 
 </Project>
