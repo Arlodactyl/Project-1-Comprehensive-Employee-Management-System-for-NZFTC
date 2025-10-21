@@ -1,11 +1,10 @@
 ﻿<Window x:Class="NZFTC_EmployeeSystem.Views.DashboardWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="NZFTC Employee Management System"
         Width="1200" Height="700"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource MaterialDesignPaper}">
+        Background="#F5F5F5">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -14,7 +13,10 @@
         </Grid.RowDefinitions>
 
         <!-- TOP BAR -->
-        <materialDesign:ColorZone Grid.Row="0" Mode="PrimaryDark" Padding="16">
+        <Border Grid.Row="0" 
+                Background="#2196F3" 
+                Padding="16"
+                Height="60">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -39,10 +41,27 @@
                 <Button Grid.Column="1"
                         Content="LOGOUT"
                         Click="Logout_Click"
-                        Style="{StaticResource MaterialDesignFlatButton}"
-                        Foreground="White"/>
+                        Background="Transparent"
+                        Foreground="White"
+                        BorderBrush="White"
+                        BorderThickness="1"
+                        Padding="15,5"
+                        Cursor="Hand"
+                        FontSize="14"
+                        FontWeight="Bold">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#1976D2"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </Grid>
-        </materialDesign:ColorZone>
+        </Border>
 
         <!-- MAIN CONTENT AREA -->
         <Grid Grid.Row="1">
@@ -52,78 +71,183 @@
             </Grid.ColumnDefinitions>
 
             <!-- LEFT NAVIGATION MENU -->
-            <Border Grid.Column="0"
-                    Background="{DynamicResource MaterialDesignDarkBackground}"
-                    BorderBrush="{DynamicResource MaterialDesignDivider}"
+            <Border Grid.Column="0" 
+                    Background="#1976D2" 
+                    BorderBrush="#E0E0E0" 
                     BorderThickness="0,0,1,0">
                 <StackPanel Margin="0,20,0,0">
 
                     <Button Content="Dashboard"
                             Click="Dashboard_Click"
-                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Background="Transparent"
                             Foreground="White"
+                            BorderThickness="0"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
                             Height="50"
-                            FontSize="16"/>
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                     <Button Content="My Profile"
                             Click="MyProfile_Click"
-                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Background="Transparent"
                             Foreground="White"
+                            BorderThickness="0"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
                             Height="50"
-                            FontSize="16"/>
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                     <Button Content="Leave Management"
                             Click="LeaveManagement_Click"
-                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Background="Transparent"
                             Foreground="White"
+                            BorderThickness="0"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
                             Height="50"
-                            FontSize="16"/>
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                     <Button Content="Payroll"
                             Click="Payroll_Click"
-                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Background="Transparent"
                             Foreground="White"
+                            BorderThickness="0"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
                             Height="50"
-                            FontSize="16"/>
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                     <Button Content="Holidays"
                             Click="Holidays_Click"
-                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Background="Transparent"
                             Foreground="White"
+                            BorderThickness="0"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
                             Height="50"
-                            FontSize="16"/>
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                     <Button Content="Grievances"
                             Click="Grievances_Click"
-                            Style="{StaticResource MaterialDesignFlatButton}"
+                            Background="Transparent"
                             Foreground="White"
+                            BorderThickness="0"
                             HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="20,0,0,0"
                             Height="50"
-                            FontSize="16"/>
+                            FontSize="16"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1565C0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
-                    <!-- ADMIN ONLY SECTION -->
+                    <!-- ADMIN SECTION -->
                     <StackPanel x:Name="AdminMenuPanel"
                                 Visibility="Collapsed"
                                 Margin="0,20,0,0">
 
                         <TextBlock Text="ADMIN"
-                                   Foreground="Gray"
+                                   Foreground="LightGray"
                                    FontSize="12"
                                    FontWeight="Bold"
                                    Margin="16,0,0,10"/>
 
                         <Button Content="Manage Employees"
                                 Click="ManageEmployees_Click"
-                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Background="Transparent"
                                 Foreground="White"
+                                BorderThickness="0"
                                 HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Padding="20,0,0,0"
                                 Height="50"
-                                FontSize="16"/>
+                                FontSize="16"
+                                Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1565C0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -131,7 +255,8 @@
             <!-- RIGHT CONTENT AREA -->
             <Frame x:Name="ContentFrame"
                    Grid.Column="1"
-                   NavigationUIVisibility="Hidden"/>
+                   NavigationUIVisibility="Hidden"
+                   Background="White"/>
         </Grid>
     </Grid>
 </Window>

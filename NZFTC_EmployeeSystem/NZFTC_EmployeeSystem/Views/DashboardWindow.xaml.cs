@@ -1,9 +1,8 @@
-﻿// Import necessary libraries for WPF (Windows Presentation Foundation)
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using NZFTC_EmployeeSystem.Models;
+using NZFTC_EmployeeSystem.Views;
 
-// This is the namespace - it organizes our code
 namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
