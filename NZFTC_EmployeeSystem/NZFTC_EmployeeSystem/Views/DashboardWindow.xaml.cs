@@ -6,12 +6,7 @@ namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
     /// DashboardWindow - Main application window after login
-    /// 
-    /// OOP CONCEPTS DEMONSTRATED:
-    /// 1. ENCAPSULATION - Private field _currentUser protects user data
-    /// 2. POLYMORPHISM - Different behavior/UI for Admin vs Employee role
-    /// 3. ABSTRACTION - Navigation methods hide complex page loading logic
-    /// </summary>
+   
     public partial class DashboardWindow : Window
     {
         // ENCAPSULATION: Private field to store logged-in user
@@ -32,11 +27,11 @@ namespace NZFTC_EmployeeSystem.Views
             _currentUser = currentUser;
 
             // Set the welcome message with user's name
-            // Uses null-coalescing operator (??) for safety
+           
             // If Employee or FullName is null, use Username instead
             WelcomeText.Text = $"Welcome, {_currentUser.Employee?.FullName ?? _currentUser.Username}";
 
-            // POLYMORPHISM: Show admin menu only for admin users
+            //
             // This demonstrates different behavior based on user role
             if (_currentUser.Role == "Admin")
             {

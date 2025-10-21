@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
-using NZFTC_EmployeeSystem.Models.Models;
 using System;
 using System.Linq;
 using System.Windows;
@@ -9,6 +8,9 @@ using System.Windows.Controls;
 
 namespace NZFTC_EmployeeSystem.Views
 {
+    /// <summary>
+    /// LeavePage - Handles leave management for employees and admins
+    /// </summary>
     public partial class LeavePage : Page
     {
         private readonly User _currentUser;

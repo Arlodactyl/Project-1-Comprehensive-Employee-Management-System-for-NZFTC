@@ -5,3 +5,12 @@ D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSyst
 D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.g.cs
 D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_Content.g.cs
 D:\Users\270063836\OneDrive - UP Education\Desktop\Coding AS2\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_MarkupCompile.cache
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.csproj.AssemblyReference.cache
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.baml
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\LeavePage.baml
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.baml
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.g.cs
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\LeavePage.g.cs
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.g.cs
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_Content.g.cs
+C:\Users\64204\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC-master\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_MarkupCompile.cache

@@ -127,3 +127,35 @@
                             Style="{StaticResource MaterialDesignFlatButton}"
                             Foreground="White"
                             HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="16"/>
+
+					<!-- ADMIN ONLY SECTION - Only visible for admin users -->
+					<StackPanel x:Name="AdminMenuPanel"
+                                Visibility="Collapsed"
+                                Margin="0,20,0,0">
+
+						<TextBlock Text="ADMIN"
+                                   Foreground="Gray"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Margin="16,0,0,10"/>
+
+						<Button Content="Manage Employees"
+                                Click="ManageEmployees_Click"
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Foreground="White"
+                                HorizontalAlignment="Stretch"
+                                Height="50"
+                                FontSize="16"/>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<!-- RIGHT CONTENT AREA - Where pages are displayed -->
+			<Frame x:Name="ContentFrame"
+                   Grid.Column="1"
+                   NavigationUIVisibility="Hidden"/>
+		</Grid>
+	</Grid>
+</Window>
