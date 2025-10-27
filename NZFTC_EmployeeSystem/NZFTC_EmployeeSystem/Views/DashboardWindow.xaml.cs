@@ -70,7 +70,8 @@ namespace NZFTC_EmployeeSystem.Views
                 "Coming Soon",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
-            );
+     
+                    ContentFrame.Navigate(new ProfilePage(_currentUser)));
         }
 
         /// <summary>
@@ -96,7 +97,8 @@ namespace NZFTC_EmployeeSystem.Views
                 "Coming Soon",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
-            );
+           
+                    ContentFrame.Navigate(new PayrollPage(_cuentUser)););
         }
 
         /// <summary>
@@ -106,6 +108,8 @@ namespace NZFTC_EmployeeSystem.Views
         private void Holidays_Click(object sender, RoutedEventArgs e)
         {
             // Show a popup message box
+                    ContentFrame.Navigate(new HolidaysPage(_currentUser));
+
             MessageBox.Show(
                 "Holidays page - To be implemented",
                 "Coming Soon",
@@ -113,6 +117,7 @@ namespace NZFTC_EmployeeSystem.Views
                 MessageBoxImage.Information
             );
         }
+        
 
         /// <summary>
         /// Grievances button clicked - shows a "coming soon" message
@@ -127,6 +132,8 @@ namespace NZFTC_EmployeeSystem.Views
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
             );
+                    ContentFrame.Navigate(new GrievancesPage(_currentUser));
+
         }
 
         /// <summary>
@@ -141,6 +148,8 @@ namespace NZFTC_EmployeeSystem.Views
                 "Employee Management page - To be implemented",
                 "Coming Soon",
                 MessageBoxButton.OK,
+                        ContentFrame.Navigate(new EmployeeManagementPage(_currentUser));
+
                 MessageBoxImage.Information
             );
         }
