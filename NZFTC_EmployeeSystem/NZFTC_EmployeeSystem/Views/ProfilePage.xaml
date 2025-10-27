@@ -1,0 +1,54 @@
+<Page x:Class="NZFTC_EmployeeSystem.Views.ProfilePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Title="My Profile">
+    <!--
+      ProfilePage
+      Displays details of the currently logged in employee. Each piece of
+      information is shown in a horizontal stack panel with a label and
+      corresponding value. A ScrollViewer wraps the content so it can
+      accommodate future expansion without clipping.
+    -->
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock Text="My Profile" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Full Name:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="FullNameText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Email:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="EmailText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Phone:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="PhoneText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Job Title:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="JobTitleText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Department:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="DepartmentText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Hire Date:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="HireDateText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Salary:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="SalaryText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Annual Leave Balance:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="AnnualLeaveText"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Sick Leave Balance:" FontWeight="Bold" Width="150"/>
+                <TextBlock x:Name="SickLeaveText"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
