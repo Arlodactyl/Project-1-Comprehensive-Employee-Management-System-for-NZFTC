@@ -1,0 +1,86 @@
+<Page x:Class="NZFTC_EmployeeSystem.Views.GrievancesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Title="Grievances">
+    <!--
+      GrievancesPage
+      Allows employees to submit grievances and view their own, while
+      administrators can view and respond to all grievances. A
+      TabControl separates the two modes. Response controls are shown
+      only on the admin tab.
+    -->
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="Grievances" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+        <TabControl Grid.Row="1">
+            <!-- Employee tab -->
+            <TabItem Header="My Grievances">
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Submit form -->
+                    <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                        <TextBlock Text="Submit New Grievance" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <TextBlock Text="Title:"/>
+                        <TextBox x:Name="GrievanceTitleTextBox" Margin="0,0,0,10"/>
+                        <TextBlock Text="Description:"/>
+                        <TextBox x:Name="GrievanceDescriptionTextBox" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                        <Button Content="Submit Grievance"
+                                Width="180"
+                                Click="SubmitGrievance_Click"
+                                Style="{StaticResource MaterialDesignRaisedButton}"/>
+                    </StackPanel>
+                    <!-- List of user's grievances -->
+                    <DataGrid x:Name="MyGrievancesGrid"
+                              Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                            <DataGridTextColumn Header="Response" Binding="{Binding AdminResponse}" Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <!-- Admin tab -->
+            <TabItem Header="All Grievances" x:Name="AdminGrievancesTab">
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!-- List of all grievances -->
+                    <DataGrid x:Name="AllGrievancesGrid"
+                              Grid.Row="0"
+                              AutoGenerateColumns="False"
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="*"/>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                            <DataGridTextColumn Header="Response" Binding="{Binding AdminResponse}" Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <!-- Response controls -->
+                    <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                        <TextBlock Text="Admin Response:"/>
+                        <TextBox x:Name="AdminResponseTextBox" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Respond" Click="Respond_Click" Margin="0,0,10,0" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                            <Button Content="Close" Click="CloseGrievance_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>
