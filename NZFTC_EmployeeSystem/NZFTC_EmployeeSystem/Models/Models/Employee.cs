@@ -20,7 +20,19 @@ namespace NZFTC_EmployeeSystem.Models
 
         // Employment details
         public string JobTitle { get; set; } = string.Empty;
-        public string Department { get; set; } = string.Empty;
+
+        // Department details
+        // Instead of storing the department name directly on the employee,
+        // we store a foreign key to the Department table. This makes
+        // managing departments easier and more consistent. When you need
+        // the department name, you can access it through the Department
+        // navigation property.
+        public int DepartmentId { get; set; } // Foreign key to Department
+
+        // Navigation property - the department this employee belongs to
+        // One department can have many employees (one-to-many relationship)
+        public Department? Department { get; set; }
+
         public DateTime HireDate { get; set; } = DateTime.Now;
 
         // Salary information - decimal is used for money values to keep it legit

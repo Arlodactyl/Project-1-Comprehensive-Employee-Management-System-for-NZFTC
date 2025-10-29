@@ -29,6 +29,11 @@ namespace NZFTC_EmployeeSystem.Models
         public int? ApprovedByUserId { get; set; }
         public DateTime? ApprovedDate { get; set; }
 
+        // Navigation property - the user who approved this leave request
+        // This creates a link to the User table using the ApprovedByUserId
+        // field. It's optional because a leave may not yet be approved.
+        public User? ApprovedByUser { get; set; }
+
         // Audit field
         public DateTime RequestDate { get; set; } = DateTime.Now;
     }

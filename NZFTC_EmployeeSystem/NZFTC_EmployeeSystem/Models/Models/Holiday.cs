@@ -19,5 +19,8 @@ namespace NZFTC_EmployeeSystem.Models
         // Audit fields
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public int CreatedByUserId { get; set; }
+
+        // Navigation property - the user who created this holiday record
+        public User? CreatedByUser { get; set; }
     }
 }

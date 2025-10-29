@@ -25,6 +25,10 @@ namespace NZFTC_EmployeeSystem.Models
         public int? HandledByUserId { get; set; }
         public DateTime? ResolvedDate { get; set; }
 
+        // Navigation property - the user (admin) who handled this grievance
+        // Associates HandledByUserId with a User entity
+        public User? HandledByUser { get; set; }
+
         // Audit fields
         public DateTime SubmittedDate { get; set; } = DateTime.Now;
     }

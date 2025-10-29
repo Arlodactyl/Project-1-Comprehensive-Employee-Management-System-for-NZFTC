@@ -27,5 +27,9 @@ namespace NZFTC_EmployeeSystem.Models
         // Metadata
         public DateTime GeneratedDate { get; set; } = DateTime.Now;
         public int GeneratedByUserId { get; set; }
+
+        // Navigation property - which user generated this payslip
+        // This links the GeneratedByUserId to the User table
+        public User? GeneratedByUser { get; set; }
     }
 }
