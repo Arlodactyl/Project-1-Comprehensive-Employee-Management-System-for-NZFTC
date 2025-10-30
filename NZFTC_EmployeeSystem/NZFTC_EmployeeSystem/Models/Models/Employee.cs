@@ -1,7 +1,7 @@
 using System;
 
-namespaceNZFTC_EmployeeSystem.Models.Models
-{
+namespace NZFTC_EmployeeSystem.Models
+
     /// <summary>
     /// This class represents one employee in the database
     /// Each property below becomes a column in the Employees table
