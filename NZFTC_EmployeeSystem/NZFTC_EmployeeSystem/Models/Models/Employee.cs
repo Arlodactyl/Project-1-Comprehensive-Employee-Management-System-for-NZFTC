@@ -1,6 +1,6 @@
 using System;
 
-namespace NZFTC_EmployeeSystem.Models
+namespaceNZFTC_EmployeeSystem.Models.Models
 {
     /// <summary>
     /// This class represents one employee in the database
