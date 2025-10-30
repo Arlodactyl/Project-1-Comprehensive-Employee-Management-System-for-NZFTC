@@ -1,7 +1,11 @@
 <Page x:Class="NZFTC_EmployeeSystem.Views.ProfilePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
       Title="My Profile">
     <!--
       ProfilePage
@@ -10,45 +14,222 @@
       corresponding value. A ScrollViewer wraps the content so it can
       accommodate future expansion without clipping.
     -->
-    <ScrollViewer>
-        <StackPanel Margin="20">
-            <TextBlock Text="My Profile" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Full Name:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="FullNameText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Email:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="EmailText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Phone:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="PhoneText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Job Title:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="JobTitleText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Department:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="DepartmentText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Hire Date:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="HireDateText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Salary:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="SalaryText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Annual Leave Balance:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="AnnualLeaveText"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Sick Leave Balance:" FontWeight="Bold" Width="150"/>
-                <TextBlock x:Name="SickLeaveText"/>
-            </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+
+    <Page.Resources>
+        <!-- TextBox Style -->
+        <Style x:Key="ProfileTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <!-- Button Style -->
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#5DADE2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3498DB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#34495E" Padding="20">
+            <TextBlock Text="My Profile" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="White"/>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid Margin="40,30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Profile Image Circle -->
+                <Ellipse Grid.Row="0" 
+                         Width="100" 
+                         Height="100" 
+                         Fill="#E74C3C"
+                         HorizontalAlignment="Left"
+                         Margin="0,0,0,30"/>
+
+                <!-- Personal Information Section -->
+                <Border Grid.Row="1" 
+                        BorderBrush="#BDC3C7" 
+                        BorderThickness="0,0,0,1"
+                        Padding="0,0,0,20"
+                        Margin="0,0,0,20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Full Name -->
+                        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
+                            <TextBlock Text="Full Name" 
+                                       FontSize="13" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="FullNameText" 
+                                     Style="{StaticResource ProfileTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+
+                        <!-- Email -->
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,15">
+                            <TextBlock Text="Email" 
+                                       FontSize="13" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="EmailText" 
+                                     Style="{StaticResource ProfileTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+
+                        <!-- Phone -->
+                        <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,15">
+                            <TextBlock Text="Phone Number" 
+                                       FontSize="13" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="PhoneText" 
+                                     Style="{StaticResource ProfileTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+
+                        <!-- Job Title -->
+                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,15">
+                            <TextBlock Text="Job Title" 
+                                       FontSize="13" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="JobTitleText" 
+                                     Style="{StaticResource ProfileTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+
+                        <!-- Department -->
+                        <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,15">
+                            <TextBlock Text="Department" 
+                                       FontSize="13" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="DepartmentText" 
+                                     Style="{StaticResource ProfileTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+
+                        <!-- Hire Date -->
+                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,15">
+                            <TextBlock Text="Hire Date" 
+                                       FontSize="13" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="HireDateText" 
+                                     Style="{StaticResource ProfileTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+
+                        <!-- Salary -->
+                        <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,15">
+                            <TextBlock Text="Salary" 
+                                       FontSize="13" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="SalaryText" 
+                                     Style="{StaticResource ProfileTextBox}"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Leave Balance Section -->
+                <Border Grid.Row="2" 
+                        BorderBrush="#BDC3C7" 
+                        BorderThickness="1"
+                        CornerRadius="5"
+                        Padding="20"
+                        Background="#F8F9FA">
+                    <StackPanel>
+                        <TextBlock Text="Leave Balances" 
+                                   FontSize="16" 
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,15"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Annual Leave Balance -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Annual Leave Balance" 
+                                           FontSize="13" 
+                                           Foreground="#7F8C8D"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="AnnualLeaveText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+
+                            <!-- Sick Leave Balance -->
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Sick Leave Balance" 
+                                           FontSize="13" 
+                                           Foreground="#7F8C8D"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="SickLeaveText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
 </Page>

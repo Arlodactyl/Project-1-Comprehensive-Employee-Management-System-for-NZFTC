@@ -54,8 +54,8 @@ namespace NZFTC_EmployeeSystem.Views
                 // Include(u => u.Employee) loads the related Employee data too
                 var user = db.Users
                     .Include(u => u.Employee) // This loads Employee data along with User
-                    .FirstOrDefault(u => 
-                        u.Username == username && 
+                    .FirstOrDefault(u =>
+                        u.Username == username &&
                         u.Password == password &&
                         u.IsActive == true
                     );

@@ -3,7 +3,7 @@ using NZFTC_EmployeeSystem.Models;
 using System;
 using System.Linq;
 using System.Windows.Controls;
-using Microsoft.EntityFrameworkCore; // ADD THIS
+using Microsoft.EntityFrameworkCore;
 
 namespace NZFTC_EmployeeSystem.Views
 {

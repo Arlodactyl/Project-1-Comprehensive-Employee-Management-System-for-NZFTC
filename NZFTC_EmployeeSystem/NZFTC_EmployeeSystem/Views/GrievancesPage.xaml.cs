@@ -36,7 +36,7 @@ namespace NZFTC_EmployeeSystem.Views
                 // Load current user's grievances
                 var myGrievances = db.Grievances
                     .Where(g => g.EmployeeId == _currentUser.EmployeeId)
-                    .OrderByDescending(g => g.SubmittedDate)
+                    .OrderByDescending(g => g.RequestDate)
                     .ToList();
                 MyGrievancesGrid.ItemsSource = myGrievances;
 
@@ -45,7 +45,7 @@ namespace NZFTC_EmployeeSystem.Views
                 {
                     var allGrievances = db.Grievances
                         .Include(g => g.Employee)
-                        .OrderByDescending(g => g.SubmittedDate)
+                        .OrderByDescending(g => g.RequestDate)
                         .ToList();
                     AllGrievancesGrid.ItemsSource = allGrievances;
                 }
@@ -69,7 +69,7 @@ namespace NZFTC_EmployeeSystem.Views
                     Title = GrievanceTitleTextBox.Text.Trim(),
                     Description = GrievanceDescriptionTextBox.Text.Trim(),
                     Status = "Open",
-                    SubmittedDate = DateTime.Now
+                    RequestDate = DateTime.Now
                 };
                 db.Grievances.Add(grievance);
                 db.SaveChanges();
@@ -138,6 +138,25 @@ namespace NZFTC_EmployeeSystem.Views
             MessageBox.Show("Grievance closed", "Success");
             AdminResponseTextBox.Clear();
             LoadGrievances();
+        }
+
+        // New Grievance button clicked - navigates to submit form
+        private void NewGrievance_Click(object sender, RoutedEventArgs e)
+        {
+            GrievanceTabControl.SelectedItem = NewGrievanceTab;
+        }
+
+        // View Status button clicked - navigates to my grievances
+        private void ViewStatus_Click(object sender, RoutedEventArgs e)
+        {
+            GrievanceTabControl.SelectedItem = MyGrievancesTab;
+        }
+
+        // Upload Notes button clicked - placeholder for file upload
+        private void UploadNotes_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("File upload feature coming soon!", "Upload Notes",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

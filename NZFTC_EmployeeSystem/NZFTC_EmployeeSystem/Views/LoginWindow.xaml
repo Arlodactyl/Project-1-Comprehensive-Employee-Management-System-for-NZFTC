@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
         mc:Ignorable="d"
         Title="NZFTC Employee Login" 
-        Height="500" 
-        Width="400"
+        Height="600" 
+        Width="500"
+        MinHeight="600"
+        MinWidth="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="White">
@@ -93,27 +95,27 @@
         </Grid.RowDefinitions>
 
         <!-- Header with Logo -->
-        <Border Grid.Row="0" Background="#2C3E50" Height="150">
+        <Border Grid.Row="0" Background="#2C3E50" Height="200">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Image Source="/Images/logo.png" 
-                       Height="80" 
-                       Width="180"
+                       Height="100" 
+                       Width="200"
                        Stretch="Uniform"
-                       Margin="0,0,0,10"/>
+                       Margin="0,0,0,15"/>
                 <TextBlock Text="Employee Management System for NZFTC Project"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="13"
                            TextAlignment="Center"/>
             </StackPanel>
         </Border>
 
         <!-- Login Form -->
         <StackPanel Grid.Row="1" 
-                    Margin="40,30"
+                    Margin="50,40"
                     VerticalAlignment="Top">
 
             <TextBlock Text="Login Page"
-                       FontSize="24"
+                       FontSize="26"
                        FontWeight="Bold"
                        Foreground="#2C3E50"
                        Margin="0,0,0,30"
