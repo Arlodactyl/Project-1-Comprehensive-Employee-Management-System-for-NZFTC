@@ -1,0 +1,65 @@
+<Page x:Class="NZFTC_EmployeeSystem.Views.DashboardHomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Dashboard Summary">
+    <!--
+      DashboardHomePage
+      This page provides a simple summary of key metrics for the system.
+      It shows the total number of employees, pending leave requests,
+      open grievances and upcoming holidays. Admins and regular users
+      see the same summary to give a quick snapshot of system data.
+    -->
+    <StackPanel Margin="20">
+        <TextBlock Text="Dashboard Summary"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+        <!-- UniformGrid arranges child elements into a grid with equal cell sizes -->
+        <UniformGrid Columns="2" Rows="2" Margin="0,20,0,0">
+            <!-- Card: Total Employees -->
+            <Border Background="{DynamicResource MaterialDesignCard}"
+                    Padding="16"
+                    Margin="8"
+                    CornerRadius="4">
+                <StackPanel>
+                    <TextBlock Text="Total Employees" FontWeight="Bold" FontSize="16"/>
+                    <!-- EmployeeCountText will be set in code-behind -->
+                    <TextBlock x:Name="EmployeeCountText" FontSize="36" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+            <!-- Card: Pending Leave Requests -->
+            <Border Background="{DynamicResource MaterialDesignCard}"
+                    Padding="16"
+                    Margin="8"
+                    CornerRadius="4">
+                <StackPanel>
+                    <TextBlock Text="Pending Leave Requests" FontWeight="Bold" FontSize="16"/>
+                    <!-- PendingLeaveText will be set in code-behind -->
+                    <TextBlock x:Name="PendingLeaveText" FontSize="36" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+            <!-- Card: Open Grievances -->
+            <Border Background="{DynamicResource MaterialDesignCard}"
+                    Padding="16"
+                    Margin="8"
+                    CornerRadius="4">
+                <StackPanel>
+                    <TextBlock Text="Open Grievances" FontWeight="Bold" FontSize="16"/>
+                    <!-- OpenGrievanceText will be set in code-behind -->
+                    <TextBlock x:Name="OpenGrievanceText" FontSize="36" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+            <!-- Card: Upcoming Holidays -->
+            <Border Background="{DynamicResource MaterialDesignCard}"
+                    Padding="16"
+                    Margin="8"
+                    CornerRadius="4">
+                <StackPanel>
+                    <TextBlock Text="Upcoming Holidays" FontWeight="Bold" FontSize="16"/>
+                    <!-- UpcomingHolidaysText will be set in code-behind -->
+                    <TextBlock x:Name="UpcomingHolidaysText" FontSize="36" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+    </StackPanel>
+</Page>
