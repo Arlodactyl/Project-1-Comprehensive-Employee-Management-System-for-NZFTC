@@ -205,7 +205,7 @@ namespace NZFTC_EmployeeSystem.Data
                 }
             );
 
-            // Create a default admin user account
+            // Create a default admin user account had to check DB
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -227,7 +227,7 @@ namespace NZFTC_EmployeeSystem.Data
             // Add some sample holidays
             modelBuilder.Entity<Holiday>().HasData(
                 new Holiday
-                {
+                {   
                     Id = 1,
                     Name = "New Year's Day",
                     Date = new DateTime(DateTime.Now.Year, 1, 1),
