@@ -271,6 +271,48 @@ namespace NZFTC_EmployeeSystem.Data
                     CreatedByUserId = 1
                 }
             );
+
+            // Seed random test employees
+            modelBuilder.Entity<Employee>().HasData(
+                new Employee { Id = 2, FirstName = "James", LastName = "Smith", Email = "james.smith@nzftc.co.nz", PhoneNumber = "022-345-6789", JobTitle = "Developer", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-500), Salary = 75000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 3, FirstName = "Emma", LastName = "Johnson", Email = "emma.johnson@nzftc.co.nz", PhoneNumber = "022-456-7890", JobTitle = "Manager", DepartmentId = 2, HireDate = DateTime.Now.AddDays(-800), Salary = 85000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 4, FirstName = "Oliver", LastName = "Williams", Email = "oliver.williams@nzftc.co.nz", PhoneNumber = "022-567-8901", JobTitle = "Analyst", DepartmentId = 3, HireDate = DateTime.Now.AddDays(-300), Salary = 65000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 5, FirstName = "Sophia", LastName = "Brown", Email = "sophia.brown@nzftc.co.nz", PhoneNumber = "022-678-9012", JobTitle = "Coordinator", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-600), Salary = 55000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 6, FirstName = "William", LastName = "Jones", Email = "william.jones@nzftc.co.nz", PhoneNumber = "022-789-0123", JobTitle = "Specialist", DepartmentId = 2, HireDate = DateTime.Now.AddDays(-450), Salary = 70000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 7, FirstName = "Ava", LastName = "Garcia", Email = "ava.garcia@nzftc.co.nz", PhoneNumber = "022-890-1234", JobTitle = "Developer", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-250), Salary = 72000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 8, FirstName = "Lucas", LastName = "Miller", Email = "lucas.miller@nzftc.co.nz", PhoneNumber = "022-901-2345", JobTitle = "Associate", DepartmentId = 3, HireDate = DateTime.Now.AddDays(-700), Salary = 60000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 9, FirstName = "Isabella", LastName = "Davis", Email = "isabella.davis@nzftc.co.nz", PhoneNumber = "022-012-3456", JobTitle = "Consultant", DepartmentId = 2, HireDate = DateTime.Now.AddDays(-400), Salary = 78000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 10, FirstName = "Mason", LastName = "Rodriguez", Email = "mason.rodriguez@nzftc.co.nz", PhoneNumber = "022-123-4567", JobTitle = "Manager", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-550), Salary = 88000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 11, FirstName = "Mia", LastName = "Martinez", Email = "mia.martinez@nzftc.co.nz", PhoneNumber = "022-234-5678", JobTitle = "Analyst", DepartmentId = 3, HireDate = DateTime.Now.AddDays(-350), Salary = 67000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true }
+            );
+
+            // Seed user accounts for test employees
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = 2, Username = "james.smith", Password = "password123", Role = "Employee", EmployeeId = 2, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 3, Username = "emma.johnson", Password = "password123", Role = "Employee", EmployeeId = 3, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 4, Username = "oliver.williams", Password = "password123", Role = "Employee", EmployeeId = 4, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 5, Username = "sophia.brown", Password = "password123", Role = "Employee", EmployeeId = 5, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 6, Username = "william.jones", Password = "password123", Role = "Employee", EmployeeId = 6, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 7, Username = "ava.garcia", Password = "password123", Role = "Employee", EmployeeId = 7, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 8, Username = "lucas.miller", Password = "password123", Role = "Employee", EmployeeId = 8, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 9, Username = "isabella.davis", Password = "password123", Role = "Employee", EmployeeId = 9, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 10, Username = "mason.rodriguez", Password = "password123", Role = "Employee", EmployeeId = 10, IsActive = true, CreatedDate = DateTime.Now },
+                new User { Id = 11, Username = "mia.martinez", Password = "password123", Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = DateTime.Now }
+            );
+
+            // Assign Employee role to test users
+            modelBuilder.Entity<UserRole>().HasData(
+                new UserRole { UserId = 2, RoleId = 2 },
+                new UserRole { UserId = 3, RoleId = 2 },
+                new UserRole { UserId = 4, RoleId = 2 },
+                new UserRole { UserId = 5, RoleId = 2 },
+                new UserRole { UserId = 6, RoleId = 2 },
+                new UserRole { UserId = 7, RoleId = 2 },
+                new UserRole { UserId = 8, RoleId = 2 },
+                new UserRole { UserId = 9, RoleId = 2 },
+                new UserRole { UserId = 10, RoleId = 2 },
+                new UserRole { UserId = 11, RoleId = 2 }
+            );
         }
     }
 }

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
 using System;
@@ -99,7 +99,6 @@ namespace NZFTC_EmployeeSystem.Views
             using (var db = new AppDbContext())
             {
                 // Create or find the department
-                // If the department typed by the user doesn't exist, create it
                 string departmentName = DepartmentTextBox.Text.Trim();
                 var department = db.Departments.FirstOrDefault(d => d.Name == departmentName);
                 if (department == null)
@@ -109,7 +108,7 @@ namespace NZFTC_EmployeeSystem.Views
                     db.SaveChanges();
                 }
 
-                // Create employee record and link to the department via DepartmentId
+                // Create employee record
                 var employee = new Employee
                 {
                     FirstName = FirstNameTextBox.Text.Trim(),
@@ -125,27 +124,30 @@ namespace NZFTC_EmployeeSystem.Views
                     SickLeaveBalance = 10,
                     IsActive = true
                 };
+
                 db.Employees.Add(employee);
                 db.SaveChanges();
 
-                // Determine selected role name from the combo box
+                // Determine selected role name
                 string selectedRoleName = ((ComboBoxItem)RoleComboBox.SelectedItem)?.Content?.ToString() ?? "Employee";
 
-                // Create user account linked to the employee
+                
+
+                // Create linked user
                 var user = new User
                 {
                     Username = UsernameTextBox.Text.Trim(),
-                    Password = PasswordBox.Password,
-                    // Still store the role name for backward compatibility
+                    
                     Role = selectedRoleName,
                     EmployeeId = employee.Id,
                     IsActive = true,
                     CreatedDate = DateTime.Now
                 };
+
                 db.Users.Add(user);
                 db.SaveChanges();
 
-                // Assign the selected role to the new user via the UserRole join table
+                // Link user to their role in UserRoles table
                 var roleEntity = db.Roles.FirstOrDefault(r => r.Name == selectedRoleName);
                 if (roleEntity != null)
                 {
