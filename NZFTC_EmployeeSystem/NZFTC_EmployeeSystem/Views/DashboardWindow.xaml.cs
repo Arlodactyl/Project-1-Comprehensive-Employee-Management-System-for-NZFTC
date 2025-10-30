@@ -47,13 +47,14 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Dashboard button clicked - clears the content frame
+        /// Dashboard button clicked - navigates to the dashboard summary page
+        /// Instead of clearing the frame, this loads a summary page
+        /// showing key metrics like employee count, pending leaves, etc.
         /// </summary>
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
-            // Clear any page that's currently showing in the content frame
-            // This shows a blank dashboard area
-            ContentFrame.Content = null;
+            // Navigate to the new dashboard home page that shows summary metrics
+            ContentFrame.Navigate(new DashboardHomePage(_currentUser));
         }
 
         /// <summary>
@@ -154,6 +155,16 @@ namespace NZFTC_EmployeeSystem.Views
             );
             // Navigate to the employee management page passing the current user
             ContentFrame.Navigate(new EmployeeManagementPage(_currentUser));
+        }
+
+        /// <summary>
+        /// Departments button clicked (ADMIN ONLY)
+        /// Navigates to the departments management page.
+        /// </summary>
+        private void Departments_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to the departments page
+            ContentFrame.Navigate(new DepartmentsPage(_currentUser));
         }
 
         /// <summary>

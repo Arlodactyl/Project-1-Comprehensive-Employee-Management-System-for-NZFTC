@@ -1,0 +1,65 @@
+<Page x:Class="NZFTC_EmployeeSystem.Views.DepartmentsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Title="Department Management">
+    <!--
+      DepartmentsPage
+      This page allows administrators to manage departments within the
+      organisation. A list of existing departments is shown in a DataGrid
+      with options to remove a department. New departments can be added
+      using the form at the bottom of the page. Deleting a department
+      that still has employees assigned is prevented.
+    -->
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- DataGrid list -->
+            <RowDefinition Height="*"/>
+            <!-- Form for adding a department -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Page Header -->
+        <TextBlock Text="Department Management"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <!-- Departments DataGrid -->
+        <DataGrid x:Name="DepartmentGrid"
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  SelectionMode="Single"
+                  Margin="0,0,0,20">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                <!-- Actions column with Delete button -->
+                <DataGridTemplateColumn Header="Actions" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete"
+                                    Tag="{Binding Id}"
+                                    Click="DeleteDepartment_Click"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Add Department Form -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBox x:Name="DepartmentNameTextBox"
+                     Width="250"
+                     Margin="0,0,10,0"
+                     materialDesign:HintAssist.Hint="Department Name"/>
+            <Button Content="Add Department"
+                    Width="150"
+                    Click="AddDepartment_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+        </StackPanel>
+    </Grid>
+</Page>
