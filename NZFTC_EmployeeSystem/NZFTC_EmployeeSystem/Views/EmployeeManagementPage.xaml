@@ -33,7 +33,14 @@
                     <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="*"/>
                     <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
                     <DataGridTextColumn Header="Job Title" Binding="{Binding JobTitle}" Width="*"/>
-                    <DataGridTextColumn Header="Department" Binding="{Binding Department}" Width="*"/>
+                    <!--
+                        Department column
+                        Use the Department.Name property from the navigation property on
+                        Employee. Without this change, the old string Department property
+                        no longer exists, causing the DataGrid to be blank. Binding to
+                        Department.Name displays the department's name correctly.
+                    -->
+                    <DataGridTextColumn Header="Department" Binding="{Binding Department.Name}" Width="*"/>
                     <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="Auto"/>
                 </DataGrid.Columns>
             </DataGrid>

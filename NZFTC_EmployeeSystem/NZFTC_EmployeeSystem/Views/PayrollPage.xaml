@@ -12,8 +12,12 @@
     -->
     <Grid Margin="20">
         <Grid.RowDefinitions>
+            <!-- Header row -->
             <RowDefinition Height="Auto"/>
+            <!-- Payslip data tab control -->
             <RowDefinition Height="*"/>
+            <!-- Admin payslip generation panel (only visible for admin users) -->
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="Payroll" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
         <TabControl Grid.Row="1">
@@ -49,5 +53,47 @@
                 </DataGrid>
             </TabItem>
         </TabControl>
+
+        <!--
+            Admin payslip generation panel
+            This panel lets administrators generate new payslips for any active
+            employee. It is collapsed by default and made visible in the
+            code-behind when the logged in user has the Admin role.
+        -->
+        <Border Grid.Row="2"
+                x:Name="AdminPayslipPanel"
+                Visibility="Collapsed"
+                Padding="10"
+                Margin="0,20,0,0"
+                Background="{DynamicResource MaterialDesignCard}"
+                BorderBrush="{DynamicResource MaterialDesignDivider}"
+                BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="Generate Payslip" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Employee:" Width="120" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="EmployeeComboBox" Width="250"
+                              DisplayMemberPath="FullName"
+                              SelectedValuePath="Id"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Pay Period Start:" Width="120" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="PayStartDatePicker" Width="250"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Pay Period End:" Width="120" VerticalAlignment="Center"/>
+                    <DatePicker x:Name="PayEndDatePicker" Width="250"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Gross Salary:" Width="120" VerticalAlignment="Center"/>
+                    <TextBox x:Name="GrossSalaryTextBox" Width="250"/>
+                </StackPanel>
+                <Button Content="Generate Payslip"
+                        Width="200"
+                        HorizontalAlignment="Left"
+                        Click="GeneratePayslip_Click"
+                        Style="{StaticResource MaterialDesignRaisedButton}"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>
