@@ -165,7 +165,6 @@ C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System
 C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\LoginWindow.baml
 C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\PayrollPage.baml
 C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\ProfilePage.baml
-C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.baml
 C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.g.cs
 C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardHomePage.g.cs
 C:\Users\64204\Desktop\yoobee\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardWindow.g.cs

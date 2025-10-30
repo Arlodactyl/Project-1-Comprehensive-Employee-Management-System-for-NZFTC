@@ -1,57 +1,166 @@
 <Page x:Class="NZFTC_EmployeeSystem.Views.LeavePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="900"
       Title="Leave Management">
 
-    <Grid Margin="20">
+    <Page.Resources>
+        <!-- Button Style -->
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Approve Button Style -->
+        <Style x:Key="ApproveButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Reject Button Style -->
+        <Style x:Key="RejectButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <TextBlock Grid.Row="0" 
-                   Text="Leave Management" 
-                   FontSize="24" 
-                   FontWeight="Bold"
-                   Margin="0,0,0,20"/>
+        <Border Grid.Row="0" Background="#34495E" Padding="20">
+            <TextBlock Text="Leave Management" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="White"/>
+        </Border>
 
         <!-- Tab Control for Employee/Admin views -->
-        <TabControl Grid.Row="1">
+        <TabControl Grid.Row="1" Margin="20">
+
             <!-- Tab 1: Apply for Leave -->
             <TabItem Header="Apply for Leave">
-                <StackPanel Margin="20">
-                    <!-- Leave Type -->
-                    <TextBlock Text="Leave Type:" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="LeaveTypeCombo" Margin="0,0,0,15">
-                        <ComboBoxItem Content="Annual Leave"/>
-                        <ComboBoxItem Content="Sick Leave"/>
-                        <ComboBoxItem Content="Unpaid Leave"/>
-                    </ComboBox>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20">
 
-                    <!-- Start Date -->
-                    <TextBlock Text="Start Date:" Margin="0,0,0,5"/>
-                    <DatePicker x:Name="StartDatePicker" Margin="0,0,0,15"/>
+                        <!-- Leave Type -->
+                        <TextBlock Text="Leave Type:" 
+                                   FontSize="13" 
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,5"/>
+                        <ComboBox x:Name="LeaveTypeCombo" 
+                                  Height="35"
+                                  FontSize="13"
+                                  Margin="0,0,0,15">
+                            <ComboBoxItem Content="Annual Leave"/>
+                            <ComboBoxItem Content="Sick Leave"/>
+                            <ComboBoxItem Content="Unpaid Leave"/>
+                        </ComboBox>
 
-                    <!-- End Date -->
-                    <TextBlock Text="End Date:" Margin="0,0,0,5"/>
-                    <DatePicker x:Name="EndDatePicker" Margin="0,0,0,15"/>
+                        <!-- Start Date -->
+                        <TextBlock Text="Start Date:" 
+                                   FontSize="13" 
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,5"/>
+                        <DatePicker x:Name="StartDatePicker" 
+                                    Height="35"
+                                    FontSize="13"
+                                    Margin="0,0,0,15"/>
 
-                    <!-- Reason -->
-                    <TextBlock Text="Reason:" Margin="0,0,0,5"/>
-                    <TextBox x:Name="ReasonTextBox" 
-                             Height="100" 
-                             TextWrapping="Wrap"
-                             AcceptsReturn="True"
-                             Margin="0,0,0,15"/>
+                        <!-- End Date -->
+                        <TextBlock Text="End Date:" 
+                                   FontSize="13" 
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,5"/>
+                        <DatePicker x:Name="EndDatePicker" 
+                                    Height="35"
+                                    FontSize="13"
+                                    Margin="0,0,0,15"/>
 
-                    <!-- Submit Button -->
-                    <Button Content="Submit Leave Request"
-                            Click="SubmitLeave_Click"
-                            Width="200"
-                            Style="{StaticResource MaterialDesignRaisedButton}"/>
-                </StackPanel>
+                        <!-- Reason -->
+                        <TextBlock Text="Reason:" 
+                                   FontSize="13" 
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,5"/>
+                        <TextBox x:Name="ReasonTextBox" 
+                                 Height="100" 
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Padding="8"
+                                 FontSize="13"
+                                 Margin="0,0,0,20"/>
+
+                        <!-- Submit Button -->
+                        <Button Content="Submit Leave Request"
+                                Click="SubmitLeave_Click"
+                                Style="{StaticResource ActionButton}"
+                                Width="200"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
 
             <!-- Tab 2: My Leave Requests -->
@@ -59,13 +168,19 @@
                 <DataGrid x:Name="MyLeaveGrid"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
+                          SelectionMode="Single"
+                          CanUserAddRows="False"
+                          AlternatingRowBackground="#ECF0F1"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
                           Margin="20">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Leave Type" Binding="{Binding LeaveType}" Width="*"/>
                         <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="*"/>
                         <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat=dd/MM/yyyy}" Width="*"/>
-                        <DataGridTextColumn Header="Days" Binding="{Binding DaysRequested}" Width="*"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                        <DataGridTextColumn Header="Days" Binding="{Binding DaysRequested}" Width="80"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                        <DataGridTextColumn Header="Reason" Binding="{Binding Reason}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -82,25 +197,32 @@
                               Grid.Row="0"
                               AutoGenerateColumns="False"
                               SelectionMode="Single"
+                              CanUserAddRows="False"
+                              AlternatingRowBackground="#ECF0F1"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
                               Margin="0,0,0,10">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="*"/>
-                            <DataGridTextColumn Header="Leave Type" Binding="{Binding LeaveType}" Width="*"/>
-                            <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="*"/>
-                            <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat=dd/MM/yyyy}" Width="*"/>
-                            <DataGridTextColumn Header="Days" Binding="{Binding DaysRequested}" Width="*"/>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                            <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="150"/>
+                            <DataGridTextColumn Header="Leave Type" Binding="{Binding LeaveType}" Width="120"/>
+                            <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                            <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                            <DataGridTextColumn Header="Days" Binding="{Binding DaysRequested}" Width="60"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                            <DataGridTextColumn Header="Reason" Binding="{Binding Reason}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Grid.Row="1" 
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Right">
                         <Button Content="Approve"
                                 Click="ApproveLeave_Click"
-                                Margin="0,0,10,0"
-                                Style="{StaticResource MaterialDesignRaisedButton}"/>
+                                Style="{StaticResource ApproveButton}"
+                                Margin="0,0,10,0"/>
                         <Button Content="Reject"
                                 Click="RejectLeave_Click"
-                                Style="{StaticResource MaterialDesignRaisedButton}"/>
+                                Style="{StaticResource RejectButton}"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

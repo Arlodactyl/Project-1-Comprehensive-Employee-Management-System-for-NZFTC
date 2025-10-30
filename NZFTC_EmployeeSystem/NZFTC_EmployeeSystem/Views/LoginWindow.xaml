@@ -1,110 +1,160 @@
-<!-- 
-    LoginWindow.xaml - Login Screen
-    This is the first window that shows when the app starts
-    Users enter their username and password here
--->
 <Window x:Class="NZFTC_EmployeeSystem.Views.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="NZFTC Employee System - Login"
-        Width="450" Height="550"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
+        mc:Ignorable="d"
+        Title="NZFTC Employee Login" 
+        Height="500" 
+        Width="400"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource MaterialDesignPaper}"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Background="White">
 
-    <!-- Main container -->
+    <Window.Resources>
+        <!-- Text Box Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Password Box Style -->
+        <Style x:Key="ModernPasswordBox" TargetType="PasswordBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Button Style -->
+        <Style x:Key="LoginButton" TargetType="Button">
+            <Setter Property="Background" Value="#5DADE2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3498DB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Cancel Button Style -->
+        <Style x:Key="CancelButton" TargetType="Button">
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <!-- Center the login card -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Login Card -->
-        <materialDesign:Card Grid.Row="1" 
-                            Padding="32" 
-                            Margin="20"
-                            UniformCornerRadius="16">
-            <StackPanel>
-                <!-- Logo/Title Section -->
-                <TextBlock Text="NZFTC"
-                          FontSize="32"
-                          FontWeight="Bold"
-                          HorizontalAlignment="Center"
-                          Foreground="{DynamicResource PrimaryHueMidBrush}"
-                          Margin="0,0,0,8"/>
-
-                <TextBlock Text="Employee Management System"
-                          FontSize="14"
-                          HorizontalAlignment="Center"
-                          Foreground="{DynamicResource MaterialDesignBodyLight}"
-                          Margin="0,0,0,32"/>
-
-                <!-- Username Field -->
-                <TextBlock Text="Username"
-                          Margin="0,0,0,8"
-                          FontWeight="Medium"/>
-
-                <TextBox x:Name="UserNameBox"
-                        materialDesign:HintAssist.Hint="Enter your username"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                        Margin="0,0,0,16"
-                        FontSize="14"/>
-
-                <!-- Password Field -->
-                <TextBlock Text="Password"
-                          Margin="0,0,0,8"
-                          FontWeight="Medium"/>
-
-                <PasswordBox x:Name="PasswordBox"
-                            materialDesign:HintAssist.Hint="Enter your password"
-                            Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
-                            Margin="0,0,0,24"
-                            FontSize="14"/>
-
-                <!-- Buttons -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Cancel Button -->
-                    <Button Grid.Column="0"
-                           Content="CANCEL"
-                           Click="Cancel_Click"
-                           Style="{StaticResource MaterialDesignOutlinedButton}"
-                           Height="40"/>
-
-                    <!-- Sign In Button -->
-                    <Button Grid.Column="2"
-                           Content="SIGN IN"
-                           Click="SignIn_Click"
-                           Style="{StaticResource MaterialDesignRaisedButton}"
-                           Height="40"/>
-                </Grid>
-
-                <!-- Default Credentials Info -->
-                <Border Background="{DynamicResource MaterialDesignDivider}"
-                       Padding="12"
-                       Margin="0,24,0,0"
-                       CornerRadius="4">
-                    <StackPanel>
-                        <TextBlock Text="Default Login Credentials:"
-                                  FontWeight="Bold"
-                                  FontSize="12"
-                                  Margin="0,0,0,8"/>
-                        <TextBlock Text="Username: admin"
-                                  FontSize="11"
-                                  Margin="0,0,0,4"/>
-                        <TextBlock Text="Password: admin123"
-                                  FontSize="11"/>
-                    </StackPanel>
-                </Border>
+        <!-- Header with Logo -->
+        <Border Grid.Row="0" Background="#2C3E50" Height="150">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image Source="/Images/logo.png" 
+                       Height="80" 
+                       Width="180"
+                       Stretch="Uniform"
+                       Margin="0,0,0,10"/>
+                <TextBlock Text="Employee Management System for NZFTC Project"
+                           Foreground="White"
+                           FontSize="12"
+                           TextAlignment="Center"/>
             </StackPanel>
-        </materialDesign:Card>
+        </Border>
+
+        <!-- Login Form -->
+        <StackPanel Grid.Row="1" 
+                    Margin="40,30"
+                    VerticalAlignment="Top">
+
+            <TextBlock Text="Login Page"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="#2C3E50"
+                       Margin="0,0,0,30"
+                       HorizontalAlignment="Center"/>
+
+            <!-- Username -->
+            <TextBlock Text="Username" 
+                       FontSize="14" 
+                       Foreground="#2C3E50"
+                       Margin="0,0,0,5"/>
+            <TextBox x:Name="UserNameBox" 
+                     Style="{StaticResource ModernTextBox}"
+                     Margin="0,0,0,20"/>
+
+            <!-- Password -->
+            <TextBlock Text="Password" 
+                       FontSize="14" 
+                       Foreground="#2C3E50"
+                       Margin="0,0,0,5"/>
+            <PasswordBox x:Name="PasswordBox" 
+                         Style="{StaticResource ModernPasswordBox}"
+                         Margin="0,0,0,30"/>
+
+            <!-- Buttons -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Content="Sign In" 
+                        Style="{StaticResource LoginButton}"
+                        Click="SignIn_Click"/>
+
+                <Button Grid.Column="2"
+                        Content="Cancel" 
+                        Style="{StaticResource CancelButton}"
+                        Click="Cancel_Click"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>
