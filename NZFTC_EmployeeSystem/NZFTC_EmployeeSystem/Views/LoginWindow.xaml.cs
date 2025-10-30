@@ -14,6 +14,19 @@ namespace NZFTC_EmployeeSystem.Views
         public LoginWindow()
         {
             InitializeComponent();
+
+            // ========================================
+            // ENSURE DATABASE AND ADMIN ACCOUNT EXIST
+            // This runs every time the login window opens
+            // ========================================
+            using (var db = new AppDbContext())
+            {
+                // Create database if it doesn't exist
+                db.Database.EnsureCreated();
+
+                // Ensure admin account exists (creates it if missing)
+                db.EnsureAdminExists();
+            }
         }
 
         // ========================================

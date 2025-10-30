@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NZFTC_EmployeeSystem.Models;
 using System;
 using System.IO;
@@ -35,20 +35,24 @@ namespace NZFTC_EmployeeSystem.Data
         // ========================================
         // DATABASE FILE LOCATION
         // This method determines WHERE the database file is saved
+        // Now saves to project root directory for easy submission
         // ========================================
         private static string GetDatabasePath()
         {
-            // Get the user's AppData folder (e.g., C:\Users\YourName\AppData\Local)
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            // Get the directory where the application .exe is running from
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
-            // Create a subfolder for our app
-            var dir = Path.Combine(appData, "NZFTC_EmployeeSystem");
-            Directory.CreateDirectory(dir); // Create folder if it doesn't exist
+            // Go up to the project root (assuming typical bin/Debug/net8.0 structure)
+            // This navigates: bin/Debug/net8.0 -> bin/Debug -> bin -> project root
+            var projectRoot = Directory.GetParent(baseDir)?.Parent?.Parent?.Parent?.FullName;
 
-            // Return the full path to the database file
+            // If we can find the project root, use it; otherwise use the exe location
+            var dbDir = projectRoot ?? baseDir;
+
+            // Return the full path to the database file in the project directory
             // Final path will be something like:
-            // C:\Users\YourName\AppData\Local\NZFTC_EmployeeSystem\employee.db
-            return Path.Combine(dir, "employee.db");
+            // C:\Users\YourName\Documents\YourProject\employee.db
+            return Path.Combine(dbDir, "employee.db");
         }
 
         // ========================================
@@ -59,9 +63,103 @@ namespace NZFTC_EmployeeSystem.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
+                var dbPath = GetDatabasePath();
+
+                // Optional: Print database location to console for verification
+                Console.WriteLine($"Database location: {dbPath}");
+
                 // Configure to use SQLite database
                 // UseSqlite is the method that says "use SQLite, not SQL Server or MySQL"
-                optionsBuilder.UseSqlite($"Data Source={GetDatabasePath()}");
+                optionsBuilder.UseSqlite($"Data Source={dbPath}");
+            }
+        }
+
+        // ========================================
+        // ENSURE ADMIN EXISTS
+        // This guarantees admin can always log in
+        // Call this when app starts or before login
+        // ========================================
+        /// <summary>
+        /// Ensures the default admin account exists in the database
+        /// Call this method when the application starts or before login
+        /// </summary>
+        public void EnsureAdminExists()
+        {
+            // Check if admin user exists
+            var adminUser = Users.FirstOrDefault(u => u.Username == "admin");
+
+            if (adminUser == null)
+            {
+                Console.WriteLine("⚠ Admin account not found. Creating...");
+
+                // First ensure the admin employee exists
+                var adminEmployee = Employees.FirstOrDefault(e => e.Id == 1);
+                if (adminEmployee == null)
+                {
+                    // Ensure IT department exists
+                    var itDept = Departments.FirstOrDefault(d => d.Id == 1);
+                    if (itDept == null)
+                    {
+                        Departments.Add(new Department { Id = 1, Name = "IT" });
+                        SaveChanges();
+                    }
+
+                    adminEmployee = new Employee
+                    {
+                        Id = 1,
+                        FirstName = "Admin",
+                        LastName = "User",
+                        Email = "admin@nzftc.com",
+                        PhoneNumber = "021-123-4567",
+                        JobTitle = "System Administrator",
+                        DepartmentId = 1,
+                        HireDate = new DateTime(2020, 1, 1),
+                        Salary = 80000m,
+                        TaxRate = 30m,
+                        AnnualLeaveBalance = 20,
+                        SickLeaveBalance = 10,
+                        IsActive = true
+                    };
+                    Employees.Add(adminEmployee);
+                    SaveChanges();
+                }
+
+                // Create admin user
+                adminUser = new User
+                {
+                    Username = "admin",
+                    Password = "admin123",
+                    Role = "Admin",
+                    EmployeeId = 1,
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                };
+                Users.Add(adminUser);
+                SaveChanges();
+
+                // Ensure Admin role exists and is assigned
+                var adminRole = Roles.FirstOrDefault(r => r.Id == 1);
+                if (adminRole == null)
+                {
+                    adminRole = new Role { Id = 1, Name = "Admin" };
+                    Roles.Add(adminRole);
+                    SaveChanges();
+                }
+
+                var userRole = UserRoles.FirstOrDefault(ur => ur.UserId == adminUser.Id && ur.RoleId == 1);
+                if (userRole == null)
+                {
+                    UserRoles.Add(new UserRole { UserId = adminUser.Id, RoleId = 1 });
+                    SaveChanges();
+                }
+
+                Console.WriteLine("✓ Admin account created successfully");
+                Console.WriteLine("  Username: admin");
+                Console.WriteLine("  Password: admin123");
+            }
+            else
+            {
+                Console.WriteLine("✓ Admin account exists and is ready");
             }
         }
 
@@ -205,7 +303,7 @@ namespace NZFTC_EmployeeSystem.Data
                 }
             );
 
-            // Create a default admin user account had to check DB
+            // Create a default admin user account - FIXED: Use fixed date
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -215,7 +313,7 @@ namespace NZFTC_EmployeeSystem.Data
                     Role = "Admin",
                     EmployeeId = 1,
                     IsActive = true,
-                    CreatedDate = DateTime.Now
+                    CreatedDate = new DateTime(2024, 1, 1) // FIXED: Use fixed date instead of DateTime.Now
                 }
             );
 
@@ -224,80 +322,80 @@ namespace NZFTC_EmployeeSystem.Data
                 new UserRole { UserId = 1, RoleId = 1 }
             );
 
-            // Add some sample holidays
+            // Add some sample holidays - FIXED: Use fixed dates
             modelBuilder.Entity<Holiday>().HasData(
                 new Holiday
-                {   
+                {
                     Id = 1,
                     Name = "New Year's Day",
-                    Date = new DateTime(DateTime.Now.Year, 1, 1),
+                    Date = new DateTime(2025, 1, 1),
                     Type = "Public",
                     Description = "First day of the new year",
                     IsRecurring = true,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1
                 },
                 new Holiday
                 {
                     Id = 2,
                     Name = "Waitangi Day",
-                    Date = new DateTime(DateTime.Now.Year, 2, 6),
+                    Date = new DateTime(2025, 2, 6),
                     Type = "Public",
                     Description = "New Zealand's national day",
                     IsRecurring = true,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1
                 },
                 new Holiday
                 {
                     Id = 3,
                     Name = "ANZAC Day",
-                    Date = new DateTime(DateTime.Now.Year, 4, 25),
+                    Date = new DateTime(2025, 4, 25),
                     Type = "Public",
                     Description = "Remembrance of soldiers",
                     IsRecurring = true,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1
                 },
                 new Holiday
                 {
                     Id = 4,
                     Name = "Christmas Day",
-                    Date = new DateTime(DateTime.Now.Year, 12, 25),
+                    Date = new DateTime(2025, 12, 25),
                     Type = "Public",
                     Description = "Christmas celebration",
                     IsRecurring = true,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1
                 }
             );
 
-            // Seed random test employees
+            // Seed random test employees - FIXED: Use fixed dates
             modelBuilder.Entity<Employee>().HasData(
-                new Employee { Id = 2, FirstName = "James", LastName = "Smith", Email = "james.smith@nzftc.co.nz", PhoneNumber = "022-345-6789", JobTitle = "Developer", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-500), Salary = 75000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 3, FirstName = "Emma", LastName = "Johnson", Email = "emma.johnson@nzftc.co.nz", PhoneNumber = "022-456-7890", JobTitle = "Manager", DepartmentId = 2, HireDate = DateTime.Now.AddDays(-800), Salary = 85000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 4, FirstName = "Oliver", LastName = "Williams", Email = "oliver.williams@nzftc.co.nz", PhoneNumber = "022-567-8901", JobTitle = "Analyst", DepartmentId = 3, HireDate = DateTime.Now.AddDays(-300), Salary = 65000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 5, FirstName = "Sophia", LastName = "Brown", Email = "sophia.brown@nzftc.co.nz", PhoneNumber = "022-678-9012", JobTitle = "Coordinator", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-600), Salary = 55000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 6, FirstName = "William", LastName = "Jones", Email = "william.jones@nzftc.co.nz", PhoneNumber = "022-789-0123", JobTitle = "Specialist", DepartmentId = 2, HireDate = DateTime.Now.AddDays(-450), Salary = 70000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 7, FirstName = "Ava", LastName = "Garcia", Email = "ava.garcia@nzftc.co.nz", PhoneNumber = "022-890-1234", JobTitle = "Developer", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-250), Salary = 72000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 8, FirstName = "Lucas", LastName = "Miller", Email = "lucas.miller@nzftc.co.nz", PhoneNumber = "022-901-2345", JobTitle = "Associate", DepartmentId = 3, HireDate = DateTime.Now.AddDays(-700), Salary = 60000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 9, FirstName = "Isabella", LastName = "Davis", Email = "isabella.davis@nzftc.co.nz", PhoneNumber = "022-012-3456", JobTitle = "Consultant", DepartmentId = 2, HireDate = DateTime.Now.AddDays(-400), Salary = 78000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 10, FirstName = "Mason", LastName = "Rodriguez", Email = "mason.rodriguez@nzftc.co.nz", PhoneNumber = "022-123-4567", JobTitle = "Manager", DepartmentId = 1, HireDate = DateTime.Now.AddDays(-550), Salary = 88000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 11, FirstName = "Mia", LastName = "Martinez", Email = "mia.martinez@nzftc.co.nz", PhoneNumber = "022-234-5678", JobTitle = "Analyst", DepartmentId = 3, HireDate = DateTime.Now.AddDays(-350), Salary = 67000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true }
+                new Employee { Id = 2, FirstName = "James", LastName = "Smith", Email = "james.smith@nzftc.co.nz", PhoneNumber = "022-345-6789", JobTitle = "Developer", DepartmentId = 1, HireDate = new DateTime(2023, 6, 15), Salary = 75000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 3, FirstName = "Emma", LastName = "Johnson", Email = "emma.johnson@nzftc.co.nz", PhoneNumber = "022-456-7890", JobTitle = "Manager", DepartmentId = 2, HireDate = new DateTime(2022, 9, 20), Salary = 85000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 4, FirstName = "Oliver", LastName = "Williams", Email = "oliver.williams@nzftc.co.nz", PhoneNumber = "022-567-8901", JobTitle = "Analyst", DepartmentId = 3, HireDate = new DateTime(2024, 1, 10), Salary = 65000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 5, FirstName = "Sophia", LastName = "Brown", Email = "sophia.brown@nzftc.co.nz", PhoneNumber = "022-678-9012", JobTitle = "Coordinator", DepartmentId = 1, HireDate = new DateTime(2023, 4, 5), Salary = 55000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 6, FirstName = "William", LastName = "Jones", Email = "william.jones@nzftc.co.nz", PhoneNumber = "022-789-0123", JobTitle = "Specialist", DepartmentId = 2, HireDate = new DateTime(2023, 7, 12), Salary = 70000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 7, FirstName = "Ava", LastName = "Garcia", Email = "ava.garcia@nzftc.co.nz", PhoneNumber = "022-890-1234", JobTitle = "Developer", DepartmentId = 1, HireDate = new DateTime(2024, 3, 1), Salary = 72000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 8, FirstName = "Lucas", LastName = "Miller", Email = "lucas.miller@nzftc.co.nz", PhoneNumber = "022-901-2345", JobTitle = "Associate", DepartmentId = 3, HireDate = new DateTime(2022, 12, 8), Salary = 60000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 9, FirstName = "Isabella", LastName = "Davis", Email = "isabella.davis@nzftc.co.nz", PhoneNumber = "022-012-3456", JobTitle = "Consultant", DepartmentId = 2, HireDate = new DateTime(2023, 8, 25), Salary = 78000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 10, FirstName = "Mason", LastName = "Rodriguez", Email = "mason.rodriguez@nzftc.co.nz", PhoneNumber = "022-123-4567", JobTitle = "Manager", DepartmentId = 1, HireDate = new DateTime(2023, 5, 18), Salary = 88000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 11, FirstName = "Mia", LastName = "Martinez", Email = "mia.martinez@nzftc.co.nz", PhoneNumber = "022-234-5678", JobTitle = "Analyst", DepartmentId = 3, HireDate = new DateTime(2023, 11, 30), Salary = 67000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true }
             );
 
-            // Seed user accounts for test employees
+            // Seed user accounts for test employees - FIXED: Use fixed dates
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 2, Username = "james.smith", Password = "password123", Role = "Employee", EmployeeId = 2, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 3, Username = "emma.johnson", Password = "password123", Role = "Employee", EmployeeId = 3, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 4, Username = "oliver.williams", Password = "password123", Role = "Employee", EmployeeId = 4, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 5, Username = "sophia.brown", Password = "password123", Role = "Employee", EmployeeId = 5, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 6, Username = "william.jones", Password = "password123", Role = "Employee", EmployeeId = 6, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 7, Username = "ava.garcia", Password = "password123", Role = "Employee", EmployeeId = 7, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 8, Username = "lucas.miller", Password = "password123", Role = "Employee", EmployeeId = 8, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 9, Username = "isabella.davis", Password = "password123", Role = "Employee", EmployeeId = 9, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 10, Username = "mason.rodriguez", Password = "password123", Role = "Employee", EmployeeId = 10, IsActive = true, CreatedDate = DateTime.Now },
-                new User { Id = 11, Username = "mia.martinez", Password = "password123", Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = DateTime.Now }
+                new User { Id = 2, Username = "james.smith", Password = "password123", Role = "Employee", EmployeeId = 2, IsActive = true, CreatedDate = new DateTime(2023, 6, 15) },
+                new User { Id = 3, Username = "emma.johnson", Password = "password123", Role = "Employee", EmployeeId = 3, IsActive = true, CreatedDate = new DateTime(2022, 9, 20) },
+                new User { Id = 4, Username = "oliver.williams", Password = "password123", Role = "Employee", EmployeeId = 4, IsActive = true, CreatedDate = new DateTime(2024, 1, 10) },
+                new User { Id = 5, Username = "sophia.brown", Password = "password123", Role = "Employee", EmployeeId = 5, IsActive = true, CreatedDate = new DateTime(2023, 4, 5) },
+                new User { Id = 6, Username = "william.jones", Password = "password123", Role = "Employee", EmployeeId = 6, IsActive = true, CreatedDate = new DateTime(2023, 7, 12) },
+                new User { Id = 7, Username = "ava.garcia", Password = "password123", Role = "Employee", EmployeeId = 7, IsActive = true, CreatedDate = new DateTime(2024, 3, 1) },
+                new User { Id = 8, Username = "lucas.miller", Password = "password123", Role = "Employee", EmployeeId = 8, IsActive = true, CreatedDate = new DateTime(2022, 12, 8) },
+                new User { Id = 9, Username = "isabella.davis", Password = "password123", Role = "Employee", EmployeeId = 9, IsActive = true, CreatedDate = new DateTime(2023, 8, 25) },
+                new User { Id = 10, Username = "mason.rodriguez", Password = "password123", Role = "Employee", EmployeeId = 10, IsActive = true, CreatedDate = new DateTime(2023, 5, 18) },
+                new User { Id = 11, Username = "mia.martinez", Password = "password123", Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = new DateTime(2023, 11, 30) }
             );
 
             // Assign Employee role to test users
