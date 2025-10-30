@@ -98,7 +98,18 @@ namespace NZFTC_EmployeeSystem.Views
 
             using (var db = new AppDbContext())
             {
-                // Create employee record
+                // Create or find the department
+                // If the department typed by the user doesn't exist, create it
+                string departmentName = DepartmentTextBox.Text.Trim();
+                var department = db.Departments.FirstOrDefault(d => d.Name == departmentName);
+                if (department == null)
+                {
+                    department = new Department { Name = departmentName };
+                    db.Departments.Add(department);
+                    db.SaveChanges();
+                }
+
+                // Create employee record and link to the department via DepartmentId
                 var employee = new Employee
                 {
                     FirstName = FirstNameTextBox.Text.Trim(),
@@ -106,7 +117,7 @@ namespace NZFTC_EmployeeSystem.Views
                     Email = EmailTextBox.Text.Trim(),
                     PhoneNumber = PhoneTextBox.Text.Trim(),
                     JobTitle = JobTitleTextBox.Text.Trim(),
-                    Department = DepartmentTextBox.Text.Trim(),
+                    DepartmentId = department.Id,
                     HireDate = hireDate,
                     Salary = salary,
                     TaxRate = taxRate,
@@ -117,18 +128,35 @@ namespace NZFTC_EmployeeSystem.Views
                 db.Employees.Add(employee);
                 db.SaveChanges();
 
+                // Determine selected role name from the combo box
+                string selectedRoleName = ((ComboBoxItem)RoleComboBox.SelectedItem)?.Content?.ToString() ?? "Employee";
+
                 // Create user account linked to the employee
                 var user = new User
                 {
                     Username = UsernameTextBox.Text.Trim(),
                     Password = PasswordBox.Password,
-                    Role = ((ComboBoxItem)RoleComboBox.SelectedItem)?.Content?.ToString() ?? "Employee",
+                    // Still store the role name for backward compatibility
+                    Role = selectedRoleName,
                     EmployeeId = employee.Id,
                     IsActive = true,
                     CreatedDate = DateTime.Now
                 };
                 db.Users.Add(user);
                 db.SaveChanges();
+
+                // Assign the selected role to the new user via the UserRole join table
+                var roleEntity = db.Roles.FirstOrDefault(r => r.Name == selectedRoleName);
+                if (roleEntity != null)
+                {
+                    var userRole = new UserRole
+                    {
+                        UserId = user.Id,
+                        RoleId = roleEntity.Id
+                    };
+                    db.UserRoles.Add(userRole);
+                    db.SaveChanges();
+                }
             }
 
             MessageBox.Show("Employee created successfully!", "Success");

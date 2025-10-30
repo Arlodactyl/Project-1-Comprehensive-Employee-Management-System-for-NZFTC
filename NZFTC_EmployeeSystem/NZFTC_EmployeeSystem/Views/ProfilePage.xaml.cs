@@ -32,7 +32,8 @@ namespace NZFTC_EmployeeSystem.Views
                     EmailText.Text = employee.Email;
                     PhoneText.Text = employee.PhoneNumber;
                     JobTitleText.Text = employee.JobTitle;
-                    DepartmentText.Text = employee.Department;
+                    // Display the name of the department by accessing the Department navigation property
+                    DepartmentText.Text = employee.Department?.Name ?? string.Empty;
                     HireDateText.Text = employee.HireDate.ToString("dd/MM/yyyy");
                     SalaryText.Text = employee.Salary.ToString("C");
                     AnnualLeaveText.Text = employee.AnnualLeaveBalance.ToString();

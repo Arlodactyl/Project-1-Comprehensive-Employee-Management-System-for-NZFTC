@@ -62,7 +62,7 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void MyProfile_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box
+            // Show a popup message box to inform the user this feature is not yet available
             // MessageBoxButton.OK means it only has an OK button
             // MessageBoxImage.Information shows the blue "i" icon
             MessageBox.Show(
@@ -70,8 +70,9 @@ namespace NZFTC_EmployeeSystem.Views
                 "Coming Soon",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
-     
-                    ContentFrame.Navigate(new ProfilePage(_currentUser)));
+            );
+            // After the message is dismissed, navigate to the ProfilePage
+            ContentFrame.Navigate(new ProfilePage(_currentUser));
         }
 
         /// <summary>
@@ -91,14 +92,15 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void Payroll_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box
+            // Show a popup message box to inform the user this feature is not yet available
             MessageBox.Show(
                 "Payroll page - To be implemented",
                 "Coming Soon",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
-           
-                    ContentFrame.Navigate(new PayrollPage(_cuentUser)););
+            );
+            // Navigate to the payroll page passing the current user
+            ContentFrame.Navigate(new PayrollPage(_currentUser));
         }
 
         /// <summary>
@@ -107,15 +109,15 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void Holidays_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box
-                    ContentFrame.Navigate(new HolidaysPage(_currentUser));
-
+            // Show a popup message box to inform the user this feature is not yet available
             MessageBox.Show(
                 "Holidays page - To be implemented",
                 "Coming Soon",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
             );
+            // Navigate to the holidays page passing the current user
+            ContentFrame.Navigate(new HolidaysPage(_currentUser));
         }
         
 
@@ -125,15 +127,15 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void Grievances_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box
+            // Show a popup message box to inform the user this feature is not yet available
             MessageBox.Show(
                 "Grievances page - To be implemented",
                 "Coming Soon",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
             );
-                    ContentFrame.Navigate(new GrievancesPage(_currentUser));
-
+            // Navigate to the grievances page passing the current user
+            ContentFrame.Navigate(new GrievancesPage(_currentUser));
         }
 
         /// <summary>
@@ -143,15 +145,15 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void ManageEmployees_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box
+            // Show a popup message box to inform the user this feature is not yet available
             MessageBox.Show(
                 "Employee Management page - To be implemented",
                 "Coming Soon",
                 MessageBoxButton.OK,
-                        ContentFrame.Navigate(new EmployeeManagementPage(_currentUser));
-
                 MessageBoxImage.Information
             );
+            // Navigate to the employee management page passing the current user
+            ContentFrame.Navigate(new EmployeeManagementPage(_currentUser));
         }
 
         /// <summary>
