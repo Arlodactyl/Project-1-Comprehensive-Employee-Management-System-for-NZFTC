@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
+using System;  // ADD THIS
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,15 +25,15 @@ namespace NZFTC_EmployeeSystem.Views
             if (_currentUser.Role != "Admin")
             {
                 AdminPayslipsTab.Visibility = Visibility.Collapsed;
-        }
-        else
-        {
-            // Show the admin payslip creation panel and load employee list
-            AdminPayslipPanel.Visibility = Visibility.Visible;
-            LoadEmployeeList();
-        }
-        // Load payslips for the current user (and all if admin)
-        LoadPayslipData();
+            }
+            else
+            {
+                // Show the admin payslip creation panel and load employee list
+                AdminPayslipPanel.Visibility = Visibility.Visible;
+                LoadEmployeeList();
+            }
+            // Load payslips for the current user (and all if admin)
+            LoadPayslipData();
         }
 
         // Loads payslip data from the database into the grids

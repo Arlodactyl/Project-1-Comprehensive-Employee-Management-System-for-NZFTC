@@ -1,7 +1,9 @@
 using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
 using System;
+using System.Linq;
 using System.Windows.Controls;
+using Microsoft.EntityFrameworkCore; // ADD THIS
 
 namespace NZFTC_EmployeeSystem.Views
 {
@@ -25,7 +27,11 @@ namespace NZFTC_EmployeeSystem.Views
         {
             using (var db = new AppDbContext())
             {
-                var employee = db.Employees.Find(_currentUser.EmployeeId);
+                // FIXED: Added Include to load Department data
+                var employee = db.Employees
+                    .Include(e => e.Department)
+                    .FirstOrDefault(e => e.Id == _currentUser.EmployeeId);
+
                 if (employee != null)
                 {
                     FullNameText.Text = employee.FullName;

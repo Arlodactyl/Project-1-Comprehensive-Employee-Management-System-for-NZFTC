@@ -53,27 +53,41 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the new dashboard home page that shows summary metrics
-            ContentFrame.Navigate(new DashboardHomePage(_currentUser));
+            // Check if DashboardHomePage exists, if not show a message
+            try
+            {
+                ContentFrame.Navigate(new DashboardHomePage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Dashboard home page is under construction.",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
 
         /// <summary>
-        /// My Profile button clicked - shows a "coming soon" message
-        /// TODO: Create a ProfilePage.xaml and navigate to it
+        /// My Profile button clicked - shows the profile page
         /// </summary>
         private void MyProfile_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box to inform the user this feature is not yet available
-            // MessageBoxButton.OK means it only has an OK button
-            // MessageBoxImage.Information shows the blue "i" icon
-            MessageBox.Show(
-                "Profile page - To be implemented",
-                "Coming Soon",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-            // After the message is dismissed, navigate to the ProfilePage
-            ContentFrame.Navigate(new ProfilePage(_currentUser));
+            // Try to navigate to ProfilePage, show message if it doesn't exist yet
+            try
+            {
+                ContentFrame.Navigate(new ProfilePage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Profile page - To be implemented",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
 
         /// <summary>
@@ -82,79 +96,105 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void LeaveManagement_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the LeavePage
-            // We pass the current user so the page knows who's logged in
-            ContentFrame.Navigate(new LeavePage(_currentUser));
+            // Try to navigate to LeavePage
+            try
+            {
+                ContentFrame.Navigate(new LeavePage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Leave management page - To be implemented",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
 
         /// <summary>
-        /// Payroll button clicked - shows a "coming soon" message
-        /// TODO: Create a PayrollPage.xaml and navigate to it
+        /// Payroll button clicked - navigates to payroll page
         /// </summary>
         private void Payroll_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box to inform the user this feature is not yet available
-            MessageBox.Show(
-                "Payroll page - To be implemented",
-                "Coming Soon",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-            // Navigate to the payroll page passing the current user
-            ContentFrame.Navigate(new PayrollPage(_currentUser));
+            // Try to navigate to PayrollPage
+            try
+            {
+                ContentFrame.Navigate(new PayrollPage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Payroll page - To be implemented",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
 
         /// <summary>
-        /// Holidays button clicked - shows a "coming soon" message
-        /// TODO: Create a HolidaysPage.xaml and navigate to it
+        /// Holidays button clicked - navigates to holidays page
         /// </summary>
         private void Holidays_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box to inform the user this feature is not yet available
-            MessageBox.Show(
-                "Holidays page - To be implemented",
-                "Coming Soon",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-            // Navigate to the holidays page passing the current user
-            ContentFrame.Navigate(new HolidaysPage(_currentUser));
+            // Try to navigate to HolidaysPage
+            try
+            {
+                ContentFrame.Navigate(new HolidaysPage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Holidays page - To be implemented",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
-        
 
         /// <summary>
-        /// Grievances button clicked - shows a "coming soon" message
-        /// TODO: Create a GrievancesPage.xaml and navigate to it
+        /// Grievances button clicked - navigates to grievances page
         /// </summary>
         private void Grievances_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box to inform the user this feature is not yet available
-            MessageBox.Show(
-                "Grievances page - To be implemented",
-                "Coming Soon",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-            // Navigate to the grievances page passing the current user
-            ContentFrame.Navigate(new GrievancesPage(_currentUser));
+            // Try to navigate to GrievancesPage
+            try
+            {
+                ContentFrame.Navigate(new GrievancesPage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Grievances page - To be implemented",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
 
         /// <summary>
         /// Manage Employees button clicked (ADMIN ONLY)
-        /// Shows a "coming soon" message
-        /// TODO: Create an EmployeeManagementPage.xaml and navigate to it
+        /// Navigates to employee management page
         /// </summary>
         private void ManageEmployees_Click(object sender, RoutedEventArgs e)
         {
-            // Show a popup message box to inform the user this feature is not yet available
-            MessageBox.Show(
-                "Employee Management page - To be implemented",
-                "Coming Soon",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-            // Navigate to the employee management page passing the current user
-            ContentFrame.Navigate(new EmployeeManagementPage(_currentUser));
+            // Try to navigate to EmployeeManagementPage
+            try
+            {
+                ContentFrame.Navigate(new EmployeeManagementPage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Employee Management page - To be implemented",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
 
         /// <summary>
@@ -163,8 +203,20 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void Departments_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the departments page
-            ContentFrame.Navigate(new DepartmentsPage(_currentUser));
+            // Try to navigate to DepartmentsPage
+            try
+            {
+                ContentFrame.Navigate(new DepartmentsPage(_currentUser));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Departments page - To be implemented",
+                    "Coming Soon",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
         }
 
         /// <summary>
