@@ -1,24 +1,19 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NZFTC_EmployeeSystem.Models
 {
     // This class represents employee grievances
-    // Demonstrates ENCAPSULATION
-    public class Grievance
+    // Demonstrates ENCAPSULATION, INHERITANCE, and POLYMORPHISM
+    // INHERITANCE: Grievance inherits from BaseRequest
+    public class Grievance : BaseRequest
     {
-        // Primary key
-        public int Id { get; set; }
-
-        // Foreign key to Employee
-        public int EmployeeId { get; set; }
-
-        // Navigation property
-        public Employee? Employee { get; set; }
+        // NOTE: Id, EmployeeId, Employee, Status inherited from BaseRequest
+        // BaseRequest also provides RequestDate (replaces SubmittedDate)
 
         // Grievance details
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string Status { get; set; } = "Open"; // Open, InProgress, Resolved, Closed
 
         // Response tracking
         public string? AdminResponse { get; set; }
@@ -27,9 +22,32 @@ namespace NZFTC_EmployeeSystem.Models
 
         // Navigation property - the user (admin) who handled this grievance
         // Associates HandledByUserId with a User entity
-        public User? HandledByUser { get; set; }
+        [ForeignKey("HandledByUserId")]
+        public virtual User? HandledByUser { get; set; }
 
-        // Audit fields
-        public DateTime SubmittedDate { get; set; } = DateTime.Now;
+        // POLYMORPHISM: Override abstract method from BaseRequest
+        public override string GetRequestSummary()
+        {
+            return $"Grievance: {Title} - Status: {Status}";
+        }
+
+        // POLYMORPHISM: Override virtual method - grievances have different approval rules
+        public override bool CanBeApproved()
+        {
+            // Grievances can move from "Open" to "InProgress" to "Closed"
+            return Status == "Open" || Status == "InProgress";
+        }
+
+        // POLYMORPHISM: Override virtual method - all grievances are high priority
+        public override string GetPriorityLevel()
+        {
+            return "High";
+        }
+
+        // POLYMORPHISM: Override virtual method - returns request type
+        public override string GetRequestType()
+        {
+            return "Grievance";
+        }
     }
 }

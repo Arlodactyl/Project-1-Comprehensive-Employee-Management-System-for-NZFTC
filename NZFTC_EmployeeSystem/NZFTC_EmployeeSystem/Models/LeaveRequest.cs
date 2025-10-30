@@ -1,40 +1,59 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NZFTC_EmployeeSystem.Models
 {
-    // This class represents a leave request in the system
-    // Demonstrates ENCAPSULATION and data validation
-    public class LeaveRequest
+    // INHERITANCE: LeaveRequest inherits from BaseRequest
+    public class LeaveRequest : BaseRequest
     {
-        // Primary key
-        public int Id { get; set; }
+        // NOTE: Id, EmployeeId, Employee, Status, RequestDate inherited from BaseRequest
 
-        // Foreign key to Employee
-        public int EmployeeId { get; set; }
-
-        // Navigation property - shows ASSOCIATION
-        public Employee? Employee { get; set; }
-
-        // Leave details
+        // Leave-specific details
         public string LeaveType { get; set; } = string.Empty; // Annual, Sick, Unpaid
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int DaysRequested { get; set; }
         public string Reason { get; set; } = string.Empty;
 
-        // Status tracking
-        public string Status { get; set; } = "Pending"; // Pending, Approved, Rejected
-
         // Approval information
         public int? ApprovedByUserId { get; set; }
         public DateTime? ApprovedDate { get; set; }
 
-        // Navigation property - the user who approved this leave request
-        // This creates a link to the User table using the ApprovedByUserId
-        // field. It's optional because a leave may not yet be approved.
-        public User? ApprovedByUser { get; set; }
+        // Navigation property - links to User who approved this leave
+        [ForeignKey("ApprovedByUserId")]
+        public virtual User? ApprovedByUser { get; set; }
 
-        // Audit field
-        public DateTime RequestDate { get; set; } = DateTime.Now;
+        // POLYMORPHISM: Override abstract method
+        public override string GetRequestSummary()
+        {
+            return $"{LeaveType}: {StartDate:dd/MM/yyyy} to {EndDate:dd/MM/yyyy} ({DaysRequested} days) - Status: {Status}";
+        }
+
+        // POLYMORPHISM: Override virtual method - custom validation for leave
+        public override bool CanBeApproved()
+        {
+            bool baseCheck = base.CanBeApproved();
+            bool hasValidDays = DaysRequested > 0 && DaysRequested <= 30;
+            bool hasValidDates = EndDate >= StartDate;
+
+            return baseCheck && hasValidDays && hasValidDates;
+        }
+
+        // POLYMORPHISM: Override virtual method - priority based on leave type
+        public override string GetPriorityLevel()
+        {
+            if (LeaveType == "Sick Leave")
+                return "High";
+            else if (LeaveType == "Annual Leave")
+                return "Normal";
+            else
+                return "Low";
+        }
+
+        // POLYMORPHISM: Override virtual method - returns request type
+        public override string GetRequestType()
+        {
+            return "Leave Request";
+        }
     }
 }
