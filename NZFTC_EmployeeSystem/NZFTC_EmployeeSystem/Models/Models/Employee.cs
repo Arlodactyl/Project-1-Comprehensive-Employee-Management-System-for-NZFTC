@@ -1,6 +1,7 @@
 using System;
 
 namespace NZFTC_EmployeeSystem.Models
+{
 
     /// <summary>
     /// This class represents one employee in the database
@@ -49,5 +50,7 @@ namespace NZFTC_EmployeeSystem.Models
         // Full name helper - this combines first and last name
         // This is NOT stored in database, it's calculated when needed
         public string FullName => $"{FirstName} {LastName}";
+        }
     }
+
 }
