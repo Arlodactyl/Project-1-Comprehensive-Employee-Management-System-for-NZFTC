@@ -140,32 +140,26 @@
                             Style="{StaticResource SidebarButtonStyle}"
                             Click="MyProfile_Click"/>
 
-                    <!-- Admin Section -->
+                    <!-- Admin Section (Only visible to Admins) -->
                     <StackPanel x:Name="AdminMenuPanel" Visibility="Collapsed" Margin="0,20,0,0">
                         <Button Content="Employee Management" 
                                 Style="{StaticResource SidebarButtonStyle}"
                                 Click="ManageEmployees_Click"/>
 
-                        <Button Content="Leave Management" 
+                        <Button Content="Departments" 
                                 Style="{StaticResource SidebarButtonStyle}"
-                                Click="LeaveManagement_Click"/>
+                                Click="Departments_Click"/>
 
                         <Button Content="Payroll" 
                                 Style="{StaticResource SidebarButtonStyle}"
                                 Click="Payroll_Click"/>
 
-                        <Button Content="Contact Management" 
-                                Style="{StaticResource SidebarButtonStyle}"/>
-
                         <Button Content="Grievances" 
                                 Style="{StaticResource SidebarButtonStyle}"
                                 Click="Grievances_Click"/>
-
-                        <Button Content="Settings" 
-                                Style="{StaticResource SidebarButtonStyle}"/>
                     </StackPanel>
 
-                    <!-- Employee Section (visible to all) -->
+                    <!-- Employee Section (visible to all users) -->
                     <StackPanel Margin="0,20,0,0">
                         <Button Content="Leave Management" 
                                 Style="{StaticResource SidebarButtonStyle}"
@@ -177,13 +171,13 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Logo at Bottom -->
-                <StackPanel Grid.Row="2" Margin="20,0,20,20" HorizontalAlignment="Center">
+                <!-- Logo at Bottom - MADE MUCH BIGGER -->
+                <StackPanel Grid.Row="2" Margin="20,0,20,30" HorizontalAlignment="Center">
                     <Image Source="/Images/logo.png" 
-                           Height="60" 
-                           Width="120"
+                           Height="150" 
+                           Width="220"
                            Stretch="Uniform"
-                           Opacity="0.7"/>
+                           Opacity="0.8"/>
                 </StackPanel>
             </Grid>
         </Border>
