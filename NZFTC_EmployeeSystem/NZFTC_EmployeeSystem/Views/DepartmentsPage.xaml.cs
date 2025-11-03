@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
 using System;
@@ -10,8 +11,8 @@ namespace NZFTC_EmployeeSystem.Views
     /// <summary>
     /// Interaction logic for DepartmentsPage.xaml
     /// This page allows administrators to manage departments within the organization.
-    /// Admins can view all departments, add new ones, and delete departments that
-    /// have no employees assigned to them.
+    /// Admins can view all departments, add new ones, delete departments that
+    /// have no employees assigned to them, and view which employees are in each department.
     /// </summary>
     public partial class DepartmentsPage : Page
     {
@@ -75,6 +76,58 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );
+            }
+        }
+
+        /// <summary>
+        /// Handles the View Employees button click for a department.
+        /// This loads and displays all employees assigned to the selected department.
+        /// </summary>
+        private void ViewEmployees_Click(object sender, RoutedEventArgs e)
+        {
+            // Step 1: Get the department ID from the button's Tag property
+            if (sender is Button button && button.Tag is int deptId)
+            {
+                try
+                {
+                    using (var db = new AppDbContext())
+                    {
+                        // Step 2: Get the department name
+                        var department = db.Departments.Find(deptId);
+                        if (department == null)
+                        {
+                            MessageBox.Show(
+                                "Department not found.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error
+                            );
+                            return;
+                        }
+
+                        // Step 3: Load all employees in this department
+                        var employees = db.Employees
+                            .Where(e => e.DepartmentId == deptId)
+                            .OrderBy(e => e.LastName)
+                            .ToList();
+
+                        // Step 4: Update the right side panel with employee information
+                        DepartmentEmployeesTitle.Text = $"Employees in {department.Name} Department";
+                        EmployeeCountText.Text = $"Total: {employees.Count} employee(s)";
+
+                        // Step 5: Bind the employees to the grid
+                        EmployeesGrid.ItemsSource = employees;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Error loading employees: {ex.Message}",
+                        "Database Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
             }
         }
 
@@ -222,9 +275,23 @@ namespace NZFTC_EmployeeSystem.Views
                             // Count how many employees are in this department
                             int employeeCount = db.Employees.Count(e => e.DepartmentId == deptId);
 
+                            // Get the names of employees in this department
+                            var employeeNames = db.Employees
+                                .Where(e => e.DepartmentId == deptId)
+                                .Select(e => e.FullName)
+                                .Take(5) // Show up to 5 names
+                                .ToList();
+
+                            string employeeList = string.Join(", ", employeeNames);
+                            if (employeeCount > 5)
+                            {
+                                employeeList += $", and {employeeCount - 5} more...";
+                            }
+
                             MessageBox.Show(
-                                $"Cannot delete this department because it has {employeeCount} employee(s) assigned to it.\n\n" +
-                                "Please reassign or remove the employees first before deleting the department.",
+                                $"Cannot delete '{department.Name}' department because it has {employeeCount} employee(s) assigned:\n\n" +
+                                $"{employeeList}\n\n" +
+                                "Please reassign or remove these employees first before deleting the department.",
                                 "Delete Not Allowed",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Warning
@@ -247,7 +314,12 @@ namespace NZFTC_EmployeeSystem.Views
                         MessageBoxImage.Information
                     );
 
-                    // Step 8: Reload the departments grid to reflect the deletion
+                    // Step 8: Clear the employee list on the right side
+                    DepartmentEmployeesTitle.Text = "Select a department to view employees";
+                    EmployeeCountText.Text = "";
+                    EmployeesGrid.ItemsSource = null;
+
+                    // Step 9: Reload the departments grid to reflect the deletion
                     LoadDepartmentData();
                 }
                 catch (Exception ex)

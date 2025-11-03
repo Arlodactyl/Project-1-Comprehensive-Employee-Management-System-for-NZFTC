@@ -59,6 +59,28 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- View Button Style -->
+        <Style x:Key="ViewButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid Background="White">
@@ -75,87 +97,137 @@
                        Foreground="White"/>
         </Border>
 
-        <!-- Main Content -->
+        <!-- Main Content with Two Columns -->
         <Grid Grid.Row="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Instructions -->
-            <TextBlock Grid.Row="0"
-                       Text="Manage company departments. You can add new departments or delete existing ones (if they have no employees assigned)."
-                       FontSize="13"
-                       Foreground="#7F8C8D"
-                       TextWrapping="Wrap"
-                       Margin="0,0,0,15"/>
+            <!-- LEFT SIDE: Departments List -->
+            <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
+                <!-- Instructions -->
+                <TextBlock Text="Manage company departments. Click 'View' to see who's assigned to each department."
+                           FontSize="13"
+                           Foreground="#7F8C8D"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,15"/>
 
-            <!-- Departments DataGrid -->
-            <DataGrid x:Name="DepartmentGrid"
-                      Grid.Row="1"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      SelectionMode="Single"
-                      CanUserAddRows="False"
-                      AlternatingRowBackground="#ECF0F1"
-                      GridLinesVisibility="Horizontal"
-                      HeadersVisibility="Column"
-                      Margin="0,0,0,20">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Department ID" Binding="{Binding Id}" Width="120"/>
-                    <DataGridTextColumn Header="Department Name" Binding="{Binding Name}" Width="*"/>
-                    <!-- Actions column with Delete button -->
-                    <DataGridTemplateColumn Header="Actions" Width="120">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Delete"
-                                        Tag="{Binding Id}"
-                                        Click="DeleteDepartment_Click"
-                                        Style="{StaticResource DeleteButton}"
-                                        Padding="10,5"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                <!-- Departments DataGrid -->
+                <DataGrid x:Name="DepartmentGrid"
+                          Height="300"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          CanUserAddRows="False"
+                          AlternatingRowBackground="#ECF0F1"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          Margin="0,0,0,20">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                        <DataGridTextColumn Header="Department Name" Binding="{Binding Name}" Width="*"/>
+                        <!-- Actions column with View and Delete buttons -->
+                        <DataGridTemplateColumn Header="Actions" Width="180">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Content="View"
+                                                Tag="{Binding Id}"
+                                                Click="ViewEmployees_Click"
+                                                Style="{StaticResource ViewButton}"
+                                                Padding="8,4"
+                                                Margin="0,0,5,0"/>
+                                        <Button Content="Delete"
+                                                Tag="{Binding Id}"
+                                                Click="DeleteDepartment_Click"
+                                                Style="{StaticResource DeleteButton}"
+                                                Padding="8,4"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-            <!-- Add Department Form -->
-            <Border Grid.Row="2" 
-                    Background="#F8F9FA" 
-                    Padding="20"
-                    CornerRadius="5"
-                    BorderBrush="#BDC3C7"
-                    BorderThickness="1">
-                <StackPanel>
-                    <TextBlock Text="Add New Department" 
-                               FontSize="16" 
-                               FontWeight="SemiBold"
-                               Foreground="#2C3E50"
-                               Margin="0,0,0,15"/>
+                <!-- Add Department Form -->
+                <Border Background="#F8F9FA" 
+                        Padding="20"
+                        CornerRadius="5"
+                        BorderBrush="#BDC3C7"
+                        BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Add New Department" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold"
+                                   Foreground="#2C3E50"
+                                   Margin="0,0,0,15"/>
 
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Margin="0,0,20,0">
-                            <TextBlock Text="Department Name:" 
-                                       FontSize="13" 
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="DepartmentNameTextBox"
-                                     Width="300"
-                                     Height="35"
-                                     FontSize="13"
-                                     Padding="8"
-                                     VerticalContentAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Margin="0,0,20,0">
+                                <TextBlock Text="Department Name:" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="DepartmentNameTextBox"
+                                         Width="250"
+                                         Height="35"
+                                         FontSize="13"
+                                         Padding="8"
+                                         VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <Button Content="Add Department"
+                                    Click="AddDepartment_Click"
+                                    Style="{StaticResource ActionButton}"
+                                    Width="150"
+                                    VerticalAlignment="Bottom"/>
                         </StackPanel>
-
-                        <Button Content="Add Department"
-                                Click="AddDepartment_Click"
-                                Style="{StaticResource ActionButton}"
-                                Width="150"
-                                VerticalAlignment="Bottom"/>
                     </StackPanel>
-                </StackPanel>
-            </Border>
+                </Border>
+            </StackPanel>
+
+            <!-- RIGHT SIDE: Employees in Selected Department -->
+            <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
+                <!-- Department Employees Section Header -->
+                <TextBlock x:Name="DepartmentEmployeesTitle"
+                           Text="Select a department to view employees"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,10"/>
+
+                <!-- Employee Count -->
+                <TextBlock x:Name="EmployeeCountText"
+                           Text=""
+                           FontSize="13"
+                           Foreground="#7F8C8D"
+                           Margin="0,0,0,15"/>
+
+                <!-- Employees DataGrid -->
+                <DataGrid x:Name="EmployeesGrid"
+                          Height="400"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          CanUserAddRows="False"
+                          AlternatingRowBackground="#ECF0F1"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="*"/>
+                        <DataGridTextColumn Header="Job Title" Binding="{Binding JobTitle}" Width="*"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>
