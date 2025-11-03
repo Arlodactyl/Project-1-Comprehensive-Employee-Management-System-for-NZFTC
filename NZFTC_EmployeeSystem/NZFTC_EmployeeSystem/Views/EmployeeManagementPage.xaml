@@ -38,6 +38,28 @@
             </Setter>
         </Style>
 
+        <!-- Toggle Button Style -->
+        <Style x:Key="ToggleButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#F39C12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#D68910"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- TextBox Style -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="32"/>
@@ -83,10 +105,16 @@
             <StackPanel Margin="20">
 
                 <!-- Employees List Section -->
-                <TextBlock Text="Employee List" 
+                <TextBlock Text="Current Employees" 
                            FontSize="18" 
                            FontWeight="Bold" 
                            Foreground="#2C3E50"
+                           Margin="0,0,0,5"/>
+
+                <TextBlock Text="View all employees and their department assignments. Select an employee and click 'Toggle Active Status' to activate or deactivate them." 
+                           FontSize="12" 
+                           Foreground="#7F8C8D"
+                           TextWrapping="Wrap"
                            Margin="0,0,0,10"/>
 
                 <DataGrid x:Name="EmployeesGrid"
@@ -110,7 +138,7 @@
                 </DataGrid>
 
                 <Button Content="Toggle Active Status" 
-                        Style="{StaticResource ActionButton}"
+                        Style="{StaticResource ToggleButton}"
                         Click="ToggleActive_Click"
                         HorizontalAlignment="Left"/>
 
@@ -119,13 +147,20 @@
                         BorderThickness="1" 
                         Padding="20" 
                         Margin="0,30,0,0"
+                        Background="#F8F9FA"
                         CornerRadius="5">
                     <StackPanel>
                         <TextBlock Text="Create New Employee" 
                                    FontSize="18" 
                                    FontWeight="Bold" 
                                    Foreground="#2C3E50"
-                                   Margin="0,0,0,20"/>
+                                   Margin="0,0,0,5"/>
+
+                        <TextBlock Text="Fill in the form below to create a new employee. Fields marked with * are required." 
+                                   FontSize="12" 
+                                   Foreground="#7F8C8D"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,15"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -144,73 +179,73 @@
 
                             <!-- First Name -->
                             <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="First Name *" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="First Name *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="FirstNameTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
                             <!-- Last Name -->
                             <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Last Name *" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Last Name *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="LastNameTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
                             <!-- Email -->
                             <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Email *" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Email *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="EmailTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
                             <!-- Phone -->
                             <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Phone Number" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Phone Number" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="PhoneTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
                             <!-- Job Title -->
                             <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Job Title" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Job Title" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="JobTitleTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
-                            <!-- Department -->
+                            <!-- Department - CHANGED FROM TEXTBOX TO COMBOBOX -->
                             <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Department" FontSize="13" Margin="0,0,0,5"/>
-                                <TextBox x:Name="DepartmentTextBox" Style="{StaticResource ModernTextBox}"/>
+                                <TextBlock Text="Department *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="DepartmentComboBox" Style="{StaticResource ModernComboBox}"/>
                             </StackPanel>
 
                             <!-- Hire Date -->
                             <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Hire Date" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Hire Date" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <DatePicker x:Name="HireDatePicker" Style="{StaticResource ModernDatePicker}"/>
                             </StackPanel>
 
                             <!-- Salary -->
                             <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Salary *" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Salary *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="SalaryTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
                             <!-- Tax Rate -->
                             <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Tax Rate (%) *" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Tax Rate (%) *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="TaxRateTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
                             <!-- Username -->
                             <StackPanel Grid.Row="4" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Username *" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Username *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBox x:Name="UsernameTextBox" Style="{StaticResource ModernTextBox}"/>
                             </StackPanel>
 
                             <!-- Password -->
                             <StackPanel Grid.Row="5" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Password *" FontSize="13" Margin="0,0,0,5"/>
-                                <PasswordBox x:Name="PasswordBox" Height="32" FontSize="13"/>
+                                <TextBlock Text="Password *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <PasswordBox x:Name="PasswordBox" Height="32" FontSize="13" Padding="8,5"/>
                             </StackPanel>
 
                             <!-- Role -->
                             <StackPanel Grid.Row="5" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Role *" FontSize="13" Margin="0,0,0,5"/>
+                                <TextBlock Text="Role *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <ComboBox x:Name="RoleComboBox" Style="{StaticResource ModernComboBox}">
                                     <ComboBoxItem Content="Employee"/>
                                     <ComboBoxItem Content="Admin"/>
@@ -223,7 +258,23 @@
                                 Background="#27AE60"
                                 Click="CreateEmployee_Click"
                                 HorizontalAlignment="Left"
-                                Margin="0,10,0,0"/>
+                                Margin="0,10,0,0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="5"
+                                            Padding="15,8">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#229954"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                     </StackPanel>
                 </Border>
             </StackPanel>
