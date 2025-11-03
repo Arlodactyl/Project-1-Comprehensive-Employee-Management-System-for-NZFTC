@@ -31,6 +31,9 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 AdminMenuPanel.Visibility = Visibility.Visible;
             }
+
+            // Automatically load Dashboard page on startup
+            ContentFrame.Navigate(new DashboardHomePage(_currentUser));
         }
 
         // Load user's profile picture from ProfilePictures folder

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NZFTC_EmployeeSystem")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+661f98fe849f24db5dc39385ed95d112a0daad53")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e661c5b9b84363af5eca6b95df87879802280bb")]
 [assembly: System.Reflection.AssemblyProductAttribute("NZFTC_EmployeeSystem")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NZFTC_EmployeeSystem")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
