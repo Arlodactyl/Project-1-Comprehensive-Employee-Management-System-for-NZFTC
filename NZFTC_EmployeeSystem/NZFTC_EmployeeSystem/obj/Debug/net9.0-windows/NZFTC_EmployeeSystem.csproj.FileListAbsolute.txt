@@ -660,6 +660,23 @@ D:\Users\270063836\OneDrive - UP Education\Desktop\Project-1-Comprehensive-Emplo
 D:\Users\270063836\OneDrive - UP Education\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.pdb
 D:\Users\270063836\OneDrive - UP Education\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.genruntimeconfig.cache
 D:\Users\270063836\OneDrive - UP Education\Desktop\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\ref\NZFTC_EmployeeSystem.dll
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.csproj.AssemblyReference.cache
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.baml
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardHomePage.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DepartmentsPage.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\EmployeeManagementPage.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\GrievancesPage.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\HolidaysPage.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\LeavePage.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\LoginWindow.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\PayrollPage.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_Content.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_MarkupCompile.cache
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_MarkupCompile.lref
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardWindow.g.cs
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\ProfilePage.g.cs
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\NZFTC_EmployeeSystem.exe
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\NZFTC_EmployeeSystem.deps.json
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\NZFTC_EmployeeSystem.runtimeconfig.json
@@ -790,26 +807,9 @@ C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Mana
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\runtimes\win-x86\native\e_sqlite3.dll
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.csproj.AssemblyReference.cache
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.baml
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DepartmentsPage.baml
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\MainWindow.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardHomePage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardWindow.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DepartmentsPage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\EmployeeManagementPage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\GrievancesPage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\HolidaysPage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\LeavePage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\LoginWindow.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\PayrollPage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\ProfilePage.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\App.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_Content.g.cs
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_MarkupCompile.cache
-C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem_MarkupCompile.lref
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardHomePage.baml
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DashboardWindow.baml
+C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\DepartmentsPage.baml
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\EmployeeManagementPage.baml
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\GrievancesPage.baml
 C:\Users\64204\Desktop\ypoobeearleiabailey\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\HolidaysPage.baml

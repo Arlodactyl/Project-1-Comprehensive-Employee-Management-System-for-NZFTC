@@ -9,14 +9,14 @@
       Title="My Profile">
     <!--
       ProfilePage
-      Displays details of the currently logged in employee. Each piece of
-      information is shown in a horizontal stack panel with a label and
-      corresponding value. A ScrollViewer wraps the content so it can
-      accommodate future expansion without clipping.
+      This page displays the logged-in employee's personal information,
+      including their profile picture, contact details, job information,
+      and leave balances. Employees can upload a profile picture which
+      is saved to the ProfilePictures folder.
     -->
 
     <Page.Resources>
-        <!-- TextBox Style -->
+        <!-- TextBox Style for displaying read-only employee information -->
         <Style x:Key="ProfileTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="35"/>
             <Setter Property="Padding" Value="10,8"/>
@@ -26,14 +26,13 @@
             <Setter Property="Background" Value="White"/>
         </Style>
 
-        <!-- Button Style -->
+        <!-- Button Style for the Upload Picture button -->
         <Style x:Key="ActionButton" TargetType="Button">
             <Setter Property="Background" Value="#5DADE2"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="100"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -41,7 +40,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="5">
+                                CornerRadius="5"
+                                Padding="10,0">
                             <ContentPresenter HorizontalAlignment="Center"
                                             VerticalAlignment="Center"/>
                         </Border>
@@ -59,10 +59,12 @@
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Header section -->
             <RowDefinition Height="*"/>
+            <!-- Scrollable content section -->
         </Grid.RowDefinitions>
 
-        <!-- Header -->
+        <!-- Header with page title -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
             <TextBlock Text="My Profile" 
                        FontSize="24" 
@@ -70,22 +72,58 @@
                        Foreground="White"/>
         </Border>
 
-        <!-- Content -->
+        <!-- Main content area with scrolling -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <Grid Margin="40,30">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <!-- Profile picture section -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Personal information section -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Leave balance section -->
                 </Grid.RowDefinitions>
 
-                <!-- Profile Image Circle -->
-                <Ellipse Grid.Row="0" 
-                         Width="100" 
-                         Height="100" 
-                         Fill="#E74C3C"
-                         HorizontalAlignment="Left"
-                         Margin="0,0,0,30"/>
+                <!-- Profile Picture Section -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,30" HorizontalAlignment="Left">
+                    <TextBlock Text="Profile Picture" 
+                               FontSize="16" 
+                               FontWeight="Bold"
+                               Foreground="#2C3E50"
+                               Margin="0,0,0,10"/>
+
+                    <!-- Profile Picture Display -->
+                    <!-- Border can only have ONE child, so we wrap Ellipse and Image in a Grid -->
+                    <Border Width="150" 
+                            Height="150" 
+                            CornerRadius="75"
+                            BorderBrush="#BDC3C7"
+                            BorderThickness="3"
+                            Margin="0,0,0,15">
+                        <!-- Clip makes the Border circular -->
+                        <Border.Clip>
+                            <EllipseGeometry Center="75,75" RadiusX="75" RadiusY="75"/>
+                        </Border.Clip>
+
+                        <!-- Grid is the single child of Border and contains both avatar elements -->
+                        <Grid>
+                            <!-- Default Red Circle shows when no profile picture is uploaded -->
+                            <Ellipse x:Name="DefaultAvatar"
+                                     Fill="#E74C3C"/>
+
+                            <!-- Profile Picture Image shows when a picture has been uploaded -->
+                            <Image x:Name="ProfilePictureImage"
+                                   Stretch="UniformToFill"
+                                   Visibility="Collapsed"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Upload Picture Button -->
+                    <Button Content="Upload Picture"
+                            Style="{StaticResource ActionButton}"
+                            Width="150"
+                            Click="UploadPicture_Click"/>
+                </StackPanel>
 
                 <!-- Personal Information Section -->
                 <Border Grid.Row="1" 
@@ -96,17 +134,24 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
+                            <!-- Left column for fields -->
                             <ColumnDefinition Width="20"/>
+                            <!-- Spacing between columns -->
                             <ColumnDefinition Width="*"/>
+                            <!-- Right column for fields -->
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
+                            <!-- Full Name (spans both columns) -->
                             <RowDefinition Height="Auto"/>
+                            <!-- Email and Phone -->
                             <RowDefinition Height="Auto"/>
+                            <!-- Job Title and Department -->
                             <RowDefinition Height="Auto"/>
+                            <!-- Hire Date and Salary -->
                         </Grid.RowDefinitions>
 
-                        <!-- Full Name -->
+                        <!-- Full Name (spans full width) -->
                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
                             <TextBlock Text="Full Name" 
                                        FontSize="13" 
@@ -117,7 +162,7 @@
                                      IsReadOnly="True"/>
                         </StackPanel>
 
-                        <!-- Email -->
+                        <!-- Email (left column) -->
                         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,15">
                             <TextBlock Text="Email" 
                                        FontSize="13" 
@@ -128,7 +173,7 @@
                                      IsReadOnly="True"/>
                         </StackPanel>
 
-                        <!-- Phone -->
+                        <!-- Phone Number (right column) -->
                         <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,15">
                             <TextBlock Text="Phone Number" 
                                        FontSize="13" 
@@ -139,7 +184,7 @@
                                      IsReadOnly="True"/>
                         </StackPanel>
 
-                        <!-- Job Title -->
+                        <!-- Job Title (left column) -->
                         <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,15">
                             <TextBlock Text="Job Title" 
                                        FontSize="13" 
@@ -150,7 +195,7 @@
                                      IsReadOnly="True"/>
                         </StackPanel>
 
-                        <!-- Department -->
+                        <!-- Department (right column) -->
                         <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,15">
                             <TextBlock Text="Department" 
                                        FontSize="13" 
@@ -161,7 +206,7 @@
                                      IsReadOnly="True"/>
                         </StackPanel>
 
-                        <!-- Hire Date -->
+                        <!-- Hire Date (left column) -->
                         <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,15">
                             <TextBlock Text="Hire Date" 
                                        FontSize="13" 
@@ -172,7 +217,7 @@
                                      IsReadOnly="True"/>
                         </StackPanel>
 
-                        <!-- Salary -->
+                        <!-- Salary (right column) -->
                         <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,15">
                             <TextBlock Text="Salary" 
                                        FontSize="13" 
@@ -201,11 +246,14 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
+                                <!-- Annual leave column -->
                                 <ColumnDefinition Width="20"/>
+                                <!-- Spacing -->
                                 <ColumnDefinition Width="*"/>
+                                <!-- Sick leave column -->
                             </Grid.ColumnDefinitions>
 
-                            <!-- Annual Leave Balance -->
+                            <!-- Annual Leave Balance (left) -->
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Annual Leave Balance" 
                                            FontSize="13" 
@@ -216,7 +264,7 @@
                                          IsReadOnly="True"/>
                             </StackPanel>
 
-                            <!-- Sick Leave Balance -->
+                            <!-- Sick Leave Balance (right) -->
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Sick Leave Balance" 
                                            FontSize="13" 

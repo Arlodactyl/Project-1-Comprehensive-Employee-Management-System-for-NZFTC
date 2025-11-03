@@ -22,32 +22,30 @@ namespace NZFTC_EmployeeSystem.Models
         public string JobTitle { get; set; } = string.Empty;
 
         // Department details
-        // Instead of storing the department name directly on the employee,
-        // we store a foreign key to the Department table. This makes
-        // managing departments easier and more consistent. When you need
-        // the department name, you can access it through the Department
-        // navigation property.
         public int DepartmentId { get; set; } // Foreign key to Department
 
         // Navigation property - the department this employee belongs to
-        // One department can have many employees (one-to-many relationship)
         public Department? Department { get; set; }
 
         public DateTime HireDate { get; set; } = DateTime.Now;
 
-        // Salary information - decimal is used for money values to keep it legit
+        // Salary information
         public decimal Salary { get; set; }
-        public decimal TaxRate { get; set; } // Store as percentage (e.g., 15 means 15%)
+        public decimal TaxRate { get; set; }
 
-        // Leave balances - how many days of leave the employee has
-        public int AnnualLeaveBalance { get; set; } = 20; // Default 20 days per year
-        public int SickLeaveBalance { get; set; } = 10;   // Default 10 days per year
+        // Leave balances
+        public int AnnualLeaveBalance { get; set; } = 20;
+        public int SickLeaveBalance { get; set; } = 10;
 
         // Account status
-        public bool IsActive { get; set; } = true; // Is the employee currently working here?
+        public bool IsActive { get; set; } = true;
 
-        // Full name helper - this combines first and last name
-        // This is NOT stored in database, it's calculated when needed
+        // Profile picture path - stores the file path to the employee's profile picture
+        // Example: "C:\Users\YourName\Pictures\profile.jpg"
+        // If null or empty, a default red circle will be shown
+        public string? ProfilePicturePath { get; set; }
+
+        // Full name helper
         public string FullName => $"{FirstName} {LastName}";
     }
 }
