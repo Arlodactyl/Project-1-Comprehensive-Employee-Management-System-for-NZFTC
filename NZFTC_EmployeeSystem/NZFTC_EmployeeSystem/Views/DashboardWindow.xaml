@@ -12,6 +12,41 @@
         WindowState="Maximized">
 
     <Window.Resources>
+        <!-- Animation for expanding menu -->
+        <Storyboard x:Key="ExpandMenu">
+            <DoubleAnimation Storyboard.TargetName="SidebarBorder" 
+                           Storyboard.TargetProperty="Width" 
+                           To="270" 
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <!-- Fade in text elements -->
+            <DoubleAnimation Storyboard.TargetName="MenuPanel" 
+                           Storyboard.TargetProperty="Opacity" 
+                           To="1" 
+                           Duration="0:0:0.3"
+                           BeginTime="0:0:0.1"/>
+        </Storyboard>
+
+        <!-- Animation for collapsing menu -->
+        <Storyboard x:Key="CollapseMenu">
+            <DoubleAnimation Storyboard.TargetName="SidebarBorder" 
+                           Storyboard.TargetProperty="Width" 
+                           To="70" 
+                           Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <!-- Fade out text elements quickly -->
+            <DoubleAnimation Storyboard.TargetName="MenuPanel" 
+                           Storyboard.TargetProperty="Opacity" 
+                           To="0.0" 
+                           Duration="0:0:0.15"/>
+        </Storyboard>
+
         <!-- Teal Button Style for Sidebar -->
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#40C4C8"/>
@@ -32,6 +67,35 @@
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                             VerticalAlignment="Center"
                                             Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2EB8BC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Collapsed Button Style (Text abbreviation only) -->
+        <Style x:Key="CollapsedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#40C4C8"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Margin" Value="5,0,5,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -97,16 +161,55 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Hamburger Menu Button Style -->
+        <Style x:Key="HamburgerButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Rectangle Grid.Row="0" Height="3" Fill="{TemplateBinding Foreground}" Margin="8,4"/>
+                                <Rectangle Grid.Row="1" Height="3" Fill="{TemplateBinding Foreground}" Margin="8,4"/>
+                                <Rectangle Grid.Row="2" Height="3" Fill="{TemplateBinding Foreground}" Margin="8,4"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E8E8E8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left Sidebar Navigation -->
-        <Border Grid.Column="0" Background="#ECF0F1" BorderBrush="#BDC3C7" BorderThickness="0,0,1,0">
+        <Border x:Name="SidebarBorder" 
+                Grid.Column="0" 
+                Background="#ECF0F1" 
+                BorderBrush="#BDC3C7" 
+                BorderThickness="0,0,1,0"
+                Width="270">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -114,65 +217,165 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Close Button (X) at top -->
+                <!-- Hamburger Menu Button at top (replaces the ? button) -->
                 <Button Grid.Row="0"
-                        Content="?" 
-                        Style="{StaticResource CloseButtonStyle}"
+                        x:Name="MenuToggleButton"
+                        Style="{StaticResource HamburgerButtonStyle}"
                         HorizontalAlignment="Left"
                         Margin="15,15,0,20"
-                        Click="Logout_Click"
-                        ToolTip="Close"/>
+                        Click="MenuToggle_Click"
+                        ToolTip="Toggle Menu"/>
 
                 <!-- Navigation Menu -->
-                <StackPanel Grid.Row="1" Margin="15,0">
-                    <!-- Main Section Header -->
-                    <TextBlock Text="Main" 
-                               FontSize="20" 
-                               FontWeight="Bold" 
-                               Foreground="#2C3E50"
-                               Margin="10,0,0,10"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="MenuPanel" Margin="15,0">
+                        <!-- Main Section Header -->
+                        <TextBlock x:Name="MainHeaderText"
+                                   Text="Main" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="#2C3E50"
+                                   Margin="10,0,0,10"/>
 
-                    <Button Content="Dashboard" 
-                            Style="{StaticResource SidebarButtonStyle}"
-                            Click="Dashboard_Click"/>
+                        <Grid>
+                            <Button x:Name="DashboardButtonExpanded"
+                                    Content="Dashboard" 
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="Dashboard_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="DashboardButtonCollapsed"
+                                    Content="DB" 
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="Dashboard_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="Dashboard"/>
+                        </Grid>
 
-                    <Button Content="Account" 
-                            Style="{StaticResource SidebarButtonStyle}"
-                            Click="MyProfile_Click"/>
+                        <Grid>
+                            <Button x:Name="AccountButtonExpanded"
+                                    Content="Account" 
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="MyProfile_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="AccountButtonCollapsed"
+                                    Content="AC" 
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="MyProfile_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="Account"/>
+                        </Grid>
 
-                    <!-- Admin Section (Only visible to Admins) -->
-                    <StackPanel x:Name="AdminMenuPanel" Visibility="Collapsed" Margin="0,20,0,0">
-                        <Button Content="Employee Management" 
-                                Style="{StaticResource SidebarButtonStyle}"
-                                Click="ManageEmployees_Click"/>
+                        <!-- Admin Section (Only visible to Admins) -->
+                        <StackPanel x:Name="AdminMenuPanel" Visibility="Collapsed" Margin="0,20,0,0">
+                            <TextBlock x:Name="AdminHeaderText"
+                                       Text="Admin" 
+                                       FontSize="20" 
+                                       FontWeight="Bold" 
+                                       Foreground="#2C3E50"
+                                       Margin="10,0,0,10"/>
 
-                        <Button Content="Departments" 
-                                Style="{StaticResource SidebarButtonStyle}"
-                                Click="Departments_Click"/>
+                            <Grid>
+                                <Button x:Name="EmployeeManagementButtonExpanded"
+                                        Content="Employee Management" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="ManageEmployees_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="EmployeeManagementButtonCollapsed"
+                                        Content="EM" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="ManageEmployees_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Employee Management"/>
+                            </Grid>
 
-                        <Button Content="Payroll" 
-                                Style="{StaticResource SidebarButtonStyle}"
-                                Click="Payroll_Click"/>
+                            <Grid>
+                                <Button x:Name="DepartmentsButtonExpanded"
+                                        Content="Departments" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="Departments_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="DepartmentsButtonCollapsed"
+                                        Content="DP" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="Departments_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Departments"/>
+                            </Grid>
 
-                        <Button Content="Grievances" 
-                                Style="{StaticResource SidebarButtonStyle}"
-                                Click="Grievances_Click"/>
+                            <Grid>
+                                <Button x:Name="PayrollButtonExpanded"
+                                        Content="Payroll" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="Payroll_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="PayrollButtonCollapsed"
+                                        Content="PR" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="Payroll_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Payroll"/>
+                            </Grid>
+
+                            <Grid>
+                                <Button x:Name="GrievancesButtonExpanded"
+                                        Content="Grievances" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="Grievances_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="GrievancesButtonCollapsed"
+                                        Content="GR" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="Grievances_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Grievances"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Employee Section (visible to all users) -->
+                        <StackPanel Margin="0,20,0,0">
+                            <TextBlock x:Name="EmployeeHeaderText"
+                                       Text="Employee" 
+                                       FontSize="20" 
+                                       FontWeight="Bold" 
+                                       Foreground="#2C3E50"
+                                       Margin="10,0,0,10"/>
+
+                            <Grid>
+                                <Button x:Name="LeaveManagementButtonExpanded"
+                                        Content="Leave Management" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="LeaveManagement_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="LeaveManagementButtonCollapsed"
+                                        Content="LM" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="LeaveManagement_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Leave Management"/>
+                            </Grid>
+
+                            <Grid>
+                                <Button x:Name="HolidaysButtonExpanded"
+                                        Content="Holidays" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="Holidays_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="HolidaysButtonCollapsed"
+                                        Content="HD" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="Holidays_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Holidays"/>
+                            </Grid>
+                        </StackPanel>
                     </StackPanel>
-
-                    <!-- Employee Section (visible to all users) -->
-                    <StackPanel Margin="0,20,0,0">
-                        <Button Content="Leave Management" 
-                                Style="{StaticResource SidebarButtonStyle}"
-                                Click="LeaveManagement_Click"/>
-
-                        <Button Content="Holidays" 
-                                Style="{StaticResource SidebarButtonStyle}"
-                                Click="Holidays_Click"/>
-                    </StackPanel>
-                </StackPanel>
+                </ScrollViewer>
 
                 <!-- Logo at Bottom -->
-                <StackPanel Grid.Row="2" Margin="20,0,20,30" HorizontalAlignment="Center">
+                <StackPanel x:Name="LogoPanel" 
+                            Grid.Row="2" 
+                            Margin="20,0,20,30" 
+                            HorizontalAlignment="Center">
                     <Image Source="/Images/logo.png" 
                            Height="150" 
                            Width="220"
