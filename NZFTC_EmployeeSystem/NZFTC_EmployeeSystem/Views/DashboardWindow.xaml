@@ -1,4 +1,4 @@
-<Window x:Class="NZFTC_EmployeeSystem.Views.DashboardWindow"
+﻿<Window x:Class="NZFTC_EmployeeSystem.Views.DashboardWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -47,14 +47,14 @@
                            Duration="0:0:0.15"/>
         </Storyboard>
 
-        <!-- Teal Button Style for Sidebar -->
+        <!-- Teal Button Style for Sidebar with grey active state -->
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#40C4C8"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Height" Value="60"/>
-            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Padding" Value="20,0,0,0"/>
@@ -72,13 +72,17 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#2EB8BC"/>
                             </Trigger>
+                            <!-- When active (current page), show grey background -->
+                            <Trigger Property="Tag" Value="Active">
+                                <Setter Property="Background" Value="#95A5A6"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <!-- Collapsed Button Style (Text abbreviation only) -->
+        <!-- Collapsed Button Style with grey active state -->
         <Style x:Key="CollapsedButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#40C4C8"/>
             <Setter Property="Foreground" Value="White"/>
@@ -86,7 +90,7 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Height" Value="60"/>
             <Setter Property="Width" Value="60"/>
-            <Setter Property="Margin" Value="5,0,5,5"/>
+            <Setter Property="Margin" Value="5,0,5,8"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
@@ -100,6 +104,10 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#2EB8BC"/>
+                            </Trigger>
+                            <!-- When active (current page), show grey background -->
+                            <Trigger Property="Tag" Value="Active">
+                                <Setter Property="Background" Value="#95A5A6"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -135,7 +143,7 @@
             </Setter>
         </Style>
 
-        <!-- Close Button Style (X) -->
+        <!-- Close Button Style -->
         <Style x:Key="CloseButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#2C3E50"/>
@@ -162,33 +170,27 @@
             </Setter>
         </Style>
 
-        <!-- Hamburger Menu Button Style -->
-        <Style x:Key="HamburgerButtonStyle" TargetType="Button">
+        <!-- Menu Toggle Button Style -->
+        <Style x:Key="MenuToggleStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#2C3E50"/>
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="50"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
+                        <Border Background="{TemplateBinding Background}"
                                 CornerRadius="5">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Rectangle Grid.Row="0" Height="3" Fill="{TemplateBinding Foreground}" Margin="8,4"/>
-                                <Rectangle Grid.Row="1" Height="3" Fill="{TemplateBinding Foreground}" Margin="8,4"/>
-                                <Rectangle Grid.Row="2" Height="3" Fill="{TemplateBinding Foreground}" Margin="8,4"/>
-                            </Grid>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#E8E8E8"/>
+                                <Setter Property="Background" Value="#E0E0E0"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -203,12 +205,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Left Sidebar Navigation -->
-        <Border x:Name="SidebarBorder" 
-                Grid.Column="0" 
-                Background="#ECF0F1" 
-                BorderBrush="#BDC3C7" 
-                BorderThickness="0,0,1,0"
+        <!-- Sidebar Navigation Menu -->
+        <Border x:Name="SidebarBorder"
+                Grid.Column="0"
+                Background="#F5F6F7"
                 Width="270">
             <Grid>
                 <Grid.RowDefinitions>
@@ -217,40 +217,39 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Hamburger Menu Button at top (replaces the ? button) -->
+                <!-- Menu Toggle Button at Top -->
                 <Button Grid.Row="0"
-                        x:Name="MenuToggleButton"
-                        Style="{StaticResource HamburgerButtonStyle}"
-                        HorizontalAlignment="Left"
-                        Margin="15,15,0,20"
+                        Content="☰"
+                        Style="{StaticResource MenuToggleStyle}"
                         Click="MenuToggle_Click"
-                        ToolTip="Toggle Menu"/>
+                        HorizontalAlignment="Left"
+                        Margin="10,15,0,15"/>
 
-                <!-- Navigation Menu -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="MenuPanel" Margin="15,0">
-                        <!-- Main Section Header -->
-                        <TextBlock x:Name="MainHeaderText"
-                                   Text="Main" 
-                                   FontSize="20" 
-                                   FontWeight="Bold" 
-                                   Foreground="#2C3E50"
-                                   Margin="10,0,0,10"/>
+                <!-- Menu Items ScrollViewer -->
+                <ScrollViewer Grid.Row="1" 
+                              VerticalScrollBarVisibility="Auto">
+                    <!-- Panel with fade animation -->
+                    <StackPanel x:Name="MenuPanel" 
+                                Margin="10,10,10,10">
 
+                        <!-- Dashboard Button - Always visible to all users -->
                         <Grid>
                             <Button x:Name="DashboardButtonExpanded"
                                     Content="Dashboard" 
                                     Style="{StaticResource SidebarButtonStyle}"
                                     Click="Dashboard_Click"
+                                    Tag="Active"
                                     Visibility="Visible"/>
                             <Button x:Name="DashboardButtonCollapsed"
                                     Content="DB" 
                                     Style="{StaticResource CollapsedButtonStyle}"
                                     Click="Dashboard_Click"
+                                    Tag="Active"
                                     Visibility="Collapsed"
                                     ToolTip="Dashboard"/>
                         </Grid>
 
+                        <!-- Account Button - Always visible to all users -->
                         <Grid>
                             <Button x:Name="AccountButtonExpanded"
                                     Content="Account" 
@@ -265,15 +264,42 @@
                                     ToolTip="Account"/>
                         </Grid>
 
-                        <!-- Admin Section (Only visible to Admins) -->
-                        <StackPanel x:Name="AdminMenuPanel" Visibility="Collapsed" Margin="0,20,0,0">
-                            <TextBlock x:Name="AdminHeaderText"
-                                       Text="Admin" 
-                                       FontSize="20" 
-                                       FontWeight="Bold" 
-                                       Foreground="#2C3E50"
-                                       Margin="10,0,0,10"/>
+                        <!-- Leave Management Button - Visible to all users -->
+                        <Grid>
+                            <Button x:Name="LeaveManagementButtonExpanded"
+                                    Content="Leave Management" 
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="LeaveManagement_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="LeaveManagementButtonCollapsed"
+                                    Content="LM" 
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="LeaveManagement_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="Leave Management"/>
+                        </Grid>
 
+                        <!-- Holidays Button - Visible to all users -->
+                        <Grid>
+                            <Button x:Name="HolidaysButtonExpanded"
+                                    Content="Holidays" 
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="Holidays_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="HolidaysButtonCollapsed"
+                                    Content="HD" 
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="Holidays_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="Holidays"/>
+                        </Grid>
+
+                        <!-- Admin Section - Only visible to admin users -->
+                        <StackPanel x:Name="AdminMenuPanel" 
+                                    Visibility="Collapsed"
+                                    Margin="0,15,0,0">
+
+                            <!-- Employee Management Button - Admin only -->
                             <Grid>
                                 <Button x:Name="EmployeeManagementButtonExpanded"
                                         Content="Employee Management" 
@@ -288,6 +314,7 @@
                                         ToolTip="Employee Management"/>
                             </Grid>
 
+                            <!-- Departments Button - Admin only -->
                             <Grid>
                                 <Button x:Name="DepartmentsButtonExpanded"
                                         Content="Departments" 
@@ -302,6 +329,7 @@
                                         ToolTip="Departments"/>
                             </Grid>
 
+                            <!-- Payroll Button - Admin only -->
                             <Grid>
                                 <Button x:Name="PayrollButtonExpanded"
                                         Content="Payroll" 
@@ -316,6 +344,7 @@
                                         ToolTip="Payroll"/>
                             </Grid>
 
+                            <!-- Grievances Button - Admin only -->
                             <Grid>
                                 <Button x:Name="GrievancesButtonExpanded"
                                         Content="Grievances" 
@@ -330,48 +359,10 @@
                                         ToolTip="Grievances"/>
                             </Grid>
                         </StackPanel>
-
-                        <!-- Employee Section (visible to all users) -->
-                        <StackPanel Margin="0,20,0,0">
-                            <TextBlock x:Name="EmployeeHeaderText"
-                                       Text="Employee" 
-                                       FontSize="20" 
-                                       FontWeight="Bold" 
-                                       Foreground="#2C3E50"
-                                       Margin="10,0,0,10"/>
-
-                            <Grid>
-                                <Button x:Name="LeaveManagementButtonExpanded"
-                                        Content="Leave Management" 
-                                        Style="{StaticResource SidebarButtonStyle}"
-                                        Click="LeaveManagement_Click"
-                                        Visibility="Visible"/>
-                                <Button x:Name="LeaveManagementButtonCollapsed"
-                                        Content="LM" 
-                                        Style="{StaticResource CollapsedButtonStyle}"
-                                        Click="LeaveManagement_Click"
-                                        Visibility="Collapsed"
-                                        ToolTip="Leave Management"/>
-                            </Grid>
-
-                            <Grid>
-                                <Button x:Name="HolidaysButtonExpanded"
-                                        Content="Holidays" 
-                                        Style="{StaticResource SidebarButtonStyle}"
-                                        Click="Holidays_Click"
-                                        Visibility="Visible"/>
-                                <Button x:Name="HolidaysButtonCollapsed"
-                                        Content="HD" 
-                                        Style="{StaticResource CollapsedButtonStyle}"
-                                        Click="Holidays_Click"
-                                        Visibility="Collapsed"
-                                        ToolTip="Holidays"/>
-                            </Grid>
-                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- Logo at Bottom -->
+                <!-- Logo at Bottom of Sidebar -->
                 <StackPanel x:Name="LogoPanel" 
                             Grid.Row="2" 
                             Margin="20,0,20,30" 
@@ -392,7 +383,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Header Bar -->
+            <!-- Top Header Bar with User Info -->
             <Border Grid.Row="0" 
                     Background="White" 
                     BorderBrush="#BDC3C7" 
@@ -404,7 +395,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Page Title -->
+                    <!-- Page Title - Updates when navigating between pages -->
                     <TextBlock x:Name="PageTitleText"
                                Grid.Column="0"
                                Text="Dashboard" 
@@ -413,13 +404,12 @@
                                Foreground="#5D6D7E"
                                VerticalAlignment="Center"/>
 
-                    <!-- User Info and Sign Out -->
+                    <!-- User Info Section - Profile picture, welcome message, and sign out button -->
                     <StackPanel Grid.Column="1" 
                                 Orientation="Horizontal" 
                                 VerticalAlignment="Center">
 
-                        <!-- FIXED: Wrapped both Ellipse and Image in a Grid so Border only has ONE child -->
-                        <!-- Profile Picture Circle -->
+                        <!-- Profile Picture Circle with Border -->
                         <Border Width="45" 
                                 Height="45" 
                                 CornerRadius="22.5"
@@ -430,20 +420,20 @@
                                 <EllipseGeometry Center="22.5,22.5" RadiusX="22.5" RadiusY="22.5"/>
                             </Border.Clip>
 
-                            <!-- Grid wraps both the default avatar and profile picture -->
+                            <!-- Grid contains both default avatar and uploaded profile picture -->
                             <Grid>
-                                <!-- Default Red Circle (shows if no picture) -->
+                                <!-- Default Avatar - Red circle shows when no picture uploaded -->
                                 <Ellipse x:Name="DefaultUserAvatar"
                                          Fill="#E74C3C"/>
 
-                                <!-- Profile Picture (shows if picture uploaded) -->
+                                <!-- Profile Picture - Shows when user has uploaded a photo -->
                                 <Image x:Name="UserProfilePicture"
                                        Stretch="UniformToFill"
                                        Visibility="Collapsed"/>
                             </Grid>
                         </Border>
 
-                        <!-- Welcome Text -->
+                        <!-- Welcome Text with User's Name -->
                         <TextBlock x:Name="WelcomeText"
                                    Text="Welcome" 
                                    FontSize="16" 
@@ -460,7 +450,7 @@
                 </Grid>
             </Border>
 
-            <!-- Content Frame for Pages -->
+            <!-- Content Frame - Pages load here when menu items clicked -->
             <Frame Grid.Row="1" 
                    x:Name="ContentFrame"
                    NavigationUIVisibility="Hidden"
