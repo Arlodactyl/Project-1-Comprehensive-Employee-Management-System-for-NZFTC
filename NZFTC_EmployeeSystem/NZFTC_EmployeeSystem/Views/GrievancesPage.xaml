@@ -9,37 +9,8 @@
       Title="Grievances">
 
     <Page.Resources>
-        <!-- Action Button Style (for top buttons with icons) -->
-        <Style x:Key="ActionButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#40C4C8"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Width" Value="140"/>
-            <Setter Property="Height" Value="120"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#F0F8FF"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <!-- Standard Button Style -->
-        <Style x:Key="StandardButton" TargetType="Button">
+        <Style x:Key="ActionButton" TargetType="Button">
             <Setter Property="Background" Value="#3498DB"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="14"/>
@@ -66,108 +37,97 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Delete/Close Button Style -->
+        <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Success Button Style -->
+        <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Info Button Style (for the help icon) -->
+        <Style x:Key="InfoButton" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="15"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
-            <TextBlock Text="Grievances" 
+            <TextBlock Text="Grievance Management" 
                        FontSize="24" 
                        FontWeight="Bold" 
                        Foreground="White"/>
         </Border>
 
-        <!-- Action Buttons (Icon Buttons) -->
-        <StackPanel Grid.Row="1" 
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Center"
-                    Margin="0,20,0,10">
-
-            <!-- New Grievance Button -->
-            <Button Style="{StaticResource ActionButtonStyle}"
-                    Click="NewGrievance_Click">
-                <StackPanel>
-                    <TextBlock Text="➕" 
-                               FontSize="36" 
-                               HorizontalAlignment="Center"
-                               Foreground="#40C4C8"
-                               Margin="0,10,0,5"/>
-                    <TextBlock Text="New" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                    <TextBlock Text="Grievance" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                </StackPanel>
-            </Button>
-
-            <!-- View Grievance Status Button -->
-            <Button Style="{StaticResource ActionButtonStyle}"
-                    Click="ViewStatus_Click">
-                <StackPanel>
-                    <TextBlock Text="📋" 
-                               FontSize="36" 
-                               HorizontalAlignment="Center"
-                               Foreground="#40C4C8"
-                               Margin="0,10,0,5"/>
-                    <TextBlock Text="View" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                    <TextBlock Text="Grievance" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                    <TextBlock Text="Status" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                </StackPanel>
-            </Button>
-
-            <!-- Upload Grievance Notes Button -->
-            <Button Style="{StaticResource ActionButtonStyle}"
-                    Click="UploadNotes_Click">
-                <StackPanel>
-                    <TextBlock Text="📤" 
-                               FontSize="36" 
-                               HorizontalAlignment="Center"
-                               Foreground="#40C4C8"
-                               Margin="0,10,0,5"/>
-                    <TextBlock Text="Upload" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                    <TextBlock Text="Grievance" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                    <TextBlock Text="Notes" 
-                               FontSize="14" 
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Foreground="#2C3E50"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
-
         <!-- Tab Control for different views -->
-        <TabControl Grid.Row="2" 
+        <TabControl Grid.Row="1" 
                     x:Name="GrievanceTabControl"
                     Margin="20">
 
@@ -175,34 +135,117 @@
             <TabItem Header="Submit New Grievance" 
                      x:Name="NewGrievanceTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="20" MaxWidth="600">
-                        <TextBlock Text="Submit a New Grievance" 
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Form Header -->
+                        <TextBlock Grid.Row="0"
+                                   Text="Submit a New Grievance" 
                                    FontSize="18" 
                                    FontWeight="Bold"
-                                   Margin="0,0,0,20"/>
+                                   Margin="0,0,0,10"/>
 
-                        <TextBlock Text="Title *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                        <TextBox x:Name="GrievanceTitleTextBox" 
-                                 Height="35"
-                                 Padding="8"
-                                 FontSize="13"
-                                 Margin="0,0,0,15"/>
+                        <!-- Instructions -->
+                        <TextBlock Grid.Row="0"
+                                   Text="Use this form to formally raise workplace concerns. All grievances are confidential and will be reviewed by HR."
+                                   FontSize="13"
+                                   Foreground="#7F8C8D"
+                                   TextWrapping="Wrap"
+                                   Margin="0,35,0,20"/>
 
-                        <TextBlock Text="Description *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                        <TextBox x:Name="GrievanceDescriptionTextBox" 
-                                 Height="150"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Padding="8"
-                                 FontSize="13"
-                                 Margin="0,0,0,20"/>
+                        <!-- Form Content -->
+                        <StackPanel Grid.Row="1" MaxWidth="700" HorizontalAlignment="Left">
 
-                        <Button Content="Submit Grievance" 
-                                Style="{StaticResource StandardButton}"
-                                Click="SubmitGrievance_Click"
-                                HorizontalAlignment="Left"/>
-                    </StackPanel>
+                            <!-- Grievance Type -->
+                            <TextBlock Text="Grievance Type *" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,5"/>
+                            <ComboBox x:Name="GrievanceTypeComboBox"
+                                      Height="35"
+                                      FontSize="13"
+                                      Margin="0,0,0,15">
+                                <ComboBoxItem Content="-- Select Type --" IsSelected="True"/>
+                                <ComboBoxItem Content="Workplace Harassment"/>
+                                <ComboBoxItem Content="Bullying"/>
+                                <ComboBoxItem Content="Discrimination"/>
+                                <ComboBoxItem Content="Health and Safety"/>
+                                <ComboBoxItem Content="Unfair Treatment"/>
+                                <ComboBoxItem Content="Pay or Entitlements"/>
+                                <ComboBoxItem Content="Working Conditions"/>
+                                <ComboBoxItem Content="Management Conduct"/>
+                                <ComboBoxItem Content="Breach of Employment Agreement"/>
+                                <ComboBoxItem Content="Other"/>
+                            </ComboBox>
+
+                            <!-- Title -->
+                            <TextBlock Text="Title *" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="GrievanceTitleTextBox" 
+                                     Height="35"
+                                     Padding="8"
+                                     FontSize="13"
+                                     Margin="0,0,0,15"
+                                     MaxLength="200"/>
+
+                            <!-- Incident Date(s) -->
+                            <TextBlock Text="Incident Date(s) *" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="Select the date(s) when the incident occurred. Hold Ctrl to select multiple dates."
+                                       FontSize="11"
+                                       Foreground="#95A5A6"
+                                       Margin="0,0,0,5"/>
+                            <Calendar x:Name="IncidentDateCalendar"
+                                      SelectionMode="MultipleRange"
+                                      DisplayMode="Month"
+                                      Margin="0,0,0,15"
+                                      HorizontalAlignment="Left"
+                                      BorderBrush="#BDC3C7"
+                                      BorderThickness="1"/>
+
+                            <!-- Description -->
+                            <TextBlock Text="Description *" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,5"/>
+                            <TextBlock Text="Please provide specific details including dates, times, and people involved."
+                                       FontSize="11"
+                                       Foreground="#95A5A6"
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="GrievanceDescriptionTextBox" 
+                                     Height="180"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto"
+                                     Padding="8"
+                                     FontSize="13"
+                                     Margin="0,0,0,20"
+                                     MaxLength="2000"/>
+
+                            <!-- Validation Message -->
+                            <TextBlock x:Name="ValidationMessageTextBlock"
+                                       Text=""
+                                       FontSize="12"
+                                       Foreground="#E74C3C"
+                                       Margin="0,0,0,10"
+                                       TextWrapping="Wrap"
+                                       Visibility="Collapsed"/>
+
+                            <!-- Submit Button -->
+                            <Button Content="Submit Grievance" 
+                                    Style="{StaticResource ActionButton}"
+                                    Click="SubmitGrievance_Click"
+                                    HorizontalAlignment="Left"
+                                    Width="180"/>
+                        </StackPanel>
+                    </Grid>
                 </ScrollViewer>
             </TabItem>
 
@@ -212,16 +255,28 @@
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
+                    <!-- Header -->
                     <TextBlock Grid.Row="0" 
                                Text="Your Submitted Grievances" 
                                FontSize="16" 
                                FontWeight="Bold"
-                               Margin="0,0,0,10"/>
+                               Margin="0,0,0,5"/>
 
-                    <DataGrid Grid.Row="1"
+                    <!-- Instructions -->
+                    <TextBlock Grid.Row="1"
+                               Text="Track the status of your grievances. You will be notified when there are updates."
+                               FontSize="13"
+                               Foreground="#7F8C8D"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,15"/>
+
+                    <!-- DataGrid -->
+                    <DataGrid Grid.Row="2"
                               x:Name="MyGrievancesGrid"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
@@ -232,20 +287,23 @@
                               HeadersVisibility="Column">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding GrievanceType}" Width="150"/>
                             <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
-                            <DataGridTextColumn Header="Submitted Date" Binding="{Binding RequestDate, StringFormat=dd/MM/yyyy}" Width="120"/>
-                            <DataGridTextColumn Header="Check Completed" Width="120">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Text" Value="☐"/>
-                                        <Setter Property="FontSize" Value="20"/>
-                                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Incident Date(s)" Binding="{Binding IncidentDates}" Width="150"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                            <DataGridTextColumn Header="Submitted" Binding="{Binding RequestDate, StringFormat=dd/MM/yyyy}" Width="110"/>
+                            <DataGridTextColumn Header="Response" Binding="{Binding AdminResponse}" Width="200"/>
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <!-- Export Button -->
+                    <Button Grid.Row="3"
+                            Content="Export My Grievances"
+                            Style="{StaticResource ActionButton}"
+                            Click="ExportMyGrievances_Click"
+                            HorizontalAlignment="Left"
+                            Margin="0,15,0,0"
+                            Width="200"/>
                 </Grid>
             </TabItem>
 
@@ -254,11 +312,30 @@
                      x:Name="AdminGrievancesTab">
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <DataGrid Grid.Row="0"
+                    <!-- Header -->
+                    <TextBlock Grid.Row="0"
+                               Text="All Employee Grievances" 
+                               FontSize="16" 
+                               FontWeight="Bold"
+                               Margin="0,0,0,5"/>
+
+                    <!-- Instructions -->
+                    <TextBlock Grid.Row="1"
+                               Text="Review and respond to employee grievances. Select a grievance to add a response or close it."
+                               FontSize="13"
+                               Foreground="#7F8C8D"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,15"/>
+
+                    <!-- DataGrid -->
+                    <DataGrid Grid.Row="2"
                               x:Name="AllGrievancesGrid"
                               AutoGenerateColumns="False"
                               SelectionMode="Single"
@@ -270,34 +347,68 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                             <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="150"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding GrievanceType}" Width="140"/>
                             <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                            <DataGridTextColumn Header="Incident Date(s)" Binding="{Binding IncidentDates}" Width="150"/>
                             <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
                             <DataGridTextColumn Header="Submitted" Binding="{Binding RequestDate, StringFormat=dd/MM/yyyy}" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <StackPanel Grid.Row="1">
-                        <TextBlock Text="Admin Response" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                        <TextBox x:Name="AdminResponseTextBox"
-                                 Height="80"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True"
-                                 Padding="8"
-                                 Margin="0,0,0,10"/>
+                    <!-- Admin Response Section -->
+                    <Border Grid.Row="3"
+                            Background="#F8F9FA" 
+                            Padding="20"
+                            CornerRadius="5"
+                            BorderBrush="#BDC3C7"
+                            BorderThickness="1"
+                            Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Admin Response" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,5"/>
+                            <TextBox x:Name="AdminResponseTextBox"
+                                     Height="100"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     Padding="8"
+                                     FontSize="13"
+                                     Margin="0,0,0,15"
+                                     MaxLength="1000"/>
 
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="Respond to Selected" 
-                                    Style="{StaticResource StandardButton}"
-                                    Background="#27AE60"
-                                    Click="Respond_Click"/>
-                            <Button Content="Close Selected" 
-                                    Style="{StaticResource StandardButton}"
-                                    Background="#E74C3C"
-                                    Click="CloseGrievance_Click"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Respond to Selected" 
+                                        Style="{StaticResource SuccessButton}"
+                                        Click="Respond_Click"
+                                        Width="180"/>
+                                <Button Content="Close Grievance" 
+                                        Style="{StaticResource DeleteButton}"
+                                        Click="CloseGrievance_Click"
+                                        Width="180"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
+                    </Border>
+
+                    <!-- Export Button -->
+                    <Button Grid.Row="4"
+                            Content="Export All Grievances"
+                            Style="{StaticResource ActionButton}"
+                            Click="ExportAllGrievances_Click"
+                            HorizontalAlignment="Left"
+                            Width="200"/>
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <!-- Info Button (bottom right corner) -->
+        <Button Grid.Row="1"
+                Content="i"
+                Style="{StaticResource InfoButton}"
+                Click="InfoButton_Click"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0,0,30,30"
+                ToolTip="What is a grievance?"/>
     </Grid>
 </Page>

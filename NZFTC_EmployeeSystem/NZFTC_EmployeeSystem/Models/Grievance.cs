@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace NZFTC_EmployeeSystem.Models
 {
     // This class represents employee grievances
@@ -14,6 +13,10 @@ namespace NZFTC_EmployeeSystem.Models
         // Grievance details
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+
+        // Grievance categorization and incident tracking
+        public string? GrievanceType { get; set; }
+        public string? IncidentDates { get; set; }  // Stores comma-separated dates
 
         // Response tracking
         public string? AdminResponse { get; set; }
