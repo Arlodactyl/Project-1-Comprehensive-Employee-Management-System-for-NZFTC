@@ -285,35 +285,46 @@
                     <StackPanel Margin="20">
 
                         <!-- Training Section Header -->
-                        <TextBlock Text="Employee Training Records" 
+                        <TextBlock Text="All Employee Training Records" 
                                    FontSize="18" 
                                    FontWeight="Bold" 
                                    Foreground="#2C3E50"
                                    Margin="0,0,0,5"/>
 
-                        <TextBlock Text="Select an employee from the Employees tab, then click 'View Training' to see their training records here." 
+                        <TextBlock Text="View and manage training records for all employees. Use search to filter by employee name or training type." 
                                    FontSize="12" 
                                    Foreground="#7F8C8D"
                                    TextWrapping="Wrap"
                                    Margin="0,0,0,15"/>
 
-                        <!-- Selected Employee Info -->
-                        <Border Background="#ECF0F1" 
-                                Padding="15" 
-                                CornerRadius="5" 
-                                Margin="0,0,0,15">
-                            <StackPanel>
-                                <TextBlock x:Name="SelectedEmployeeText"
-                                           Text="No employee selected"
-                                           FontSize="14"
-                                           FontWeight="SemiBold"
-                                           Foreground="#2C3E50"/>
-                            </StackPanel>
-                        </Border>
+                        <!-- Search Box -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Search:" 
+                                       Grid.Column="0"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,10,0"/>
+                            <TextBox x:Name="TrainingSearchTextBox"
+                                     Grid.Column="1"
+                                     Style="{StaticResource ModernTextBox}"
+                                     TextChanged="TrainingSearchTextBox_TextChanged"/>
+                            <Button Content="Refresh All"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ActionButton}"
+                                    Click="RefreshTraining_Click"
+                                    Margin="10,0,0,0"/>
+                        </Grid>
 
                         <!-- Training Records Grid -->
                         <DataGrid x:Name="TrainingGrid"
-                                  Height="250"
+                                  Height="350"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
                                   SelectionMode="Single"
@@ -324,10 +335,11 @@
                                   Margin="0,0,0,15">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                                <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="200"/>
+                                <DataGridTextColumn Header="Employee Name" Binding="{Binding Employee.FullName}" Width="180"/>
+                                <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="180"/>
                                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
-                                <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="130"/>
-                                <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="150"/>
+                                <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                                <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="140"/>
                                 <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -360,6 +372,13 @@
                                            FontWeight="Bold" 
                                            Foreground="#2C3E50"
                                            Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Employee *" FontSize="12" Margin="0,0,0,3"/>
+                                <ComboBox x:Name="TrainingEmployeeComboBox" 
+                                          Style="{StaticResource ModernComboBox}" 
+                                          DisplayMemberPath="FullName"
+                                          SelectedValuePath="Id"
+                                          Margin="0,0,0,10"/>
 
                                 <TextBlock Text="Training Type *" FontSize="12" Margin="0,0,0,3"/>
                                 <ComboBox x:Name="TrainingTypeComboBox" 

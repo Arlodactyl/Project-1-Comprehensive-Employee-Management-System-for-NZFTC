@@ -20,7 +20,7 @@ namespace NZFTC_EmployeeSystem.Views
         private readonly User _currentUser;
 
         // Store the currently selected employee for training view
-        private Employee? _selectedEmployee = null;
+        private Employee _selectedEmployee = null;
 
         public EmployeeManagementPage(User currentUser)
         {
@@ -44,6 +44,7 @@ namespace NZFTC_EmployeeSystem.Views
             LoadEmployees();
             RoleComboBox.SelectedIndex = 0;
             LoadDepartments();
+            LoadAllTrainingRecords();
 
             // Hide Complete Training button if user is not Admin or Workplace Trainer
             if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
@@ -123,11 +124,11 @@ namespace NZFTC_EmployeeSystem.Views
                 using (var db = new AppDbContext())
                 {
                     var employees = db.Employees
-                        .Include(e => e.Department)
-                        .Where(e => e.FirstName.ToLower().Contains(searchText) ||
-                                    e.LastName.ToLower().Contains(searchText) ||
-                                    (e.FirstName + " " + e.LastName).ToLower().Contains(searchText))
-                        .OrderBy(e => e.Id) // Keep ID ordering
+                        .Include(emp => emp.Department)
+                        .Where(emp => emp.FirstName.ToLower().Contains(searchText) ||
+                                    emp.LastName.ToLower().Contains(searchText) ||
+                                    (emp.FirstName + " " + emp.LastName).ToLower().Contains(searchText))
+                        .OrderBy(emp => emp.Id) // Keep ID ordering
                         .ToList();
 
                     EmployeesGrid.ItemsSource = employees;
@@ -154,8 +155,8 @@ namespace NZFTC_EmployeeSystem.Views
                 using (var db = new AppDbContext())
                 {
                     var employees = db.Employees
-                        .Include(e => e.Department)
-                        .OrderBy(e => e.Id)
+                        .Include(emp => emp.Department)
+                        .OrderBy(emp => emp.Id)
                         .ToList();
 
                     // Create CSV content
@@ -271,11 +272,41 @@ namespace NZFTC_EmployeeSystem.Views
             }
 
             _selectedEmployee = selected;
-            SelectedEmployeeText.Text = $"Training Records for: {selected.FullName} (ID: {selected.Id})";
             LoadTrainingRecords(selected.Id);
 
             // Switch to training tab (index 1)
             var tabControl = this.FindName("TrainingTab") as TabControl;
+        }
+
+        /// <summary>
+        /// Load all training records for all employees
+        /// </summary>
+        private void LoadAllTrainingRecords()
+        {
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var trainings = db.Trainings
+                        .Include(t => t.Employee)
+                        .Include(t => t.SignedOffByUser)
+                        .OrderBy(t => t.Employee.LastName)
+                        .ThenBy(t => t.Employee.FirstName)
+                        .ThenBy(t => t.Id)
+                        .ToList();
+
+                    TrainingGrid.ItemsSource = trainings;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error loading training records: {ex.Message}",
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
         }
 
         /// <summary>
@@ -312,20 +343,33 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void AddTraining_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedEmployee == null)
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var employees = db.Employees
+                        .Where(emp => emp.IsActive)
+                        .OrderBy(emp => emp.LastName)
+                        .ThenBy(emp => emp.FirstName)
+                        .ToList();
+
+                    TrainingEmployeeComboBox.ItemsSource = employees;
+                }
+
+                AddTrainingPanel.Visibility = Visibility.Visible;
+                TrainingEmployeeComboBox.SelectedIndex = -1;
+                TrainingTypeComboBox.SelectedIndex = 0;
+                TrainingNotesTextBox.Clear();
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Please select an employee first by clicking 'View Training'.",
-                    "No Employee Selected",
+                    $"Error loading employees: {ex.Message}",
+                    "Database Error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    MessageBoxImage.Error
                 );
-                return;
             }
-
-            AddTrainingPanel.Visibility = Visibility.Visible;
-            TrainingTypeComboBox.SelectedIndex = 0;
-            TrainingNotesTextBox.Clear();
         }
 
         /// <summary>
@@ -341,13 +385,13 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void SaveTraining_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedEmployee == null)
+            if (TrainingEmployeeComboBox.SelectedValue == null)
             {
                 MessageBox.Show(
-                    "No employee selected.",
-                    "Error",
+                    "Please select an employee.",
+                    "Validation Error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Error
+                    MessageBoxImage.Warning
                 );
                 return;
             }
@@ -368,10 +412,11 @@ namespace NZFTC_EmployeeSystem.Views
                 using (var db = new AppDbContext())
                 {
                     string trainingType = ((ComboBoxItem)TrainingTypeComboBox.SelectedItem).Content.ToString() ?? "";
+                    int employeeId = (int)TrainingEmployeeComboBox.SelectedValue;
 
                     var training = new Training
                     {
-                        EmployeeId = _selectedEmployee.Id,
+                        EmployeeId = employeeId,
                         TrainingType = trainingType,
                         Status = "Not Started",
                         Notes = TrainingNotesTextBox.Text.Trim()
@@ -389,7 +434,7 @@ namespace NZFTC_EmployeeSystem.Views
                 );
 
                 AddTrainingPanel.Visibility = Visibility.Collapsed;
-                LoadTrainingRecords(_selectedEmployee.Id);
+                LoadAllTrainingRecords();
             }
             catch (Exception ex)
             {
@@ -466,10 +511,7 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Information
                 );
 
-                if (_selectedEmployee != null)
-                {
-                    LoadTrainingRecords(_selectedEmployee.Id);
-                }
+                LoadAllTrainingRecords();
             }
             catch (Exception ex)
             {
@@ -487,37 +529,29 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void ExportTraining_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedEmployee == null)
-            {
-                MessageBox.Show(
-                    "Please select an employee first by clicking 'View Training'.",
-                    "No Employee Selected",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-                return;
-            }
-
             try
             {
                 using (var db = new AppDbContext())
                 {
                     var trainings = db.Trainings
+                        .Include(t => t.Employee)
                         .Include(t => t.SignedOffByUser)
-                        .Where(t => t.EmployeeId == _selectedEmployee.Id)
-                        .OrderBy(t => t.Id)
+                        .OrderBy(t => t.Employee.LastName)
+                        .ThenBy(t => t.Employee.FirstName)
+                        .ThenBy(t => t.Id)
                         .ToList();
 
                     // Create CSV content
                     var csv = new StringBuilder();
-                    csv.AppendLine($"Training Records for: {_selectedEmployee.FullName} (ID: {_selectedEmployee.Id})");
+                    csv.AppendLine("All Training Records");
                     csv.AppendLine($"Generated: {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
                     csv.AppendLine("");
-                    csv.AppendLine("ID,Training Type,Status,Completed Date,Signed Off By,Notes");
+                    csv.AppendLine("ID,Employee Name,Training Type,Status,Completed Date,Signed Off By,Notes");
 
                     foreach (var t in trainings)
                     {
                         csv.AppendLine($"{t.Id}," +
+                                      $"\"{t.Employee?.FullName ?? "Unknown"}\"," +
                                       $"\"{t.TrainingType}\"," +
                                       $"\"{t.Status}\"," +
                                       $"{(t.CompletedDate.HasValue ? t.CompletedDate.Value.ToString("dd/MM/yyyy") : "")}," +
@@ -529,7 +563,7 @@ namespace NZFTC_EmployeeSystem.Views
                     string downloadsPath = Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                         "Downloads");
-                    string fileName = $"Training_{_selectedEmployee.FirstName}_{_selectedEmployee.LastName}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+                    string fileName = $"All_Training_Records_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
                     string fullPath = Path.Combine(downloadsPath, fileName);
 
                     File.WriteAllText(fullPath, csv.ToString());
@@ -551,6 +585,52 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Error
                 );
             }
+        }
+
+        /// <summary>
+        /// Search training records by employee name or training type
+        /// </summary>
+        private void TrainingSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = TrainingSearchTextBox.Text.ToLower().Trim();
+
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var trainings = db.Trainings
+                        .Include(t => t.Employee)
+                        .Include(t => t.SignedOffByUser)
+                        .Where(t => t.Employee.FirstName.ToLower().Contains(searchText) ||
+                                    t.Employee.LastName.ToLower().Contains(searchText) ||
+                                    (t.Employee.FirstName + " " + t.Employee.LastName).ToLower().Contains(searchText) ||
+                                    t.TrainingType.ToLower().Contains(searchText))
+                        .OrderBy(t => t.Employee.LastName)
+                        .ThenBy(t => t.Employee.FirstName)
+                        .ThenBy(t => t.Id)
+                        .ToList();
+
+                    TrainingGrid.ItemsSource = trainings;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error searching training: {ex.Message}",
+                    "Search Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Refresh all training records
+        /// </summary>
+        private void RefreshTraining_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingSearchTextBox.Clear();
+            LoadAllTrainingRecords();
         }
 
         /// <summary>
