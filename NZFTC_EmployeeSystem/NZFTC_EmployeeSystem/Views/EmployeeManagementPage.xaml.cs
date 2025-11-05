@@ -46,6 +46,11 @@ namespace NZFTC_EmployeeSystem.Views
             LoadDepartments();
             LoadAllTrainingRecords();
 
+            // Show Add Training panel by default and load employees
+            LoadEmployeesForTraining();
+            AddTrainingPanel.Visibility = Visibility.Visible;
+            TrainingTypeComboBox.SelectedIndex = 0;
+
             // Hide Complete Training button if user is not Admin or Workplace Trainer
             if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
             {
@@ -290,9 +295,8 @@ namespace NZFTC_EmployeeSystem.Views
                     var trainings = db.Trainings
                         .Include(t => t.Employee)
                         .Include(t => t.SignedOffByUser)
-                        .OrderBy(t => t.Employee.LastName)
+                        .OrderByDescending(t => t.CompletedDate)
                         .ThenBy(t => t.Employee.FirstName)
-                        .ThenBy(t => t.Id)
                         .ToList();
 
                     TrainingGrid.ItemsSource = trainings;
@@ -339,9 +343,9 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Show add training panel
+        /// Load employees for training dropdown
         /// </summary>
-        private void AddTraining_Click(object sender, RoutedEventArgs e)
+        private void LoadEmployeesForTraining()
         {
             try
             {
@@ -355,11 +359,6 @@ namespace NZFTC_EmployeeSystem.Views
 
                     TrainingEmployeeComboBox.ItemsSource = employees;
                 }
-
-                AddTrainingPanel.Visibility = Visibility.Visible;
-                TrainingEmployeeComboBox.SelectedIndex = -1;
-                TrainingTypeComboBox.SelectedIndex = 0;
-                TrainingNotesTextBox.Clear();
             }
             catch (Exception ex)
             {
@@ -370,6 +369,17 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Error
                 );
             }
+        }
+
+        /// <summary>
+        /// Show add training panel
+        /// </summary>
+        private void AddTraining_Click(object sender, RoutedEventArgs e)
+        {
+            AddTrainingPanel.Visibility = Visibility.Visible;
+            TrainingEmployeeComboBox.SelectedIndex = -1;
+            TrainingTypeComboBox.SelectedIndex = 0;
+            TrainingNotesTextBox.Clear();
         }
 
         /// <summary>
@@ -605,9 +615,8 @@ namespace NZFTC_EmployeeSystem.Views
                                     t.Employee.LastName.ToLower().Contains(searchText) ||
                                     (t.Employee.FirstName + " " + t.Employee.LastName).ToLower().Contains(searchText) ||
                                     t.TrainingType.ToLower().Contains(searchText))
-                        .OrderBy(t => t.Employee.LastName)
+                        .OrderByDescending(t => t.CompletedDate)
                         .ThenBy(t => t.Employee.FirstName)
-                        .ThenBy(t => t.Id)
                         .ToList();
 
                     TrainingGrid.ItemsSource = trainings;

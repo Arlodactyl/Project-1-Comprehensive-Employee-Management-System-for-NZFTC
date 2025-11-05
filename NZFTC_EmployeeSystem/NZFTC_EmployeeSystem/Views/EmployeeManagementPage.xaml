@@ -378,6 +378,8 @@
                                           Style="{StaticResource ModernComboBox}" 
                                           DisplayMemberPath="FullName"
                                           SelectedValuePath="Id"
+                                          IsEditable="True"
+                                          IsTextSearchEnabled="True"
                                           Margin="0,0,0,10"/>
 
                                 <TextBlock Text="Training Type *" FontSize="12" Margin="0,0,0,3"/>
