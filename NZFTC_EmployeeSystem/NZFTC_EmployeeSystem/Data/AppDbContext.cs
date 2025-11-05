@@ -261,6 +261,20 @@ namespace NZFTC_EmployeeSystem.Data
                 .HasForeignKey(h => h.CreatedByUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Configure Training.EmployeeId -> Employee relationship
+            modelBuilder.Entity<Training>()
+                .HasOne(t => t.Employee)
+                .WithMany()
+                .HasForeignKey(t => t.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Training.SignedOffByUserId -> User relationship
+            modelBuilder.Entity<Training>()
+                .HasOne(t => t.SignedOffByUser)
+                .WithMany()
+                .HasForeignKey(t => t.SignedOffByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Seed initial data (create default admin account)
             SeedData(modelBuilder);
         }
@@ -281,7 +295,8 @@ namespace NZFTC_EmployeeSystem.Data
             // Create some default roles
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" },
-                new Role { Id = 2, Name = "Employee" }
+                new Role { Id = 2, Name = "Employee" },
+                new Role { Id = 3, Name = "Workplace Trainer" }
             );
 
             // Create a default admin employee
@@ -323,7 +338,7 @@ namespace NZFTC_EmployeeSystem.Data
                 new UserRole { UserId = 1, RoleId = 1 }
             );
 
-            // Add some sample holidays - FIXED: Use fixed dates
+            // Add some sample holidays 
             modelBuilder.Entity<Holiday>().HasData(
                 new Holiday
                 {
@@ -371,7 +386,7 @@ namespace NZFTC_EmployeeSystem.Data
                 }
             );
 
-            // Seed random test employees - FIXED: Use fixed dates
+            // Seed random test employees
             modelBuilder.Entity<Employee>().HasData(
                 new Employee { Id = 2, FirstName = "James", LastName = "Smith", Email = "james.smith@nzftc.co.nz", PhoneNumber = "022-345-6789", JobTitle = "Developer", DepartmentId = 1, HireDate = new DateTime(2023, 6, 15), Salary = 75000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
                 new Employee { Id = 3, FirstName = "Emma", LastName = "Johnson", Email = "emma.johnson@nzftc.co.nz", PhoneNumber = "022-456-7890", JobTitle = "Manager", DepartmentId = 2, HireDate = new DateTime(2022, 9, 20), Salary = 85000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
@@ -382,10 +397,11 @@ namespace NZFTC_EmployeeSystem.Data
                 new Employee { Id = 8, FirstName = "Lucas", LastName = "Miller", Email = "lucas.miller@nzftc.co.nz", PhoneNumber = "022-901-2345", JobTitle = "Associate", DepartmentId = 3, HireDate = new DateTime(2022, 12, 8), Salary = 60000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
                 new Employee { Id = 9, FirstName = "Isabella", LastName = "Davis", Email = "isabella.davis@nzftc.co.nz", PhoneNumber = "022-012-3456", JobTitle = "Consultant", DepartmentId = 2, HireDate = new DateTime(2023, 8, 25), Salary = 78000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
                 new Employee { Id = 10, FirstName = "Mason", LastName = "Rodriguez", Email = "mason.rodriguez@nzftc.co.nz", PhoneNumber = "022-123-4567", JobTitle = "Manager", DepartmentId = 1, HireDate = new DateTime(2023, 5, 18), Salary = 88000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 11, FirstName = "Mia", LastName = "Martinez", Email = "mia.martinez@nzftc.co.nz", PhoneNumber = "022-234-5678", JobTitle = "Analyst", DepartmentId = 3, HireDate = new DateTime(2023, 11, 30), Salary = 67000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true }
+                new Employee { Id = 11, FirstName = "Mia", LastName = "Martinez", Email = "mia.martinez@nzftc.co.nz", PhoneNumber = "022-234-5678", JobTitle = "Analyst", DepartmentId = 3, HireDate = new DateTime(2023, 11, 30), Salary = 67000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
+                new Employee { Id = 12, FirstName = "Sarah", LastName = "Wilson", Email = "sarah.wilson@nzftc.co.nz", PhoneNumber = "022-345-6790", JobTitle = "Workplace Trainer", DepartmentId = 2, HireDate = new DateTime(2021, 3, 15), Salary = 72000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true }
             );
 
-            // Seed user accounts for test employees - FIXED: Use fixed dates
+            // Seed user accounts for test employees
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 2, Username = "james.smith", Password = "password123", Role = "Employee", EmployeeId = 2, IsActive = true, CreatedDate = new DateTime(2023, 6, 15) },
                 new User { Id = 3, Username = "emma.johnson", Password = "password123", Role = "Employee", EmployeeId = 3, IsActive = true, CreatedDate = new DateTime(2022, 9, 20) },
@@ -396,7 +412,8 @@ namespace NZFTC_EmployeeSystem.Data
                 new User { Id = 8, Username = "lucas.miller", Password = "password123", Role = "Employee", EmployeeId = 8, IsActive = true, CreatedDate = new DateTime(2022, 12, 8) },
                 new User { Id = 9, Username = "isabella.davis", Password = "password123", Role = "Employee", EmployeeId = 9, IsActive = true, CreatedDate = new DateTime(2023, 8, 25) },
                 new User { Id = 10, Username = "mason.rodriguez", Password = "password123", Role = "Employee", EmployeeId = 10, IsActive = true, CreatedDate = new DateTime(2023, 5, 18) },
-                new User { Id = 11, Username = "mia.martinez", Password = "password123", Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = new DateTime(2023, 11, 30) }
+                new User { Id = 11, Username = "mia.martinez", Password = "password123", Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = new DateTime(2023, 11, 30) },
+                new User { Id = 12, Username = "trainer", Password = "password123", Role = "Workplace Trainer", EmployeeId = 12, IsActive = true, CreatedDate = new DateTime(2021, 3, 15) }
             );
 
             // Assign Employee role to test users
@@ -410,7 +427,38 @@ namespace NZFTC_EmployeeSystem.Data
                 new UserRole { UserId = 8, RoleId = 2 },
                 new UserRole { UserId = 9, RoleId = 2 },
                 new UserRole { UserId = 10, RoleId = 2 },
-                new UserRole { UserId = 11, RoleId = 2 }
+                new UserRole { UserId = 11, RoleId = 2 },
+                new UserRole { UserId = 12, RoleId = 3 }
+            );
+
+            // Seed training records for testing
+            modelBuilder.Entity<Training>().HasData(
+                new Training { Id = 1, EmployeeId = 1, TrainingType = "Ethics Training", Status = "Completed", CompletedDate = new DateTime(2024, 1, 15), SignedOffByUserId = 1, Notes = "Initial admin training" },
+                new Training { Id = 2, EmployeeId = 1, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2024, 1, 10), SignedOffByUserId = 1, Notes = "Company induction completed" },
+                new Training { Id = 3, EmployeeId = 2, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 6, 16), SignedOffByUserId = 1, Notes = "New hire induction" },
+                new Training { Id = 4, EmployeeId = 2, TrainingType = "Health and Safety", Status = "Completed", CompletedDate = new DateTime(2023, 6, 20), SignedOffByUserId = 1, Notes = "Workplace safety training" },
+                new Training { Id = 5, EmployeeId = 2, TrainingType = "Fire Safety", Status = "In Progress", Notes = "Scheduled for next week" },
+                new Training { Id = 6, EmployeeId = 3, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2022, 9, 21), SignedOffByUserId = 1 },
+                new Training { Id = 7, EmployeeId = 3, TrainingType = "Ethics Training", Status = "Completed", CompletedDate = new DateTime(2022, 10, 5), SignedOffByUserId = 1 },
+                new Training { Id = 8, EmployeeId = 3, TrainingType = "Data Privacy", Status = "Not Started", Notes = "To be scheduled" },
+                new Training { Id = 9, EmployeeId = 4, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2024, 1, 11), SignedOffByUserId = 1 },
+                new Training { Id = 10, EmployeeId = 4, TrainingType = "First Aid", Status = "In Progress", Notes = "Attending course next month" },
+                new Training { Id = 11, EmployeeId = 5, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 4, 6), SignedOffByUserId = 1 },
+                new Training { Id = 12, EmployeeId = 5, TrainingType = "Workplace Harassment", Status = "Completed", CompletedDate = new DateTime(2023, 5, 15), SignedOffByUserId = 1 },
+                new Training { Id = 13, EmployeeId = 5, TrainingType = "Ethics Training", Status = "Not Started" },
+                new Training { Id = 14, EmployeeId = 6, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 7, 13), SignedOffByUserId = 1 },
+                new Training { Id = 15, EmployeeId = 6, TrainingType = "Health and Safety", Status = "Completed", CompletedDate = new DateTime(2023, 7, 20), SignedOffByUserId = 1 },
+                new Training { Id = 16, EmployeeId = 7, TrainingType = "Induction", Status = "Not Started", Notes = "New employee - schedule induction" },
+                new Training { Id = 17, EmployeeId = 8, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2022, 12, 9), SignedOffByUserId = 1 },
+                new Training { Id = 18, EmployeeId = 8, TrainingType = "Ethics Training", Status = "Completed", CompletedDate = new DateTime(2023, 1, 20), SignedOffByUserId = 1 },
+                new Training { Id = 19, EmployeeId = 8, TrainingType = "Fire Safety", Status = "Completed", CompletedDate = new DateTime(2023, 2, 10), SignedOffByUserId = 1 },
+                new Training { Id = 20, EmployeeId = 9, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 8, 26), SignedOffByUserId = 1 },
+                new Training { Id = 21, EmployeeId = 9, TrainingType = "Data Privacy", Status = "In Progress", Notes = "Online course in progress" },
+                new Training { Id = 22, EmployeeId = 10, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 5, 19), SignedOffByUserId = 1 },
+                new Training { Id = 23, EmployeeId = 10, TrainingType = "Health and Safety", Status = "Completed", CompletedDate = new DateTime(2023, 6, 1), SignedOffByUserId = 1 },
+                new Training { Id = 24, EmployeeId = 10, TrainingType = "First Aid", Status = "Completed", CompletedDate = new DateTime(2023, 9, 15), SignedOffByUserId = 12, Notes = "Signed off by workplace trainer" },
+                new Training { Id = 25, EmployeeId = 11, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 12, 1), SignedOffByUserId = 1 },
+                new Training { Id = 26, EmployeeId = 11, TrainingType = "Ethics Training", Status = "Not Started", Notes = "Scheduled for Q1 2025" }
             );
         }
     }

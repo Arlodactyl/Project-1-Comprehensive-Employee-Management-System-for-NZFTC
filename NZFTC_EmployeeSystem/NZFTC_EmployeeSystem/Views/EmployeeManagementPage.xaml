@@ -263,6 +263,7 @@
                                         <ComboBox x:Name="RoleComboBox" Style="{StaticResource ModernComboBox}" Margin="0,0,0,10">
                                             <ComboBoxItem Content="Employee" IsSelected="True"/>
                                             <ComboBoxItem Content="Admin"/>
+                                            <ComboBoxItem Content="Workplace Trainer"/>
                                         </ComboBox>
                                     </StackPanel>
                                 </Grid>
@@ -336,7 +337,8 @@
                             <Button Content="Add Training" 
                                     Style="{StaticResource ActionButton}"
                                     Click="AddTraining_Click"/>
-                            <Button Content="Complete Training" 
+                            <Button x:Name="CompleteTrainingButton"
+                                    Content="Complete Training" 
                                     Style="{StaticResource ExportButton}"
                                     Click="CompleteTraining_Click"/>
                             <Button Content="Export Training Records" 

@@ -27,8 +27,8 @@ namespace NZFTC_EmployeeSystem.Views
             InitializeComponent();
             _currentUser = currentUser;
 
-            // Security check: Only admins can access this page
-            if (_currentUser.Role != "Admin")
+            // Security check: Only admins and Workplace Trainers can access this page
+            if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
             {
                 MessageBox.Show(
                     "You do not have permission to access Employee Management.",
@@ -44,6 +44,12 @@ namespace NZFTC_EmployeeSystem.Views
             LoadEmployees();
             RoleComboBox.SelectedIndex = 0;
             LoadDepartments();
+
+            // Hide Complete Training button if user is not Admin or Workplace Trainer
+            if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
+            {
+                CompleteTrainingButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -224,20 +230,11 @@ namespace NZFTC_EmployeeSystem.Views
                     {
                         employee.IsActive = !employee.IsActive;
                         db.SaveChanges();
-
-                        // Update user account status
-                        var user = db.Users.FirstOrDefault(u => u.EmployeeId == employee.Id);
-                        if (user != null)
-                        {
-                            user.IsActive = employee.IsActive;
-                            db.SaveChanges();
-                        }
                     }
                 }
 
-                string status = selected.IsActive ? "deactivated" : "activated";
                 MessageBox.Show(
-                    $"Employee {selected.FullName} has been {status}.",
+                    $"Employee {selected.FullName} status changed to {(selected.IsActive ? "Inactive" : "Active")}.",
                     "Success",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
@@ -248,7 +245,7 @@ namespace NZFTC_EmployeeSystem.Views
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Error updating employee status: {ex.Message}",
+                    $"Error toggling employee status: {ex.Message}",
                     "Database Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
@@ -311,14 +308,14 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Show add training form
+        /// Show add training panel
         /// </summary>
         private void AddTraining_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedEmployee == null)
             {
                 MessageBox.Show(
-                    "Please select an employee and click 'View Training' first.",
+                    "Please select an employee first by clicking 'View Training'.",
                     "No Employee Selected",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
@@ -332,7 +329,7 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Cancel add training
+        /// Cancel adding training
         /// </summary>
         private void CancelAddTraining_Click(object sender, RoutedEventArgs e)
         {
@@ -344,7 +341,16 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void SaveTraining_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedEmployee == null) return;
+            if (_selectedEmployee == null)
+            {
+                MessageBox.Show(
+                    "No employee selected.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+                return;
+            }
 
             if (TrainingTypeComboBox.SelectedItem == null)
             {
@@ -361,12 +367,12 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 using (var db = new AppDbContext())
                 {
-                    var trainingType = ((ComboBoxItem)TrainingTypeComboBox.SelectedItem).Content.ToString();
+                    string trainingType = ((ComboBoxItem)TrainingTypeComboBox.SelectedItem).Content.ToString() ?? "";
 
                     var training = new Training
                     {
                         EmployeeId = _selectedEmployee.Id,
-                        TrainingType = trainingType ?? "",
+                        TrainingType = trainingType,
                         Status = "Not Started",
                         Notes = TrainingNotesTextBox.Text.Trim()
                     };
@@ -398,15 +404,41 @@ namespace NZFTC_EmployeeSystem.Views
 
         /// <summary>
         /// Mark selected training as completed
+        /// ONLY ADMIN AND WORKPLACE TRAINER CAN SIGN OFF
         /// </summary>
         private void CompleteTraining_Click(object sender, RoutedEventArgs e)
         {
+            // SECURITY CHECK: Only Admin and Workplace Trainer can sign off training
+            if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
+            {
+                MessageBox.Show(
+                    "Only Admin and Workplace Trainer accounts can sign off training.\n\n" +
+                    $"Your current role: {_currentUser.Role}",
+                    "Access Denied",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
             var selected = TrainingGrid.SelectedItem as Training;
             if (selected == null)
             {
                 MessageBox.Show(
                     "Please select a training record from the list.",
                     "No Selection",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            // Check if already completed
+            if (selected.Status == "Completed")
+            {
+                MessageBox.Show(
+                    "This training is already marked as completed.",
+                    "Already Completed",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
                 );
@@ -428,7 +460,7 @@ namespace NZFTC_EmployeeSystem.Views
                 }
 
                 MessageBox.Show(
-                    "Training marked as completed!",
+                    $"Training marked as completed and signed off by {_currentUser.Username}!",
                     "Success",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
@@ -458,7 +490,7 @@ namespace NZFTC_EmployeeSystem.Views
             if (_selectedEmployee == null)
             {
                 MessageBox.Show(
-                    "Please select an employee and view their training first.",
+                    "Please select an employee first by clicking 'View Training'.",
                     "No Employee Selected",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
@@ -476,7 +508,11 @@ namespace NZFTC_EmployeeSystem.Views
                         .OrderBy(t => t.Id)
                         .ToList();
 
+                    // Create CSV content
                     var csv = new StringBuilder();
+                    csv.AppendLine($"Training Records for: {_selectedEmployee.FullName} (ID: {_selectedEmployee.Id})");
+                    csv.AppendLine($"Generated: {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                    csv.AppendLine("");
                     csv.AppendLine("ID,Training Type,Status,Completed Date,Signed Off By,Notes");
 
                     foreach (var t in trainings)
@@ -493,7 +529,7 @@ namespace NZFTC_EmployeeSystem.Views
                     string downloadsPath = Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                         "Downloads");
-                    string fileName = $"Training_{_selectedEmployee.FullName.Replace(" ", "_")}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+                    string fileName = $"Training_{_selectedEmployee.FirstName}_{_selectedEmployee.LastName}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
                     string fullPath = Path.Combine(downloadsPath, fileName);
 
                     File.WriteAllText(fullPath, csv.ToString());
