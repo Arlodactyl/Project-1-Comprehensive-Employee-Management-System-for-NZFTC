@@ -460,6 +460,20 @@ namespace NZFTC_EmployeeSystem.Data
                 new Training { Id = 25, EmployeeId = 11, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 12, 1), SignedOffByUserId = 1 },
                 new Training { Id = 26, EmployeeId = 11, TrainingType = "Ethics Training", Status = "Not Started", Notes = "Scheduled for Q1 2025" }
             );
+
+            // Seed sample payslips for recent weeks
+            modelBuilder.Entity<Payslip>().HasData(
+                new Payslip { Id = 1, EmployeeId = 1, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1538.46m, TaxDeduction = 461.54m, NetSalary = 1076.92m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
+                new Payslip { Id = 2, EmployeeId = 2, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1442.31m, TaxDeduction = 252.40m, NetSalary = 1189.91m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
+                new Payslip { Id = 3, EmployeeId = 3, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1634.62m, TaxDeduction = 286.06m, NetSalary = 1348.56m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
+                new Payslip { Id = 4, EmployeeId = 4, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1230.77m, TaxDeduction = 215.38m, NetSalary = 1015.39m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
+                new Payslip { Id = 5, EmployeeId = 5, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1057.69m, TaxDeduction = 185.10m, NetSalary = 872.59m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
+                new Payslip { Id = 6, EmployeeId = 1, PayPeriodStart = new DateTime(2025, 10, 20), PayPeriodEnd = new DateTime(2025, 10, 26), GrossSalary = 1538.46m, TaxDeduction = 461.54m, NetSalary = 1076.92m, GeneratedDate = new DateTime(2025, 10, 27), GeneratedByUserId = 1 },
+                new Payslip { Id = 7, EmployeeId = 2, PayPeriodStart = new DateTime(2025, 10, 20), PayPeriodEnd = new DateTime(2025, 10, 26), GrossSalary = 1442.31m, TaxDeduction = 252.40m, NetSalary = 1189.91m, GeneratedDate = new DateTime(2025, 10, 27), GeneratedByUserId = 1 },
+                new Payslip { Id = 8, EmployeeId = 3, PayPeriodStart = new DateTime(2025, 10, 20), PayPeriodEnd = new DateTime(2025, 10, 26), GrossSalary = 1716.35m, TaxDeduction = 300.36m, NetSalary = 1415.99m, GeneratedDate = new DateTime(2025, 10, 27), GeneratedByUserId = 1 },
+                new Payslip { Id = 9, EmployeeId = 6, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1346.15m, TaxDeduction = 235.58m, NetSalary = 1110.57m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
+                new Payslip { Id = 10, EmployeeId = 7, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1384.62m, TaxDeduction = 242.31m, NetSalary = 1142.31m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 }
+            );
         }
     }
 }

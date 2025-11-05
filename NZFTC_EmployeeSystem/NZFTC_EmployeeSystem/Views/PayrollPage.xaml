@@ -3,22 +3,12 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="900"
       Title="Payroll">
-    <!--
-      PayrollPage
-      Shows payslips for the logged in employee and, if the user is an
-      administrator, all employees' payslips. Uses a TabControl to
-      separate the two views. Dates and currency values are formatted
-      using the appropriate StringFormat settings.
-    -->
-
     <Page.Resources>
-        <!-- Button Style -->
         <Style x:Key="ActionButton" TargetType="Button">
-            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Background" Value="#3498DB"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -26,197 +16,89 @@
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="5"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#229954"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
-
-        <!-- TextBox Style -->
-        <Style x:Key="InputTextBox" TargetType="TextBox">
+        <Style x:Key="ExportButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+        </Style>
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="32"/>
             <Setter Property="Padding" Value="8,5"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="BorderBrush" Value="#BDC3C7"/>
-            <Setter Property="BorderThickness" Value="1"/>
         </Style>
-
-        <!-- ComboBox Style -->
-        <Style x:Key="InputComboBox" TargetType="ComboBox">
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Height" Value="32"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="BorderBrush" Value="#BDC3C7"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <!-- DatePicker Style -->
-        <Style x:Key="InputDatePicker" TargetType="DatePicker">
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="BorderBrush" Value="#BDC3C7"/>
-            <Setter Property="BorderThickness" Value="1"/>
         </Style>
     </Page.Resources>
-
-    <Grid Background="White">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Header row -->
             <RowDefinition Height="*"/>
-            <!-- Payslip data tab control -->
-            <RowDefinition Height="Auto"/>
-            <!-- Admin payslip generation panel (only visible for admin users) -->
         </Grid.RowDefinitions>
-
-        <!-- Header -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
-            <TextBlock Text="Payroll" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="White"/>
+            <TextBlock x:Name="PageHeaderText" Text="Payroll" FontSize="24" FontWeight="Bold" Foreground="White"/>
         </Border>
-
-        <TabControl Grid.Row="1" Margin="20">
-            <!-- Employee's own payslips -->
-            <TabItem Header="My Payslips">
-                <DataGrid x:Name="MyPayslipsGrid"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          CanUserAddRows="False"
-                          AlternatingRowBackground="#ECF0F1"
-                          GridLinesVisibility="Horizontal"
-                          HeadersVisibility="Column">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Pay Period Start" Binding="{Binding PayPeriodStart, StringFormat=dd/MM/yyyy}" Width="*"/>
-                        <DataGridTextColumn Header="Pay Period End" Binding="{Binding PayPeriodEnd, StringFormat=dd/MM/yyyy}" Width="*"/>
-                        <DataGridTextColumn Header="Gross" Binding="{Binding GrossSalary, StringFormat=C}" Width="*"/>
-                        <DataGridTextColumn Header="Tax" Binding="{Binding TaxDeduction, StringFormat=C}" Width="*"/>
-                        <DataGridTextColumn Header="Net" Binding="{Binding NetSalary, StringFormat=C}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+        <TabControl x:Name="PayrollTabControl" Grid.Row="1">
+            <TabItem x:Name="AllPayslipsTab" Header="All Payslips" FontSize="14">
+                <ScrollViewer>
+                    <StackPanel Margin="20">
+                        <TextBlock Text="All Employee Payslips" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,5"/>
+                        <TextBlock Text="Recent week payslips for all employees. Use search to filter by employee name." FontSize="12" Foreground="#7F8C8D" Margin="0,0,0,15"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Search:" Grid.Column="0" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Margin="0,0,10,0"/>
+                            <TextBox x:Name="PayslipSearchTextBox" Grid.Column="1" Style="{StaticResource ModernTextBox}" TextChanged="PayslipSearchTextBox_TextChanged"/>
+                            <Button Content="Refresh" Grid.Column="2" Style="{StaticResource ActionButton}" Click="RefreshPayslips_Click" Margin="10,0,0,0"/>
+                        </Grid>
+                        <DataGrid x:Name="AllPayslipsGrid" Height="300" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" CanUserAddRows="False" AlternatingRowBackground="#ECF0F1" Margin="0,0,0,15">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="150"/>
+                                <DataGridTextColumn Header="Start" Binding="{Binding PayPeriodStart, StringFormat=dd/MM/yyyy}" Width="100"/>
+                                <DataGridTextColumn Header="End" Binding="{Binding PayPeriodEnd, StringFormat=dd/MM/yyyy}" Width="100"/>
+                                <DataGridTextColumn Header="Gross" Binding="{Binding GrossSalary, StringFormat=C}" Width="100"/>
+                                <DataGridTextColumn Header="Tax" Binding="{Binding TaxDeduction, StringFormat=C}" Width="100"/>
+                                <DataGridTextColumn Header="Net" Binding="{Binding NetSalary, StringFormat=C}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Export to Excel" Style="{StaticResource ExportButton}" Click="ExportPayslips_Click" Margin="0,0,0,20"/>
+                        <Border BorderBrush="#BDC3C7" BorderThickness="1" Padding="20" Background="#F8F9FA" CornerRadius="5">
+                            <StackPanel>
+                                <TextBlock Text="Generate Weekly Payslip" FontSize="16" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,15"/>
+                                <TextBlock Text="Employee *" FontSize="12" Margin="0,0,0,3"/>
+                                <ComboBox x:Name="EmployeeComboBox" Style="{StaticResource ModernComboBox}" DisplayMemberPath="FullName" SelectedValuePath="Id" IsEditable="True" IsTextSearchEnabled="True" Margin="0,0,0,10"/>
+                                <TextBlock Text="Week Ending *" FontSize="12" Margin="0,0,0,3"/>
+                                <DatePicker x:Name="WeekEndingDatePicker" Height="32" FontSize="13" Margin="0,0,0,10"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Generate" Style="{StaticResource ActionButton}" Click="GeneratePayslip_Click"/>
+                                    <Button Content="Clear" Style="{StaticResource ActionButton}" Background="#95A5A6" Click="ClearForm_Click"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
-
-            <!-- Admin view of all payslips -->
-            <TabItem Header="All Payslips" x:Name="AdminPayslipsTab">
-                <DataGrid x:Name="AllPayslipsGrid"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          CanUserAddRows="False"
-                          AlternatingRowBackground="#ECF0F1"
-                          GridLinesVisibility="Horizontal"
-                          HeadersVisibility="Column">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="*"/>
-                        <DataGridTextColumn Header="Pay Period Start" Binding="{Binding PayPeriodStart, StringFormat=dd/MM/yyyy}" Width="*"/>
-                        <DataGridTextColumn Header="Pay Period End" Binding="{Binding PayPeriodEnd, StringFormat=dd/MM/yyyy}" Width="*"/>
-                        <DataGridTextColumn Header="Gross" Binding="{Binding GrossSalary, StringFormat=C}" Width="*"/>
-                        <DataGridTextColumn Header="Tax" Binding="{Binding TaxDeduction, StringFormat=C}" Width="*"/>
-                        <DataGridTextColumn Header="Net" Binding="{Binding NetSalary, StringFormat=C}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+            <TabItem x:Name="MyPayslipsTab" Header="My Payslips" FontSize="14">
+                <ScrollViewer>
+                    <StackPanel Margin="20">
+                        <TextBlock Text="My Payslips" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,15"/>
+                        <DataGrid x:Name="MyPayslipsGrid" Height="400" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" CanUserAddRows="False" AlternatingRowBackground="#ECF0F1" Margin="0,0,0,15">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Period Start" Binding="{Binding PayPeriodStart, StringFormat=dd/MM/yyyy}" Width="120"/>
+                                <DataGridTextColumn Header="Period End" Binding="{Binding PayPeriodEnd, StringFormat=dd/MM/yyyy}" Width="120"/>
+                                <DataGridTextColumn Header="Gross" Binding="{Binding GrossSalary, StringFormat=C}" Width="100"/>
+                                <DataGridTextColumn Header="Tax" Binding="{Binding TaxDeduction, StringFormat=C}" Width="100"/>
+                                <DataGridTextColumn Header="Net" Binding="{Binding NetSalary, StringFormat=C}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Export My Payslips" Style="{StaticResource ExportButton}" Click="ExportMyPayslips_Click" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
-
-        <!--
-            Admin payslip generation panel
-            This panel lets administrators generate new payslips for any active
-            employee. It is collapsed by default and made visible in the
-            code-behind when the logged in user has the Admin role.
-        -->
-        <Border Grid.Row="2"
-                x:Name="AdminPayslipPanel"
-                Visibility="Collapsed"
-                Padding="20"
-                Margin="20,0,20,20"
-                Background="#F8F9FA"
-                BorderBrush="#BDC3C7"
-                BorderThickness="1"
-                CornerRadius="5">
-            <StackPanel>
-                <TextBlock Text="Generate Payslip" 
-                           FontSize="18" 
-                           FontWeight="Bold" 
-                           Margin="0,0,0,15"/>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- Employee Selection -->
-                    <TextBlock Grid.Row="0" Grid.Column="0" 
-                               Text="Employee:" 
-                               VerticalAlignment="Center"
-                               Margin="0,0,10,10"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1"
-                              x:Name="EmployeeComboBox" 
-                              Style="{StaticResource InputComboBox}"
-                              DisplayMemberPath="FullName"
-                              SelectedValuePath="Id"
-                              Margin="0,0,0,10"/>
-
-                    <!-- Pay Period Start -->
-                    <TextBlock Grid.Row="1" Grid.Column="0" 
-                               Text="Pay Period Start:" 
-                               VerticalAlignment="Center"
-                               Margin="0,0,10,10"/>
-                    <DatePicker Grid.Row="1" Grid.Column="1"
-                                x:Name="PayStartDatePicker" 
-                                Style="{StaticResource InputDatePicker}"
-                                Margin="0,0,0,10"/>
-
-                    <!-- Pay Period End -->
-                    <TextBlock Grid.Row="2" Grid.Column="0" 
-                               Text="Pay Period End:" 
-                               VerticalAlignment="Center"
-                               Margin="0,0,10,10"/>
-                    <DatePicker Grid.Row="2" Grid.Column="1"
-                                x:Name="PayEndDatePicker" 
-                                Style="{StaticResource InputDatePicker}"
-                                Margin="0,0,0,10"/>
-
-                    <!-- Gross Salary -->
-                    <TextBlock Grid.Row="3" Grid.Column="0" 
-                               Text="Gross Salary:" 
-                               VerticalAlignment="Center"
-                               Margin="0,0,10,10"/>
-                    <TextBox Grid.Row="3" Grid.Column="1"
-                             x:Name="GrossSalaryTextBox" 
-                             Style="{StaticResource InputTextBox}"
-                             Margin="0,0,0,10"/>
-
-                    <!-- Generate Button -->
-                    <Button Grid.Row="4" Grid.Column="1"
-                            Content="Generate Payslip"
-                            Style="{StaticResource ActionButton}"
-                            Click="GeneratePayslip_Click"
-                            HorizontalAlignment="Left"
-                            Width="200"/>
-                </Grid>
-            </StackPanel>
-        </Border>
     </Grid>
 </Page>
