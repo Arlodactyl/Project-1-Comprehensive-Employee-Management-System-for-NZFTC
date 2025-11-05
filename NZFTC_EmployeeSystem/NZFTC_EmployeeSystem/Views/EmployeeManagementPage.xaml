@@ -60,6 +60,28 @@
             </Setter>
         </Style>
 
+        <!-- Export Button Style -->
+        <Style x:Key="ExportButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- TextBox Style -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="32"/>
@@ -86,7 +108,7 @@
         </Style>
     </Page.Resources>
 
-    <Grid Background="White">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -100,184 +122,279 @@
                        Foreground="White"/>
         </Border>
 
-        <!-- Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="20">
+        <!-- Content with Tabs -->
+        <TabControl Grid.Row="1" Margin="0">
+            <!-- Tab 1: Employees List -->
+            <TabItem Header="Employees" FontSize="14">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20">
 
-                <!-- Employees List Section -->
-                <TextBlock Text="Current Employees" 
-                           FontSize="18" 
-                           FontWeight="Bold" 
-                           Foreground="#2C3E50"
-                           Margin="0,0,0,5"/>
+                        <!-- Search and Export Section -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                <TextBlock Text="View all employees and their department assignments. Select an employee and click 'Toggle Active Status' to activate or deactivate them." 
-                           FontSize="12" 
-                           Foreground="#7F8C8D"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,10"/>
+                            <!-- Search Box -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <TextBlock Text="Search:" 
+                                           VerticalAlignment="Center"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,10,0"/>
+                                <TextBox x:Name="SearchTextBox"
+                                         Width="300"
+                                         Style="{StaticResource ModernTextBox}"
+                                         TextChanged="SearchTextBox_TextChanged"/>
+                            </StackPanel>
 
-                <DataGrid x:Name="EmployeesGrid"
-                          Height="250"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          CanUserAddRows="False"
-                          AlternatingRowBackground="#ECF0F1"
-                          GridLinesVisibility="Horizontal"
-                          HeadersVisibility="Column"
-                          Margin="0,0,0,10">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                        <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="150"/>
-                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="180"/>
-                        <DataGridTextColumn Header="Job Title" Binding="{Binding JobTitle}" Width="150"/>
-                        <DataGridTextColumn Header="Department" Binding="{Binding Department.Name}" Width="120"/>
-                        <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                            <!-- Export Button -->
+                            <Button Grid.Column="1"
+                                    Content="Export to CSV"
+                                    Style="{StaticResource ExportButton}"
+                                    Click="ExportEmployees_Click"/>
+                        </Grid>
 
-                <Button Content="Toggle Active Status" 
-                        Style="{StaticResource ToggleButton}"
-                        Click="ToggleActive_Click"
-                        HorizontalAlignment="Left"/>
-
-                <!-- Create New Employee Section -->
-                <Border BorderBrush="#BDC3C7" 
-                        BorderThickness="1" 
-                        Padding="20" 
-                        Margin="0,30,0,0"
-                        Background="#F8F9FA"
-                        CornerRadius="5">
-                    <StackPanel>
-                        <TextBlock Text="Create New Employee" 
+                        <!-- Employees List Section -->
+                        <TextBlock Text="Current Employees" 
                                    FontSize="18" 
                                    FontWeight="Bold" 
                                    Foreground="#2C3E50"
                                    Margin="0,0,0,5"/>
 
-                        <TextBlock Text="Fill in the form below to create a new employee. Fields marked with * are required." 
+                        <TextBlock Text="Employees are automatically ordered by ID. Use the search box to filter by name." 
+                                   FontSize="12" 
+                                   Foreground="#7F8C8D"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,10"/>
+
+                        <DataGrid x:Name="EmployeesGrid"
+                                  Height="300"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single"
+                                  CanUserAddRows="False"
+                                  AlternatingRowBackground="#ECF0F1"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  Margin="0,0,0,10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="150"/>
+                                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="180"/>
+                                <DataGridTextColumn Header="Job Title" Binding="{Binding JobTitle}" Width="150"/>
+                                <DataGridTextColumn Header="Department" Binding="{Binding Department.Name}" Width="120"/>
+                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Toggle Active Status" 
+                                    Style="{StaticResource ToggleButton}"
+                                    Click="ToggleActive_Click"
+                                    HorizontalAlignment="Left"/>
+                            <Button Content="View Training" 
+                                    Style="{StaticResource ActionButton}"
+                                    Click="ViewTraining_Click"
+                                    HorizontalAlignment="Left"/>
+                        </StackPanel>
+
+                        <!-- Create New Employee Section -->
+                        <Border BorderBrush="#BDC3C7" 
+                                BorderThickness="1" 
+                                Padding="20" 
+                                Margin="0,30,0,0"
+                                Background="#F8F9FA"
+                                CornerRadius="5">
+                            <StackPanel>
+                                <TextBlock Text="Create New Employee" 
+                                           FontSize="18" 
+                                           FontWeight="Bold" 
+                                           Foreground="#2C3E50"
+                                           Margin="0,0,0,15"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Left Column -->
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="First Name *" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="FirstNameTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Last Name *" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="LastNameTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Email *" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="EmailTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Phone Number" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="PhoneTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Job Title" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="JobTitleTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Department *" FontSize="12" Margin="0,0,0,3"/>
+                                        <ComboBox x:Name="DepartmentComboBox" Style="{StaticResource ModernComboBox}" Margin="0,0,0,10"/>
+                                    </StackPanel>
+
+                                    <!-- Right Column -->
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="Hire Date" FontSize="12" Margin="0,0,0,3"/>
+                                        <DatePicker x:Name="HireDatePicker" Style="{StaticResource ModernDatePicker}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Salary *" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="SalaryTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Tax Rate (%) *" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TaxRateTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Username *" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="UsernameTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Password *" FontSize="12" Margin="0,0,0,3"/>
+                                        <PasswordBox x:Name="PasswordBox" Height="32" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Role *" FontSize="12" Margin="0,0,0,3"/>
+                                        <ComboBox x:Name="RoleComboBox" Style="{StaticResource ModernComboBox}" Margin="0,0,0,10">
+                                            <ComboBoxItem Content="Employee" IsSelected="True"/>
+                                            <ComboBoxItem Content="Admin"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Button Content="Create Employee" 
+                                        Style="{StaticResource ActionButton}"
+                                        Click="CreateEmployee_Click"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 2: Training Records -->
+            <TabItem Header="Training Records" FontSize="14">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20">
+
+                        <!-- Training Section Header -->
+                        <TextBlock Text="Employee Training Records" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="#2C3E50"
+                                   Margin="0,0,0,5"/>
+
+                        <TextBlock Text="Select an employee from the Employees tab, then click 'View Training' to see their training records here." 
                                    FontSize="12" 
                                    Foreground="#7F8C8D"
                                    TextWrapping="Wrap"
                                    Margin="0,0,0,15"/>
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <!-- First Name -->
-                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="First Name *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="FirstNameTextBox" Style="{StaticResource ModernTextBox}"/>
+                        <!-- Selected Employee Info -->
+                        <Border Background="#ECF0F1" 
+                                Padding="15" 
+                                CornerRadius="5" 
+                                Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock x:Name="SelectedEmployeeText"
+                                           Text="No employee selected"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="#2C3E50"/>
                             </StackPanel>
+                        </Border>
 
-                            <!-- Last Name -->
-                            <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Last Name *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="LastNameTextBox" Style="{StaticResource ModernTextBox}"/>
-                            </StackPanel>
+                        <!-- Training Records Grid -->
+                        <DataGrid x:Name="TrainingGrid"
+                                  Height="250"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single"
+                                  CanUserAddRows="False"
+                                  AlternatingRowBackground="#ECF0F1"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  Margin="0,0,0,15">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="200"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                                <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="130"/>
+                                <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="150"/>
+                                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
 
-                            <!-- Email -->
-                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Email *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="EmailTextBox" Style="{StaticResource ModernTextBox}"/>
-                            </StackPanel>
+                        <!-- Training Action Buttons -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                            <Button Content="Add Training" 
+                                    Style="{StaticResource ActionButton}"
+                                    Click="AddTraining_Click"/>
+                            <Button Content="Complete Training" 
+                                    Style="{StaticResource ExportButton}"
+                                    Click="CompleteTraining_Click"/>
+                            <Button Content="Export Training Records" 
+                                    Style="{StaticResource ExportButton}"
+                                    Click="ExportTraining_Click"/>
+                        </StackPanel>
 
-                            <!-- Phone -->
-                            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Phone Number" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="PhoneTextBox" Style="{StaticResource ModernTextBox}"/>
-                            </StackPanel>
+                        <!-- Add Training Form -->
+                        <Border x:Name="AddTrainingPanel"
+                                BorderBrush="#BDC3C7" 
+                                BorderThickness="1" 
+                                Padding="20" 
+                                Background="#F8F9FA"
+                                CornerRadius="5"
+                                Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock Text="Add New Training Record" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="#2C3E50"
+                                           Margin="0,0,0,15"/>
 
-                            <!-- Job Title -->
-                            <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Job Title" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="JobTitleTextBox" Style="{StaticResource ModernTextBox}"/>
-                            </StackPanel>
-
-                            <!-- Department - CHANGED FROM TEXTBOX TO COMBOBOX -->
-                            <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Department *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <ComboBox x:Name="DepartmentComboBox" Style="{StaticResource ModernComboBox}"/>
-                            </StackPanel>
-
-                            <!-- Hire Date -->
-                            <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Hire Date" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <DatePicker x:Name="HireDatePicker" Style="{StaticResource ModernDatePicker}"/>
-                            </StackPanel>
-
-                            <!-- Salary -->
-                            <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Salary *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="SalaryTextBox" Style="{StaticResource ModernTextBox}"/>
-                            </StackPanel>
-
-                            <!-- Tax Rate -->
-                            <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Tax Rate (%) *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="TaxRateTextBox" Style="{StaticResource ModernTextBox}"/>
-                            </StackPanel>
-
-                            <!-- Username -->
-                            <StackPanel Grid.Row="4" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Username *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBox x:Name="UsernameTextBox" Style="{StaticResource ModernTextBox}"/>
-                            </StackPanel>
-
-                            <!-- Password -->
-                            <StackPanel Grid.Row="5" Grid.Column="0" Margin="0,0,0,10">
-                                <TextBlock Text="Password *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <PasswordBox x:Name="PasswordBox" Height="32" FontSize="13" Padding="8,5"/>
-                            </StackPanel>
-
-                            <!-- Role -->
-                            <StackPanel Grid.Row="5" Grid.Column="2" Margin="0,0,0,10">
-                                <TextBlock Text="Role *" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <ComboBox x:Name="RoleComboBox" Style="{StaticResource ModernComboBox}">
-                                    <ComboBoxItem Content="Employee"/>
-                                    <ComboBoxItem Content="Admin"/>
+                                <TextBlock Text="Training Type *" FontSize="12" Margin="0,0,0,3"/>
+                                <ComboBox x:Name="TrainingTypeComboBox" 
+                                          Style="{StaticResource ModernComboBox}" 
+                                          Margin="0,0,0,10">
+                                    <ComboBoxItem Content="Ethics Training"/>
+                                    <ComboBoxItem Content="Induction"/>
+                                    <ComboBoxItem Content="Health and Safety"/>
+                                    <ComboBoxItem Content="Fire Safety"/>
+                                    <ComboBoxItem Content="First Aid"/>
+                                    <ComboBoxItem Content="Data Privacy"/>
+                                    <ComboBoxItem Content="Workplace Harassment"/>
+                                    <ComboBoxItem Content="Other"/>
                                 </ComboBox>
-                            </StackPanel>
-                        </Grid>
 
-                        <Button Content="Create Employee" 
-                                Style="{StaticResource ActionButton}"
-                                Background="#27AE60"
-                                Click="CreateEmployee_Click"
-                                HorizontalAlignment="Left"
-                                Margin="0,10,0,0">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" 
-                                            CornerRadius="5"
-                                            Padding="15,8">
-                                        <ContentPresenter HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#229954"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                                <TextBlock Text="Notes" FontSize="12" Margin="0,0,0,3"/>
+                                <TextBox x:Name="TrainingNotesTextBox" 
+                                         Style="{StaticResource ModernTextBox}" 
+                                         Height="60"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"
+                                         Margin="0,0,0,15"/>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Save Training" 
+                                            Style="{StaticResource ActionButton}"
+                                            Click="SaveTraining_Click"/>
+                                    <Button Content="Cancel" 
+                                            Style="{StaticResource ToggleButton}"
+                                            Click="CancelAddTraining_Click"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
                     </StackPanel>
-                </Border>
-            </StackPanel>
-        </ScrollViewer>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

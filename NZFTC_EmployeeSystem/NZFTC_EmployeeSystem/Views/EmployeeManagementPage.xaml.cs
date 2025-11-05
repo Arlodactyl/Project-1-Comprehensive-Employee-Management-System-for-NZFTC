@@ -2,32 +2,32 @@
 using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
-    /// Interaction logic for EmployeeManagementPage.xaml
-    /// This page allows administrators to view all employees, create new employees,
-    /// and toggle employee active status. Each employee is linked to a department
-    /// and has a corresponding user account for login.
+    /// Employee Management Page with training records
+    /// Allows admins to manage employees and their training
     /// </summary>
     public partial class EmployeeManagementPage : Page
     {
         // Store the current logged-in user
         private readonly User _currentUser;
 
-        /// <summary>
-        /// Constructor - runs when the page is first created
-        /// </summary>
+        // Store the currently selected employee for training view
+        private Employee? _selectedEmployee = null;
+
         public EmployeeManagementPage(User currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;
 
-            // Security check: Only admins should access this page
+            // Security check: Only admins can access this page
             if (_currentUser.Role != "Admin")
             {
                 MessageBox.Show(
@@ -40,20 +40,15 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
-            // Load all employees from the database
+            // Load initial data
             LoadEmployees();
-
-            // Set default role to "Employee" when creating new employees
             RoleComboBox.SelectedIndex = 0;
-
-            // Load departments into the department dropdown
             LoadDepartments();
         }
 
         /// <summary>
-        /// Loads all employees from the database and displays them in the grid.
-        /// IMPORTANT: Uses Include() to load the Department navigation property
-        /// so we can see which department each employee belongs to.
+        /// Loads all employees ordered by ID
+        /// Includes Department navigation property for display
         /// </summary>
         private void LoadEmployees()
         {
@@ -61,11 +56,10 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 using (var db = new AppDbContext())
                 {
-                    // FIXED: Added Include(e => e.Department) to load department data
-                    // This is called "eager loading" - it loads related data at the same time
+                    // Load employees ordered by ID (ascending)
                     var employees = db.Employees
-                        .Include(e => e.Department) // This loads the Department for each Employee
-                        .OrderBy(e => e.LastName)
+                        .Include(e => e.Department)
+                        .OrderBy(e => e.Id) // Order by ID as requested
                         .ToList();
 
                     EmployeesGrid.ItemsSource = employees;
@@ -83,8 +77,7 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Loads all departments into a ComboBox for easy selection when creating employees.
-        /// This replaces the text box with a dropdown for better user experience.
+        /// Loads departments for the dropdown when creating employees
         /// </summary>
         private void LoadDepartments()
         {
@@ -96,7 +89,6 @@ namespace NZFTC_EmployeeSystem.Views
                         .OrderBy(d => d.Name)
                         .ToList();
 
-                    // Store departments for later use
                     DepartmentComboBox.ItemsSource = departments;
                     DepartmentComboBox.DisplayMemberPath = "Name";
                     DepartmentComboBox.SelectedValuePath = "Id";
@@ -114,13 +106,103 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Toggles the selected employee's active status between active and inactive.
-        /// When an employee is deactivated, their corresponding user account is also
-        /// deactivated, preventing them from logging in.
+        /// Search employees by name as user types
+        /// </summary>
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = SearchTextBox.Text.ToLower().Trim();
+
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var employees = db.Employees
+                        .Include(e => e.Department)
+                        .Where(e => e.FirstName.ToLower().Contains(searchText) ||
+                                    e.LastName.ToLower().Contains(searchText) ||
+                                    (e.FirstName + " " + e.LastName).ToLower().Contains(searchText))
+                        .OrderBy(e => e.Id) // Keep ID ordering
+                        .ToList();
+
+                    EmployeesGrid.ItemsSource = employees;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error searching employees: {ex.Message}",
+                    "Search Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Export employee list to CSV file
+        /// </summary>
+        private void ExportEmployees_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var employees = db.Employees
+                        .Include(e => e.Department)
+                        .OrderBy(e => e.Id)
+                        .ToList();
+
+                    // Create CSV content
+                    var csv = new StringBuilder();
+                    csv.AppendLine("ID,First Name,Last Name,Email,Phone,Job Title,Department,Hire Date,Salary,Active");
+
+                    foreach (var emp in employees)
+                    {
+                        csv.AppendLine($"{emp.Id}," +
+                                      $"\"{emp.FirstName}\"," +
+                                      $"\"{emp.LastName}\"," +
+                                      $"\"{emp.Email}\"," +
+                                      $"\"{emp.PhoneNumber ?? ""}\"," +
+                                      $"\"{emp.JobTitle ?? ""}\"," +
+                                      $"\"{emp.Department?.Name ?? ""}\"," +
+                                      $"{emp.HireDate:dd/MM/yyyy}," +
+                                      $"{emp.Salary}," +
+                                      $"{emp.IsActive}");
+                    }
+
+                    // Save to Downloads folder
+                    string downloadsPath = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                        "Downloads");
+                    string fileName = $"Employees_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+                    string fullPath = Path.Combine(downloadsPath, fileName);
+
+                    File.WriteAllText(fullPath, csv.ToString());
+
+                    MessageBox.Show(
+                        $"Employee list exported successfully!\n\nSaved to: {fullPath}",
+                        "Export Complete",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error exporting employees: {ex.Message}",
+                    "Export Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Toggle employee active status
         /// </summary>
         private void ToggleActive_Click(object sender, RoutedEventArgs e)
         {
-            // Step 1: Get the selected employee from the grid
             var selected = EmployeesGrid.SelectedItem as Employee;
             if (selected == null)
             {
@@ -135,18 +217,15 @@ namespace NZFTC_EmployeeSystem.Views
 
             try
             {
-                // Step 2: Update the employee's active status in the database
                 using (var db = new AppDbContext())
                 {
                     var employee = db.Employees.Find(selected.Id);
                     if (employee != null)
                     {
-                        // Toggle the status (true becomes false, false becomes true)
                         employee.IsActive = !employee.IsActive;
                         db.SaveChanges();
 
-                        // Step 3: Also update the associated user account status
-                        // This prevents inactive employees from logging in
+                        // Update user account status
                         var user = db.Users.FirstOrDefault(u => u.EmployeeId == employee.Id);
                         if (user != null)
                         {
@@ -156,7 +235,6 @@ namespace NZFTC_EmployeeSystem.Views
                     }
                 }
 
-                // Step 4: Show success message with the new status
                 string status = selected.IsActive ? "deactivated" : "activated";
                 MessageBox.Show(
                     $"Employee {selected.FullName} has been {status}.",
@@ -165,7 +243,6 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Information
                 );
 
-                // Step 5: Reload the employee list to show the updated status
                 LoadEmployees();
             }
             catch (Exception ex)
@@ -180,14 +257,272 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Creates a new employee and corresponding user account.
-        /// This method validates all inputs, creates or finds the department,
-        /// creates the employee record, creates the user account, and links
-        /// the user to their role in the UserRoles table.
+        /// View training records for selected employee
+        /// </summary>
+        private void ViewTraining_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = EmployeesGrid.SelectedItem as Employee;
+            if (selected == null)
+            {
+                MessageBox.Show(
+                    "Please select an employee from the list first.",
+                    "No Selection",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            _selectedEmployee = selected;
+            SelectedEmployeeText.Text = $"Training Records for: {selected.FullName} (ID: {selected.Id})";
+            LoadTrainingRecords(selected.Id);
+
+            // Switch to training tab (index 1)
+            var tabControl = this.FindName("TrainingTab") as TabControl;
+        }
+
+        /// <summary>
+        /// Load training records for an employee
+        /// </summary>
+        private void LoadTrainingRecords(int employeeId)
+        {
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var trainings = db.Trainings
+                        .Include(t => t.SignedOffByUser)
+                        .Where(t => t.EmployeeId == employeeId)
+                        .OrderBy(t => t.Id)
+                        .ToList();
+
+                    TrainingGrid.ItemsSource = trainings;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error loading training records: {ex.Message}",
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Show add training form
+        /// </summary>
+        private void AddTraining_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedEmployee == null)
+            {
+                MessageBox.Show(
+                    "Please select an employee and click 'View Training' first.",
+                    "No Employee Selected",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            AddTrainingPanel.Visibility = Visibility.Visible;
+            TrainingTypeComboBox.SelectedIndex = 0;
+            TrainingNotesTextBox.Clear();
+        }
+
+        /// <summary>
+        /// Cancel add training
+        /// </summary>
+        private void CancelAddTraining_Click(object sender, RoutedEventArgs e)
+        {
+            AddTrainingPanel.Visibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
+        /// Save new training record
+        /// </summary>
+        private void SaveTraining_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedEmployee == null) return;
+
+            if (TrainingTypeComboBox.SelectedItem == null)
+            {
+                MessageBox.Show(
+                    "Please select a training type.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var trainingType = ((ComboBoxItem)TrainingTypeComboBox.SelectedItem).Content.ToString();
+
+                    var training = new Training
+                    {
+                        EmployeeId = _selectedEmployee.Id,
+                        TrainingType = trainingType ?? "",
+                        Status = "Not Started",
+                        Notes = TrainingNotesTextBox.Text.Trim()
+                    };
+
+                    db.Trainings.Add(training);
+                    db.SaveChanges();
+                }
+
+                MessageBox.Show(
+                    "Training record added successfully!",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+
+                AddTrainingPanel.Visibility = Visibility.Collapsed;
+                LoadTrainingRecords(_selectedEmployee.Id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error adding training: {ex.Message}",
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Mark selected training as completed
+        /// </summary>
+        private void CompleteTraining_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = TrainingGrid.SelectedItem as Training;
+            if (selected == null)
+            {
+                MessageBox.Show(
+                    "Please select a training record from the list.",
+                    "No Selection",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var training = db.Trainings.Find(selected.Id);
+                    if (training != null)
+                    {
+                        training.Status = "Completed";
+                        training.CompletedDate = DateTime.Now;
+                        training.SignedOffByUserId = _currentUser.Id;
+                        db.SaveChanges();
+                    }
+                }
+
+                MessageBox.Show(
+                    "Training marked as completed!",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+
+                if (_selectedEmployee != null)
+                {
+                    LoadTrainingRecords(_selectedEmployee.Id);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error completing training: {ex.Message}",
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Export training records to CSV
+        /// </summary>
+        private void ExportTraining_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedEmployee == null)
+            {
+                MessageBox.Show(
+                    "Please select an employee and view their training first.",
+                    "No Employee Selected",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var trainings = db.Trainings
+                        .Include(t => t.SignedOffByUser)
+                        .Where(t => t.EmployeeId == _selectedEmployee.Id)
+                        .OrderBy(t => t.Id)
+                        .ToList();
+
+                    var csv = new StringBuilder();
+                    csv.AppendLine("ID,Training Type,Status,Completed Date,Signed Off By,Notes");
+
+                    foreach (var t in trainings)
+                    {
+                        csv.AppendLine($"{t.Id}," +
+                                      $"\"{t.TrainingType}\"," +
+                                      $"\"{t.Status}\"," +
+                                      $"{(t.CompletedDate.HasValue ? t.CompletedDate.Value.ToString("dd/MM/yyyy") : "")}," +
+                                      $"\"{t.SignedOffByUser?.Username ?? ""}\"," +
+                                      $"\"{t.Notes ?? ""}\"");
+                    }
+
+                    // Save to Downloads folder
+                    string downloadsPath = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                        "Downloads");
+                    string fileName = $"Training_{_selectedEmployee.FullName.Replace(" ", "_")}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+                    string fullPath = Path.Combine(downloadsPath, fileName);
+
+                    File.WriteAllText(fullPath, csv.ToString());
+
+                    MessageBox.Show(
+                        $"Training records exported successfully!\n\nSaved to: {fullPath}",
+                        "Export Complete",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error exporting training: {ex.Message}",
+                    "Export Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
+        /// Create new employee (existing code - kept the same)
         /// </summary>
         private void CreateEmployee_Click(object sender, RoutedEventArgs e)
         {
-            // Step 1: Validate required fields
+            // Validate required fields
             if (string.IsNullOrWhiteSpace(FirstNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(LastNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(EmailTextBox.Text) ||
@@ -203,7 +538,7 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
-            // Step 2: Validate salary is a valid number
+            // Validate salary
             if (!decimal.TryParse(SalaryTextBox.Text, out decimal salary) || salary <= 0)
             {
                 MessageBox.Show(
@@ -215,7 +550,7 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
-            // Step 3: Validate tax rate is a valid number
+            // Validate tax rate
             if (!decimal.TryParse(TaxRateTextBox.Text, out decimal taxRate) || taxRate < 0 || taxRate > 100)
             {
                 MessageBox.Show(
@@ -227,7 +562,7 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
-            // Step 4: Validate department is selected
+            // Validate department
             if (DepartmentComboBox.SelectedValue == null)
             {
                 MessageBox.Show(
@@ -239,7 +574,7 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
-            // Step 5: Validate email format (basic check)
+            // Validate email format
             if (!EmailTextBox.Text.Contains("@"))
             {
                 MessageBox.Show(
@@ -253,12 +588,11 @@ namespace NZFTC_EmployeeSystem.Views
 
             try
             {
-                // Step 6: Get hire date or use today's date if not selected
                 var hireDate = HireDatePicker.SelectedDate ?? DateTime.Now;
 
                 using (var db = new AppDbContext())
                 {
-                    // Step 7: Check if username already exists
+                    // Check username exists
                     if (db.Users.Any(u => u.Username.ToLower() == UsernameTextBox.Text.Trim().ToLower()))
                     {
                         MessageBox.Show(
@@ -270,7 +604,7 @@ namespace NZFTC_EmployeeSystem.Views
                         return;
                     }
 
-                    // Step 8: Check if email already exists
+                    // Check email exists
                     if (db.Employees.Any(e => e.Email.ToLower() == EmailTextBox.Text.Trim().ToLower()))
                     {
                         MessageBox.Show(
@@ -282,10 +616,9 @@ namespace NZFTC_EmployeeSystem.Views
                         return;
                     }
 
-                    // Step 9: Get the selected department ID
                     int departmentId = (int)DepartmentComboBox.SelectedValue;
 
-                    // Step 10: Create the employee record
+                    // Create employee
                     var employee = new Employee
                     {
                         FirstName = FirstNameTextBox.Text.Trim(),
@@ -297,22 +630,21 @@ namespace NZFTC_EmployeeSystem.Views
                         HireDate = hireDate,
                         Salary = salary,
                         TaxRate = taxRate,
-                        AnnualLeaveBalance = 20, // Default 20 days
-                        SickLeaveBalance = 10,   // Default 10 days
+                        AnnualLeaveBalance = 20,
+                        SickLeaveBalance = 10,
                         IsActive = true
                     };
 
                     db.Employees.Add(employee);
-                    db.SaveChanges(); // Save to get the employee ID
+                    db.SaveChanges();
 
-                    // Step 11: Determine the selected role
                     string selectedRoleName = ((ComboBoxItem)RoleComboBox.SelectedItem)?.Content?.ToString() ?? "Employee";
 
-                    // Step 12: Create the linked user account
+                    // Create user account
                     var user = new User
                     {
                         Username = UsernameTextBox.Text.Trim(),
-                        Password = PasswordBox.Password, // Note: In production, this should be hashed
+                        Password = PasswordBox.Password,
                         Role = selectedRoleName,
                         EmployeeId = employee.Id,
                         IsActive = true,
@@ -320,9 +652,9 @@ namespace NZFTC_EmployeeSystem.Views
                     };
 
                     db.Users.Add(user);
-                    db.SaveChanges(); // Save to get the user ID
+                    db.SaveChanges();
 
-                    // Step 13: Link the user to their role in the UserRoles table
+                    // Link to role
                     var roleEntity = db.Roles.FirstOrDefault(r => r.Name == selectedRoleName);
                     if (roleEntity != null)
                     {
@@ -336,7 +668,6 @@ namespace NZFTC_EmployeeSystem.Views
                     }
                 }
 
-                // Step 14: Show success message
                 MessageBox.Show(
                     $"Employee {FirstNameTextBox.Text} {LastNameTextBox.Text} created successfully!\n\n" +
                     $"Username: {UsernameTextBox.Text}\n" +
@@ -346,7 +677,7 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Information
                 );
 
-                // Step 15: Clear the form so admin can create another employee
+                // Clear form
                 FirstNameTextBox.Clear();
                 LastNameTextBox.Clear();
                 EmailTextBox.Clear();
@@ -360,7 +691,6 @@ namespace NZFTC_EmployeeSystem.Views
                 PasswordBox.Clear();
                 RoleComboBox.SelectedIndex = 0;
 
-                // Step 16: Reload the employee list to show the new employee
                 LoadEmployees();
             }
             catch (Exception ex)
