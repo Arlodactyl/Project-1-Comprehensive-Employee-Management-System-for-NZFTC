@@ -338,48 +338,388 @@ namespace NZFTC_EmployeeSystem.Data
                 new UserRole { UserId = 1, RoleId = 1 }
             );
 
-            // Add some sample holidays 
+            // Seed comprehensive New Zealand public holidays for 2025 and 2026
+            // This provides a full calendar of holidays including national public holidays,
+            // regional anniversary days, and company-specific holidays
             modelBuilder.Entity<Holiday>().HasData(
+                // ========================================
+                // 2025 NEW ZEALAND PUBLIC HOLIDAYS
+                // ========================================
+
+                // New Year's Day - January 1, 2025
                 new Holiday
                 {
                     Id = 1,
                     Name = "New Year's Day",
                     Date = new DateTime(2025, 1, 1),
                     Type = "Public",
-                    Description = "First day of the new year",
+                    Description = "First day of the new year - a nationwide public holiday in New Zealand",
                     IsRecurring = true,
                     CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1
                 },
+
+                // Day after New Year's Day - January 2, 2025
                 new Holiday
                 {
                     Id = 2,
-                    Name = "Waitangi Day",
-                    Date = new DateTime(2025, 2, 6),
+                    Name = "Day after New Year's Day",
+                    Date = new DateTime(2025, 1, 2),
                     Type = "Public",
-                    Description = "New Zealand's national day",
+                    Description = "Second day of new year celebrations - public holiday in New Zealand",
                     IsRecurring = true,
                     CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1
                 },
+
+                // Waitangi Day - February 6, 2025
                 new Holiday
                 {
                     Id = 3,
-                    Name = "ANZAC Day",
-                    Date = new DateTime(2025, 4, 25),
+                    Name = "Waitangi Day",
+                    Date = new DateTime(2025, 2, 6),
                     Type = "Public",
-                    Description = "Remembrance of soldiers",
+                    Description = "New Zealand's national day commemorating the signing of the Treaty of Waitangi in 1840",
                     IsRecurring = true,
                     CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1
                 },
+
+                // Good Friday - April 18, 2025
                 new Holiday
                 {
                     Id = 4,
+                    Name = "Good Friday",
+                    Date = new DateTime(2025, 4, 18),
+                    Type = "Public",
+                    Description = "Christian holiday commemorating the crucifixion of Jesus Christ - public holiday",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Easter Monday - April 21, 2025
+                new Holiday
+                {
+                    Id = 5,
+                    Name = "Easter Monday",
+                    Date = new DateTime(2025, 4, 21),
+                    Type = "Public",
+                    Description = "Day after Easter Sunday - recognized as a public holiday in New Zealand",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // ANZAC Day - April 25, 2025
+                new Holiday
+                {
+                    Id = 6,
+                    Name = "ANZAC Day",
+                    Date = new DateTime(2025, 4, 25),
+                    Type = "Public",
+                    Description = "Remembrance day for Australian and New Zealand Army Corps members who served in wars and conflicts",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Queen's Birthday - June 2, 2025
+                new Holiday
+                {
+                    Id = 7,
+                    Name = "Queen's Birthday",
+                    Date = new DateTime(2025, 6, 2),
+                    Type = "Public",
+                    Description = "Official celebration of the monarch's birthday - observed on first Monday in June",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Matariki - June 20, 2025
+                new Holiday
+                {
+                    Id = 8,
+                    Name = "Matariki",
+                    Date = new DateTime(2025, 6, 20),
+                    Type = "Public",
+                    Description = "Maori New Year celebrating the rise of the Matariki star cluster - newest public holiday in NZ",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Labour Day - October 27, 2025
+                new Holiday
+                {
+                    Id = 9,
+                    Name = "Labour Day",
+                    Date = new DateTime(2025, 10, 27),
+                    Type = "Public",
+                    Description = "Celebrates workers' rights and the eight-hour working day - fourth Monday in October",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Christmas Day - December 25, 2025
+                new Holiday
+                {
+                    Id = 10,
                     Name = "Christmas Day",
                     Date = new DateTime(2025, 12, 25),
                     Type = "Public",
-                    Description = "Christmas celebration",
+                    Description = "Christian celebration of the birth of Jesus Christ - major public holiday in New Zealand",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Boxing Day - December 26, 2025
+                new Holiday
+                {
+                    Id = 11,
+                    Name = "Boxing Day",
+                    Date = new DateTime(2025, 12, 26),
+                    Type = "Public",
+                    Description = "Day after Christmas - traditionally for giving to those in need, now a shopping holiday",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // ========================================
+                // 2025 REGIONAL ANNIVERSARY DAYS
+                // These are observed in specific regions of New Zealand
+                // ========================================
+
+                // Wellington Anniversary Day - January 27, 2025
+                new Holiday
+                {
+                    Id = 12,
+                    Name = "Wellington Anniversary Day",
+                    Date = new DateTime(2025, 1, 27),
+                    Type = "Public",
+                    Description = "Regional holiday for Wellington province - commemorates founding of the city",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Auckland Anniversary Day - January 27, 2025
+                new Holiday
+                {
+                    Id = 13,
+                    Name = "Auckland Anniversary Day",
+                    Date = new DateTime(2025, 1, 27),
+                    Type = "Public",
+                    Description = "Regional holiday for Auckland province - celebrates the arrival of first Governor",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Canterbury Anniversary Day - November 14, 2025
+                new Holiday
+                {
+                    Id = 14,
+                    Name = "Canterbury Anniversary Day",
+                    Date = new DateTime(2025, 11, 14),
+                    Type = "Public",
+                    Description = "Regional holiday for Canterbury - celebrates the arrival of the first Canterbury settlers",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // ========================================
+                // 2025 COMPANY HOLIDAYS
+                // These are specific to NZFTC company
+                // ========================================
+
+                // Company Founding Day - March 15, 2025
+                new Holiday
+                {
+                    Id = 15,
+                    Name = "NZFTC Founding Day",
+                    Date = new DateTime(2025, 3, 15),
+                    Type = "Company",
+                    Description = "Celebrates the founding anniversary of New Zealand Freight Transport Company",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Summer Shutdown Start - December 22, 2025
+                new Holiday
+                {
+                    Id = 16,
+                    Name = "Summer Shutdown - Week 1",
+                    Date = new DateTime(2025, 12, 22),
+                    Type = "Company",
+                    Description = "Company closes for summer break - first week of annual shutdown period",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Summer Shutdown Continued - December 29, 2025
+                new Holiday
+                {
+                    Id = 17,
+                    Name = "Summer Shutdown - Week 2",
+                    Date = new DateTime(2025, 12, 29),
+                    Type = "Company",
+                    Description = "Company remains closed for summer break - second week of annual shutdown period",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // ========================================
+                // 2026 NEW ZEALAND PUBLIC HOLIDAYS
+                // Planning ahead for next year's calendar
+                // ========================================
+
+                // New Year's Day - January 1, 2026
+                new Holiday
+                {
+                    Id = 18,
+                    Name = "New Year's Day",
+                    Date = new DateTime(2026, 1, 1),
+                    Type = "Public",
+                    Description = "First day of the new year - a nationwide public holiday in New Zealand",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Day after New Year's Day - January 2, 2026
+                new Holiday
+                {
+                    Id = 19,
+                    Name = "Day after New Year's Day",
+                    Date = new DateTime(2026, 1, 2),
+                    Type = "Public",
+                    Description = "Second day of new year celebrations - public holiday in New Zealand",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Waitangi Day - February 6, 2026
+                new Holiday
+                {
+                    Id = 20,
+                    Name = "Waitangi Day",
+                    Date = new DateTime(2026, 2, 6),
+                    Type = "Public",
+                    Description = "New Zealand's national day commemorating the signing of the Treaty of Waitangi in 1840",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Good Friday - April 3, 2026
+                new Holiday
+                {
+                    Id = 21,
+                    Name = "Good Friday",
+                    Date = new DateTime(2026, 4, 3),
+                    Type = "Public",
+                    Description = "Christian holiday commemorating the crucifixion of Jesus Christ - public holiday",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Easter Monday - April 6, 2026
+                new Holiday
+                {
+                    Id = 22,
+                    Name = "Easter Monday",
+                    Date = new DateTime(2026, 4, 6),
+                    Type = "Public",
+                    Description = "Day after Easter Sunday - recognized as a public holiday in New Zealand",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // ANZAC Day - April 25, 2026
+                new Holiday
+                {
+                    Id = 23,
+                    Name = "ANZAC Day",
+                    Date = new DateTime(2026, 4, 25),
+                    Type = "Public",
+                    Description = "Remembrance day for Australian and New Zealand Army Corps members who served in wars and conflicts",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Queen's Birthday - June 1, 2026
+                new Holiday
+                {
+                    Id = 24,
+                    Name = "Queen's Birthday",
+                    Date = new DateTime(2026, 6, 1),
+                    Type = "Public",
+                    Description = "Official celebration of the monarch's birthday - observed on first Monday in June",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Matariki - July 10, 2026 (estimated)
+                new Holiday
+                {
+                    Id = 25,
+                    Name = "Matariki",
+                    Date = new DateTime(2026, 7, 10),
+                    Type = "Public",
+                    Description = "Maori New Year celebrating the rise of the Matariki star cluster - newest public holiday in NZ",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Labour Day - October 26, 2026
+                new Holiday
+                {
+                    Id = 26,
+                    Name = "Labour Day",
+                    Date = new DateTime(2026, 10, 26),
+                    Type = "Public",
+                    Description = "Celebrates workers' rights and the eight-hour working day - fourth Monday in October",
+                    IsRecurring = false,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Christmas Day - December 25, 2026
+                new Holiday
+                {
+                    Id = 27,
+                    Name = "Christmas Day",
+                    Date = new DateTime(2026, 12, 25),
+                    Type = "Public",
+                    Description = "Christian celebration of the birth of Jesus Christ - major public holiday in New Zealand",
+                    IsRecurring = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    CreatedByUserId = 1
+                },
+
+                // Boxing Day - December 26, 2026
+                new Holiday
+                {
+                    Id = 28,
+                    Name = "Boxing Day",
+                    Date = new DateTime(2026, 12, 26),
+                    Type = "Public",
+                    Description = "Day after Christmas - traditionally for giving to those in need, now a shopping holiday",
                     IsRecurring = true,
                     CreatedDate = new DateTime(2024, 1, 1),
                     CreatedByUserId = 1

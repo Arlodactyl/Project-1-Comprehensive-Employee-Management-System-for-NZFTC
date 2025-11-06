@@ -1,6 +1,7 @@
 using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,8 +10,9 @@ namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
     /// Interaction logic for HolidaysPage.xaml
-    /// This page displays a list of company holidays.
+    /// This page displays a list of company holidays with countdown timers.
     /// Administrators can add new holidays through the Add Holiday tab.
+    /// Features a visual timeline map showing upcoming holidays.
     /// </summary>
     public partial class HolidaysPage : Page
     {
@@ -39,8 +41,8 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Loads all holidays from the database and displays them in the grid
-        /// This method connects to the database, retrieves holidays, and binds them to the UI
+        /// Loads all holidays from the database and displays them in both the grid and timeline
+        /// This method connects to the database, retrieves holidays, calculates countdowns, and binds to UI
         /// </summary>
         private void LoadHolidayData()
         {
@@ -54,8 +56,33 @@ namespace NZFTC_EmployeeSystem.Views
                         .OrderBy(h => h.Date)
                         .ToList();
 
+                    // Convert the holidays to HolidayViewModel which includes countdown calculation
+                    var holidayViewModels = holidays.Select(h => new HolidayViewModel
+                    {
+                        Id = h.Id,
+                        Name = h.Name,
+                        Date = h.Date,
+                        Type = h.Type,
+                        Description = h.Description,
+                        IsRecurring = h.IsRecurring,
+                        CreatedDate = h.CreatedDate,
+                        CreatedByUserId = h.CreatedByUserId,
+                        // Calculate the countdown string by calling the helper method
+                        DaysUntil = CalculateCountdown(h.Date)
+                    }).ToList();
+
                     // Bind the holidays to the DataGrid so they appear on screen
-                    HolidaysGrid.ItemsSource = holidays;
+                    HolidaysGrid.ItemsSource = holidayViewModels;
+
+                    // Filter to only show upcoming holidays in the timeline (next 12 months)
+                    // This prevents the timeline from becoming cluttered with old holidays
+                    var upcomingHolidays = holidayViewModels
+                        .Where(h => h.Date >= DateTime.Today && h.Date <= DateTime.Today.AddMonths(12))
+                        .Take(10) // Limit to 10 holidays to prevent overcrowding
+                        .ToList();
+
+                    // Bind the upcoming holidays to the timeline control
+                    TimelineItemsControl.ItemsSource = upcomingHolidays;
                 }
             }
             catch (Exception ex)
@@ -67,6 +94,60 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );
+            }
+        }
+
+        /// <summary>
+        /// Calculates a human-readable countdown string from today to the holiday date
+        /// Returns different messages based on whether the holiday is past, today, or future
+        /// </summary>
+        /// <param name="holidayDate">The date of the holiday</param>
+        /// <returns>A string like "In 5 days", "Today!", or "Passed"</returns>
+        private string CalculateCountdown(DateTime holidayDate)
+        {
+            // Get today's date at midnight for accurate day calculation
+            var today = DateTime.Today;
+
+            // Calculate the difference in days between today and the holiday
+            var daysUntil = (holidayDate.Date - today).Days;
+
+            // Return appropriate message based on the number of days
+            if (daysUntil < 0)
+            {
+                // Holiday has already passed
+                return "Passed";
+            }
+            else if (daysUntil == 0)
+            {
+                // Holiday is today
+                return "Today!";
+            }
+            else if (daysUntil == 1)
+            {
+                // Holiday is tomorrow
+                return "Tomorrow!";
+            }
+            else if (daysUntil <= 7)
+            {
+                // Holiday is within a week - show urgency
+                return $"In {daysUntil} days";
+            }
+            else if (daysUntil <= 30)
+            {
+                // Holiday is within a month
+                return $"In {daysUntil} days";
+            }
+            else if (daysUntil <= 365)
+            {
+                // Holiday is within a year - show in weeks for easier understanding
+                var weeks = daysUntil / 7;
+                return $"In {weeks} weeks";
+            }
+            else
+            {
+                // Holiday is more than a year away - show in years
+                var years = daysUntil / 365;
+                return $"In {years} year(s)";
             }
         }
 
@@ -151,7 +232,7 @@ namespace NZFTC_EmployeeSystem.Views
                 RecurringCheckBox.IsChecked = false;
                 HolidayDescriptionTextBox.Clear();
 
-                // Step 7: Reload the holidays grid to show the newly added holiday
+                // Step 7: Reload the holidays grid and timeline to show the newly added holiday
                 LoadHolidayData();
             }
             catch (Exception ex)
@@ -165,5 +246,27 @@ namespace NZFTC_EmployeeSystem.Views
                 );
             }
         }
+    }
+
+    /// <summary>
+    /// View Model class for displaying holidays with calculated countdown
+    /// This class extends the Holiday model with a DaysUntil property for display purposes
+    /// We use a separate view model so we don't modify the database model
+    /// </summary>
+    public class HolidayViewModel
+    {
+        // All the standard Holiday properties
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+        public string Type { get; set; }
+        public string Description { get; set; }
+        public bool IsRecurring { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreatedByUserId { get; set; }
+
+        // Additional property for countdown display
+        // This is calculated in the code-behind and not stored in the database
+        public string DaysUntil { get; set; }
     }
 }

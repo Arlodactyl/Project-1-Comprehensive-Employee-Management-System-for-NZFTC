@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="900"
+      d:DesignHeight="900" d:DesignWidth="1000"
       Title="Holidays">
 
     <Page.Resources>
@@ -58,23 +58,146 @@
 
             <!-- Tab 1: View Holidays -->
             <TabItem Header="View Holidays">
-                <DataGrid x:Name="HolidaysGrid"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          CanUserAddRows="False"
-                          AlternatingRowBackground="#ECF0F1"
-                          GridLinesVisibility="Horizontal"
-                          HeadersVisibility="Column"
-                          Margin="20">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Holiday Name" Binding="{Binding Name}" Width="*"/>
-                        <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="120"/>
-                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
-                        <DataGridCheckBoxColumn Header="Recurring" Binding="{Binding IsRecurring}" Width="100"/>
-                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <!-- Row for the holidays grid -->
+                        <RowDefinition Height="2*"/>
+                        <!-- Row for the visual timeline map -->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Holidays Grid with Countdown Column -->
+                    <DataGrid x:Name="HolidaysGrid"
+                              Grid.Row="0"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              CanUserAddRows="False"
+                              AlternatingRowBackground="#ECF0F1"
+                              GridLinesVisibility="Horizontal"
+                              HeadersVisibility="Column"
+                              Margin="20">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Holiday Name" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="120"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
+                            <!-- New Countdown Column - shows days until the holiday -->
+                            <DataGridTextColumn Header="Countdown" Binding="{Binding DaysUntil}" Width="120"/>
+                            <DataGridCheckBoxColumn Header="Recurring" Binding="{Binding IsRecurring}" Width="100"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Visual Timeline Map Section -->
+                    <Border Grid.Row="1" 
+                            BorderBrush="#BDC3C7" 
+                            BorderThickness="1" 
+                            Margin="20,0,20,20"
+                            Background="#F8F9FA"
+                            CornerRadius="8">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Timeline Header -->
+                            <Border Grid.Row="0" 
+                                    Background="#34495E" 
+                                    CornerRadius="8,8,0,0"
+                                    Padding="15,10">
+                                <TextBlock Text="Upcoming Holidays Timeline" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="White"/>
+                            </Border>
+
+                            <!-- Timeline Content Area -->
+                            <ScrollViewer Grid.Row="1" 
+                                          HorizontalScrollBarVisibility="Auto" 
+                                          VerticalScrollBarVisibility="Auto"
+                                          Padding="20">
+                                <ItemsControl x:Name="TimelineItemsControl">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <!-- Wrap panel allows items to flow horizontally -->
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <!-- Each holiday card in the timeline -->
+                                            <Border Width="180" 
+                                                    Height="140" 
+                                                    Background="White"
+                                                    BorderBrush="#3498DB"
+                                                    BorderThickness="2"
+                                                    CornerRadius="8"
+                                                    Margin="10"
+                                                    Padding="12">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
+
+                                                    <!-- Holiday Name -->
+                                                    <TextBlock Grid.Row="0" 
+                                                               Text="{Binding Name}" 
+                                                               FontSize="14"
+                                                               FontWeight="Bold"
+                                                               Foreground="#2C3E50"
+                                                               TextWrapping="Wrap"
+                                                               TextAlignment="Center"
+                                                               Margin="0,0,0,8"/>
+
+                                                    <!-- Holiday Date -->
+                                                    <TextBlock Grid.Row="1" 
+                                                               Text="{Binding Date, StringFormat=dd/MM/yyyy}" 
+                                                               FontSize="12"
+                                                               Foreground="#7F8C8D"
+                                                               TextAlignment="Center"
+                                                               Margin="0,0,0,8"/>
+
+                                                    <!-- Countdown Display -->
+                                                    <Border Grid.Row="2" 
+                                                            Background="#E8F5E9"
+                                                            BorderBrush="#4CAF50"
+                                                            BorderThickness="1"
+                                                            CornerRadius="4"
+                                                            Padding="8,4"
+                                                            Margin="0,0,0,8">
+                                                        <TextBlock Text="{Binding DaysUntil}" 
+                                                                   FontSize="13"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="#2E7D32"
+                                                                   TextAlignment="Center"/>
+                                                    </Border>
+
+                                                    <!-- Holiday Type Badge -->
+                                                    <Border Grid.Row="3" 
+                                                            Background="#BBDEFB"
+                                                            CornerRadius="4"
+                                                            Padding="6,3"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Type}" 
+                                                                   FontSize="11"
+                                                                   Foreground="#1565C0"
+                                                                   TextAlignment="Center"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </Grid>
             </TabItem>
 
             <!-- Tab 2: Add Holiday (Admin Only) -->
