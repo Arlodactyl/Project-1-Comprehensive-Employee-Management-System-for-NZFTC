@@ -4,6 +4,7 @@ using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
     /// PayrollPage handles payslip management for employees and administrators
+    /// ENHANCED: Now auto-generates missing weekly payslips for employees from hire date to current week
     /// </summary>
     public partial class PayrollPage : Page
     {
@@ -33,6 +35,9 @@ namespace NZFTC_EmployeeSystem.Views
                 AllPayslipsTab.Visibility = Visibility.Collapsed;
                 // Start on My Payslips tab for employees
                 PayrollTabControl.SelectedIndex = 0;
+
+                // ENHANCEMENT: Auto-generate missing payslips for this employee
+                AutoGenerateMissingPayslips();
             }
             else
             {
@@ -42,6 +47,138 @@ namespace NZFTC_EmployeeSystem.Views
 
             // Load payslip data
             LoadPayslipData();
+        }
+
+        /// <summary>
+        /// Auto-generates missing weekly payslips for the current employee
+        /// from their hire date up to the current week
+        /// </summary>
+        private void AutoGenerateMissingPayslips()
+        {
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    // Get the current employee's details
+                    var employee = db.Employees.Find(_currentUser.EmployeeId);
+                    if (employee == null) return;
+
+                    // Calculate the start date (first Monday after hire date)
+                    DateTime startDate = GetNextMonday(employee.HireDate);
+
+                    // Calculate the current week's ending (next Sunday)
+                    DateTime today = DateTime.Today;
+                    DateTime currentWeekEnd = GetNextSunday(today);
+
+                    // Get all existing payslip week endings for this employee
+                    var existingWeekEndings = db.Payslips
+                        .Where(p => p.EmployeeId == employee.Id)
+                        .Select(p => p.PayPeriodEnd)
+                        .ToHashSet();
+
+                    int generatedCount = 0;
+                    List<Payslip> newPayslips = new List<Payslip>();
+
+                    // Loop through each week from start date to current week
+                    DateTime currentWeekStart = startDate;
+                    while (currentWeekStart <= today)
+                    {
+                        // Calculate week end (6 days after start for a 7-day week)
+                        DateTime weekEnd = currentWeekStart.AddDays(6);
+
+                        // Only generate if this week doesn't already have a payslip
+                        if (!existingWeekEndings.Contains(weekEnd))
+                        {
+                            // Calculate payslip amounts (assuming 40 hours per week)
+                            decimal weeklyHours = 40;
+                            decimal hourlyRate = employee.Salary / 52 / 40;  // Annual to hourly
+                            decimal grossSalary = hourlyRate * weeklyHours;
+                            decimal taxDeduction = grossSalary * (employee.TaxRate / 100m);
+                            decimal netSalary = grossSalary - taxDeduction;
+
+                            // Create new payslip
+                            var payslip = new Payslip
+                            {
+                                EmployeeId = employee.Id,
+                                PayPeriodStart = currentWeekStart,
+                                PayPeriodEnd = weekEnd,
+                                GrossSalary = grossSalary,
+                                TaxDeduction = taxDeduction,
+                                NetSalary = netSalary,
+                                GeneratedDate = DateTime.Now,
+                                GeneratedByUserId = _currentUser.Id
+                            };
+
+                            newPayslips.Add(payslip);
+                            generatedCount++;
+                        }
+
+                        // Move to next week (add 7 days)
+                        currentWeekStart = currentWeekStart.AddDays(7);
+                    }
+
+                    // Save all new payslips to database if any were generated
+                    if (newPayslips.Any())
+                    {
+                        db.Payslips.AddRange(newPayslips);
+                        db.SaveChanges();
+
+                        // Show a subtle notification
+                        if (generatedCount > 0)
+                        {
+                            MessageBox.Show(
+                                $"Welcome! Your payroll history has been updated.\n\n" +
+                                $"Generated {generatedCount} payslip(s) covering weeks from {startDate:dd/MM/yyyy} to present.",
+                                "Payslips Generated",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information
+                            );
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Silent fail - don't block page load if auto-generation fails
+                MessageBox.Show(
+                    $"Note: Unable to auto-generate payslips.\n{ex.Message}",
+                    "Payroll Notice",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
+        }
+
+        /// <summary>
+        /// Gets the next Monday on or after the given date
+        /// </summary>
+        private DateTime GetNextMonday(DateTime date)
+        {
+            // If date is already Monday, return it
+            if (date.DayOfWeek == DayOfWeek.Monday)
+                return date;
+
+            // Calculate days until next Monday
+            int daysUntilMonday = ((int)DayOfWeek.Monday - (int)date.DayOfWeek + 7) % 7;
+            if (daysUntilMonday == 0) daysUntilMonday = 7;
+
+            return date.AddDays(daysUntilMonday);
+        }
+
+        /// <summary>
+        /// Gets the next Sunday on or after the given date
+        /// </summary>
+        private DateTime GetNextSunday(DateTime date)
+        {
+            // If date is already Sunday, return it
+            if (date.DayOfWeek == DayOfWeek.Sunday)
+                return date;
+
+            // Calculate days until next Sunday
+            int daysUntilSunday = ((int)DayOfWeek.Sunday - (int)date.DayOfWeek + 7) % 7;
+            if (daysUntilSunday == 0) daysUntilSunday = 7;
+
+            return date.AddDays(daysUntilSunday);
         }
 
         /// <summary>
@@ -206,21 +343,22 @@ namespace NZFTC_EmployeeSystem.Views
                 db.Payslips.Add(payslip);
                 db.SaveChanges();
 
-                // Show success message with details
-                MessageBox.Show($"Payslip generated successfully!\n\n" +
-                               $"Employee: {employee.FullName}\n" +
-                               $"Period: {weekStart:dd/MM/yyyy} to {weekEnding:dd/MM/yyyy}\n" +
-                               $"Hours: {weeklyHours}\n" +
-                               $"Hourly Rate: {hourlyRate:C}\n" +
-                               $"Gross: {grossSalary:C}\n" +
-                               $"Tax ({employee.TaxRate}%): {taxDeduction:C}\n" +
-                               $"Net: {netSalary:C}",
-                               "Payslip Generated", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+                MessageBox.Show(
+                    $"Payslip generated successfully!\n\n" +
+                    $"Employee: {employee.FullName}\n" +
+                    $"Period: {weekStart:dd/MM/yyyy} - {weekEnding:dd/MM/yyyy}\n" +
+                    $"Net Pay: {netSalary:C}",
+                    "Payslip Created",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
 
-            // Clear form and refresh
-            ClearForm_Click(sender, e);
-            LoadPayslipData();
+                // Clear form
+                ClearForm_Click(sender, e);
+
+                // Reload data
+                LoadPayslipData();
+            }
         }
 
         /// <summary>
@@ -228,40 +366,40 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void ClearForm_Click(object sender, RoutedEventArgs e)
         {
-            EmployeeComboBox.SelectedIndex = -1;
+            EmployeeComboBox.SelectedItem = null;
             WeekEndingDatePicker.SelectedDate = null;
         }
 
         /// <summary>
-        /// Show detailed payslip view when user double-clicks a row in All Payslips grid
+        /// Handle double-click on All Payslips grid to view details
         /// </summary>
         private void AllPayslipsGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (AllPayslipsGrid.SelectedItem is Payslip selectedPayslip)
+            if (AllPayslipsGrid.SelectedItem is Payslip payslip)
             {
-                ShowPayslipDetails(selectedPayslip);
+                ShowPayslipDetails(payslip);
             }
         }
 
         /// <summary>
-        /// Show detailed payslip view when user double-clicks a row in My Payslips grid
+        /// Handle double-click on My Payslips grid to view details
         /// </summary>
         private void MyPayslipsGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (MyPayslipsGrid.SelectedItem is Payslip selectedPayslip)
+            if (MyPayslipsGrid.SelectedItem is Payslip payslip)
             {
-                ShowPayslipDetails(selectedPayslip);
+                ShowPayslipDetails(payslip);
             }
         }
 
         /// <summary>
-        /// Display full payslip details in a dialog
+        /// Display detailed payslip information in a popup window
         /// </summary>
         private void ShowPayslipDetails(Payslip payslip)
         {
             using (var db = new AppDbContext())
             {
-                // Load full employee and department details
+                // Get employee details
                 var employee = db.Employees
                     .Include(e => e.Department)
                     .FirstOrDefault(e => e.Id == payslip.EmployeeId);
@@ -270,77 +408,80 @@ namespace NZFTC_EmployeeSystem.Views
 
                 if (employee == null)
                 {
-                    MessageBox.Show("Employee information not found.", "Error",
+                    MessageBox.Show("Employee data not found.", "Error",
                                   MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 // Calculate additional details
-                decimal hours = 40;
+                decimal weeklyHours = 40;
                 decimal hourlyRate = employee.Salary / 52 / 40;
 
-                // Build detailed payslip message
-                string details = "═══════════════════════════════════════\n";
-                details += "           PAYSLIP DETAILS\n";
-                details += "═══════════════════════════════════════\n\n";
-                details += $"EMPLOYEE INFORMATION\n";
-                details += $"Name: {employee.FullName}\n";
-                details += $"Employee ID: {employee.Id}\n";
-                details += $"Email: {employee.Email}\n";
-                details += $"Job Title: {employee.JobTitle}\n";
-                details += $"Department: {employee.Department?.Name ?? "N/A"}\n\n";
-                details += $"PAY PERIOD\n";
-                details += $"Period Start: {payslip.PayPeriodStart:dddd, dd MMMM yyyy}\n";
-                details += $"Period End: {payslip.PayPeriodEnd:dddd, dd MMMM yyyy}\n\n";
-                details += $"EARNINGS\n";
-                details += $"Hours Worked: {hours:F2}\n";
-                details += $"Hourly Rate: {hourlyRate:C}\n";
-                details += $"Annual Salary: {employee.Salary:C}\n";
-                details += $"Gross Pay: {payslip.GrossSalary:C}\n\n";
-                details += $"DEDUCTIONS\n";
-                details += $"Tax Rate: {employee.TaxRate}%\n";
-                details += $"Tax Deduction: {payslip.TaxDeduction:C}\n\n";
-                details += $"NET PAY: {payslip.NetSalary:C}\n\n";
-                details += $"═══════════════════════════════════════\n";
-                details += $"Generated: {payslip.GeneratedDate:dd/MM/yyyy HH:mm:ss}\n";
-                details += $"Generated By: {generatedBy?.Username ?? "System"}\n";
-                details += $"Payslip ID: {payslip.Id}\n";
+                // Build detailed message
+                string details = $@"
+═══════════════════════════════════════
+PAYSLIP DETAILS
+═══════════════════════════════════════
 
-                MessageBox.Show(details, "Payslip Details",
-                              MessageBoxButton.OK, MessageBoxImage.Information);
+EMPLOYEE INFORMATION
+Employee: {employee.FullName}
+Employee ID: {employee.Id}
+Department: {employee.Department?.Name ?? "N/A"}
+Position: {employee.JobTitle}
+
+PAY PERIOD
+Start Date: {payslip.PayPeriodStart:dddd, dd MMMM yyyy}
+End Date: {payslip.PayPeriodEnd:dddd, dd MMMM yyyy}
+Duration: 7 days (1 week)
+
+HOURS & RATE
+Hours Worked: {weeklyHours} hours
+Hourly Rate: {hourlyRate:C2}/hour
+Annual Salary: {employee.Salary:C0}
+
+EARNINGS & DEDUCTIONS
+Gross Salary: {payslip.GrossSalary:C2}
+Tax Rate: {employee.TaxRate}%
+Tax Deducted: {payslip.TaxDeduction:C2}
+────────────────────────────────────
+NET PAY: {payslip.NetSalary:C2}
+════════════════════════════════════
+
+PAYSLIP INFORMATION
+Payslip ID: #{payslip.Id}
+Generated: {payslip.GeneratedDate:dd/MM/yyyy HH:mm:ss}
+Generated By: {generatedBy?.Username ?? "System"}
+
+═══════════════════════════════════════";
+
+                MessageBox.Show(
+                    details,
+                    "Payslip Details",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
             }
         }
 
         /// <summary>
-        /// Export filtered/visible payslips to CSV file (Admin only)
+        /// Export visible payslips to CSV file
         /// </summary>
         private void ExportPayslips_Click(object sender, RoutedEventArgs e)
         {
-            // Check if user is admin
-            if (_currentUser.Role != "Admin")
-            {
-                MessageBox.Show("Only administrators can export payslips.", "Access Denied",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            // Get the currently visible payslips from the grid
+            var payslipsList = AllPayslipsGrid.ItemsSource as List<Payslip>;
 
-            // Get currently visible payslips (respects search filter)
-            var payslipsToExport = AllPayslipsGrid.ItemsSource as IEnumerable<Payslip>;
-
-            // Check if there's data to export
-            if (payslipsToExport == null || !payslipsToExport.Any())
+            if (payslipsList == null || !payslipsList.Any())
             {
                 MessageBox.Show("No payslips to export.", "No Data",
                               MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            var payslipsList = payslipsToExport.ToList();
-
             // Create save file dialog
             SaveFileDialog saveDialog = new SaveFileDialog
             {
-                Filter = "CSV files (*.csv)|*.csv|Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
                 FilterIndex = 1,
                 FileName = $"Payslips_Export_{DateTime.Now:yyyyMMdd_HHmmss}.csv",
                 DefaultExt = "csv",
@@ -474,6 +615,7 @@ HOW TO USE THIS PAGE:
 
 For Employees:
 • View your payslips in the 'My Payslips' tab
+• Your payslips are automatically generated weekly from your hire date
 • Double-click any payslip to view full details
 • Export your payslips to CSV for your records
 

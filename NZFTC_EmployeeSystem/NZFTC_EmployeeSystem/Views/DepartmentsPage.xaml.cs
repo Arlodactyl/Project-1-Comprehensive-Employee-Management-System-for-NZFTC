@@ -10,8 +10,8 @@ namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
     /// Interaction logic for DepartmentsPage.xaml
-    /// This page allows administrators to manage departments within the organization.
-    /// Admins can view all departments, add new ones, delete departments that
+    /// This page allows administrators and trainers to manage departments within the organization.
+    /// Admins/Trainers can view all departments, add new ones, delete departments that
     /// have no employees assigned to them, and view which employees are in each department.
     /// </summary>
     public partial class DepartmentsPage : Page
@@ -28,8 +28,9 @@ namespace NZFTC_EmployeeSystem.Views
             InitializeComponent();
             _currentUser = currentUser;
 
-            // Security check: Only admins should access this page
-            if (_currentUser.Role != "Admin")
+            // Security check: Only admins and trainers should access this page
+            // FIXED: Allow both Admin and Trainer roles
+            if (_currentUser.Role != "Admin" && _currentUser.Role != "Trainer")
             {
                 MessageBox.Show(
                     "You do not have permission to access Department Management.",
