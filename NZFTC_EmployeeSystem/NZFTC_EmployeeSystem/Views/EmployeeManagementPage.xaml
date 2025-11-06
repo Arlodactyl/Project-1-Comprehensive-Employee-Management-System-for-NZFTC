@@ -82,6 +82,28 @@
             </Setter>
         </Style>
 
+        <!-- View Button Style (Purple) -->
+        <Style x:Key="ViewButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#9B59B6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#8E44AD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- TextBox Style -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="32"/>
@@ -123,7 +145,7 @@
         </Border>
 
         <!-- Content with Tabs -->
-        <TabControl Grid.Row="1" Margin="0">
+        <TabControl x:Name="MainTabControl" Grid.Row="1" Margin="0">
             <!-- Tab 1: Employees List -->
             <TabItem Header="Employees" FontSize="14">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -163,12 +185,13 @@
                                    Foreground="#2C3E50"
                                    Margin="0,0,0,5"/>
 
-                        <TextBlock Text="Employees are automatically ordered by ID. Use the search box to filter by name." 
+                        <TextBlock Text="Click on an employee name to see actions. Double-click to quickly edit." 
                                    FontSize="12" 
                                    Foreground="#7F8C8D"
                                    TextWrapping="Wrap"
                                    Margin="0,0,0,10"/>
 
+                        <!-- DataGrid with Click and Double-Click handlers -->
                         <DataGrid x:Name="EmployeesGrid"
                                   Height="300"
                                   AutoGenerateColumns="False"
@@ -178,7 +201,9 @@
                                   AlternatingRowBackground="#ECF0F1"
                                   GridLinesVisibility="Horizontal"
                                   HeadersVisibility="Column"
-                                  Margin="0,0,0,10">
+                                  Margin="0,0,0,10"
+                                  SelectionChanged="EmployeesGrid_SelectionChanged"
+                                  MouseDoubleClick="EmployeesGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                                 <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="150"/>
@@ -189,15 +214,29 @@
                             </DataGrid.Columns>
                         </DataGrid>
 
-                        <StackPanel Orientation="Horizontal">
+                        <!-- Action buttons for selected employee - Shows when employee is clicked -->
+                        <StackPanel x:Name="EmployeeActionPanel" 
+                                    Orientation="Horizontal" 
+                                    Visibility="Collapsed"
+                                    Margin="0,0,0,10">
+                            <TextBlock x:Name="SelectedEmployeeText"
+                                       Text="Selected: None"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,15,0"/>
+                            <Button Content="View Details" 
+                                    Style="{StaticResource ViewButton}"
+                                    Click="ViewDetails_Click"/>
+                            <Button Content="Edit Employee" 
+                                    Style="{StaticResource ActionButton}"
+                                    Click="EditEmployee_Click"/>
                             <Button Content="Toggle Active Status" 
                                     Style="{StaticResource ToggleButton}"
-                                    Click="ToggleActive_Click"
-                                    HorizontalAlignment="Left"/>
+                                    Click="ToggleActive_Click"/>
                             <Button Content="View Training" 
                                     Style="{StaticResource ActionButton}"
-                                    Click="ViewTraining_Click"
-                                    HorizontalAlignment="Left"/>
+                                    Click="ViewTraining_Click"/>
                         </StackPanel>
 
                         <!-- Create New Employee Section -->
@@ -279,7 +318,95 @@
                 </ScrollViewer>
             </TabItem>
 
-            <!-- Tab 2: Training Records -->
+            <!-- Tab 2: Edit Employee - Shows when Edit button is clicked -->
+            <TabItem x:Name="EditEmployeeTab" Header="Edit Employee" FontSize="14" Visibility="Collapsed">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Edit Employee Details" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="#2C3E50"
+                                   Margin="0,0,0,5"/>
+
+                        <TextBlock x:Name="EditEmployeeNameText"
+                                   Text="Editing: None"
+                                   FontSize="14"
+                                   Foreground="#7F8C8D"
+                                   Margin="0,0,0,20"/>
+
+                        <!-- Edit Form -->
+                        <Border BorderBrush="#BDC3C7" 
+                                BorderThickness="1" 
+                                Padding="20" 
+                                Background="#F8F9FA"
+                                CornerRadius="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Left Column - Edit fields -->
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="First Name *" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditFirstNameTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Last Name *" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditLastNameTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Email *" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditEmailTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Phone Number" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditPhoneTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Job Title" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditJobTitleTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Department *" FontSize="12" Margin="0,0,0,3"/>
+                                    <ComboBox x:Name="EditDepartmentComboBox" Style="{StaticResource ModernComboBox}" Margin="0,0,0,10"/>
+                                </StackPanel>
+
+                                <!-- Right Column - Edit fields -->
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Hire Date" FontSize="12" Margin="0,0,0,3"/>
+                                    <DatePicker x:Name="EditHireDatePicker" Style="{StaticResource ModernDatePicker}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Salary *" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditSalaryTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Tax Rate (%) *" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditTaxRateTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Annual Leave Balance" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditAnnualLeaveTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Sick Leave Balance" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="EditSickLeaveTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                                    <CheckBox x:Name="EditIsActiveCheckBox" 
+                                              Content="Employee is Active" 
+                                              FontSize="12"
+                                              Margin="0,10,0,10"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Save and Cancel buttons -->
+                        <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                            <Button Content="Save Changes" 
+                                    Style="{StaticResource ExportButton}"
+                                    Click="SaveEmployeeChanges_Click"/>
+                            <Button Content="Cancel" 
+                                    Style="{StaticResource ToggleButton}"
+                                    Click="CancelEdit_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 3: Training Records -->
             <TabItem Header="Training Records" FontSize="14">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="20">
@@ -322,7 +449,7 @@
                                     Margin="10,0,0,0"/>
                         </Grid>
 
-                        <!-- Training Records Grid -->
+                        <!-- Training Records Grid with Double-Click handler -->
                         <DataGrid x:Name="TrainingGrid"
                                   Height="350"
                                   AutoGenerateColumns="False"
@@ -332,7 +459,8 @@
                                   AlternatingRowBackground="#ECF0F1"
                                   GridLinesVisibility="Horizontal"
                                   HeadersVisibility="Column"
-                                  Margin="0,0,0,15">
+                                  Margin="0,0,0,15"
+                                  MouseDoubleClick="TrainingGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                                 <DataGridTextColumn Header="Employee Name" Binding="{Binding Employee.FullName}" Width="180"/>
