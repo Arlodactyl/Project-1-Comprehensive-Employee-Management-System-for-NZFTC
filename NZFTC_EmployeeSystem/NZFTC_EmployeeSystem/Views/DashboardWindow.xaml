@@ -156,41 +156,15 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#E8E8E8"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Menu Toggle Button Style -->
-        <Style x:Key="MenuToggleStyle" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#2C3E50"/>
-            <Setter Property="FontSize" Value="28"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
+                        <Border Background="{TemplateBinding Background}" 
                                 CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center"
                                             VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#E0E0E0"/>
+                                <Setter Property="Background" Value="#E74C3C"/>
+                                <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -205,10 +179,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Sidebar Navigation Menu -->
-        <Border x:Name="SidebarBorder"
-                Grid.Column="0"
-                Background="#F5F6F7"
+        <!-- Collapsible Sidebar Navigation Menu -->
+        <Border x:Name="SidebarBorder" 
+                Grid.Column="0" 
+                Background="White" 
+                BorderBrush="#BDC3C7"
+                BorderThickness="0,0,1,0"
                 Width="270">
             <Grid>
                 <Grid.RowDefinitions>
@@ -218,38 +194,37 @@
                 </Grid.RowDefinitions>
 
                 <!-- Menu Toggle Button at Top -->
-                <Button Grid.Row="0"
-                        Content="☰"
-                        Style="{StaticResource MenuToggleStyle}"
+                <Button Grid.Row="0" 
+                        x:Name="MenuToggleButton"
+                        Content="☰" 
+                        Style="{StaticResource CollapsedButtonStyle}"
                         Click="MenuToggle_Click"
                         HorizontalAlignment="Left"
-                        Margin="10,15,0,15"/>
+                        Margin="5,15,5,20"/>
 
-                <!-- Menu Items ScrollViewer -->
+                <!-- Scrollable Menu Items -->
                 <ScrollViewer Grid.Row="1" 
-                              VerticalScrollBarVisibility="Auto">
-                    <!-- Panel with fade animation -->
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Disabled">
                     <StackPanel x:Name="MenuPanel" 
-                                Margin="10,10,10,10">
+                                Margin="10,0,10,20">
 
-                        <!-- Dashboard Button - Always visible to all users -->
+                        <!-- Dashboard Button - Visible to ALL users -->
                         <Grid>
                             <Button x:Name="DashboardButtonExpanded"
                                     Content="Dashboard" 
                                     Style="{StaticResource SidebarButtonStyle}"
                                     Click="Dashboard_Click"
-                                    Tag="Active"
                                     Visibility="Visible"/>
                             <Button x:Name="DashboardButtonCollapsed"
                                     Content="DB" 
                                     Style="{StaticResource CollapsedButtonStyle}"
                                     Click="Dashboard_Click"
-                                    Tag="Active"
                                     Visibility="Collapsed"
                                     ToolTip="Dashboard"/>
                         </Grid>
 
-                        <!-- Account Button - Always visible to all users -->
+                        <!-- Account Button - Visible to ALL users -->
                         <Grid>
                             <Button x:Name="AccountButtonExpanded"
                                     Content="Account" 
@@ -264,23 +239,38 @@
                                     ToolTip="Account"/>
                         </Grid>
 
-                        <!-- Leave Management Button - Visible to all users -->
-                        <Grid>
-                            <Button x:Name="LeaveManagementButtonExpanded"
-                                    Content="Leave Management" 
+                        <!-- My Training Button - Visible to Employee and Workplace Trainer only -->
+                        <Grid x:Name="MyTrainingButtonGrid">
+                            <Button x:Name="MyTrainingButtonExpanded"
+                                    Content="My Training" 
                                     Style="{StaticResource SidebarButtonStyle}"
-                                    Click="LeaveManagement_Click"
+                                    Click="MyTraining_Click"
                                     Visibility="Visible"/>
-                            <Button x:Name="LeaveManagementButtonCollapsed"
-                                    Content="LM" 
+                            <Button x:Name="MyTrainingButtonCollapsed"
+                                    Content="MT" 
                                     Style="{StaticResource CollapsedButtonStyle}"
-                                    Click="LeaveManagement_Click"
+                                    Click="MyTraining_Click"
                                     Visibility="Collapsed"
-                                    ToolTip="Leave Management"/>
+                                    ToolTip="My Training"/>
                         </Grid>
 
-                        <!-- Holidays Button - Visible to all users -->
-                        <Grid>
+                        <!-- My Pay Button - Visible to Employee only -->
+                        <Grid x:Name="MyPayButtonGrid">
+                            <Button x:Name="MyPayButtonExpanded"
+                                    Content="My Pay" 
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="MyPay_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="MyPayButtonCollapsed"
+                                    Content="MP" 
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="MyPay_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="My Pay"/>
+                        </Grid>
+
+                        <!-- Holidays Button - Visible to Employee only -->
+                        <Grid x:Name="HolidaysButtonGrid">
                             <Button x:Name="HolidaysButtonExpanded"
                                     Content="Holidays"
                                     Style="{StaticResource SidebarButtonStyle}"
@@ -294,7 +284,7 @@
                                     ToolTip="Holidays"/>
                         </Grid>
 
-                        <!-- About/Contact Button - Visible to all users -->
+                        <!-- About/Contact Button - Visible to ALL users -->
                         <Grid>
                             <Button x:Name="AboutContactButtonExpanded"
                                     Content="About/Contact"
@@ -309,12 +299,13 @@
                                     ToolTip="About/Contact"/>
                         </Grid>
 
-                        <!-- Admin Section - Only visible to admin users -->
-                        <StackPanel x:Name="AdminMenuPanel" 
+                        <!-- Admin & Workplace Trainer Section -->
+                        <!-- Shows Employee Management, Departments, and more -->
+                        <StackPanel x:Name="AdminTrainerMenuPanel" 
                                     Visibility="Collapsed"
                                     Margin="0,15,0,0">
 
-                            <!-- Employee Management Button - Admin only -->
+                            <!-- Employee Management Button - Admin and Workplace Trainer -->
                             <Grid>
                                 <Button x:Name="EmployeeManagementButtonExpanded"
                                         Content="Employee Management" 
@@ -329,7 +320,7 @@
                                         ToolTip="Employee Management"/>
                             </Grid>
 
-                            <!-- Departments Button - Admin only -->
+                            <!-- Departments Button - Admin and Workplace Trainer -->
                             <Grid>
                                 <Button x:Name="DepartmentsButtonExpanded"
                                         Content="Departments" 
@@ -343,6 +334,12 @@
                                         Visibility="Collapsed"
                                         ToolTip="Departments"/>
                             </Grid>
+                        </StackPanel>
+
+                        <!-- Admin Only Section -->
+                        <StackPanel x:Name="AdminOnlyMenuPanel" 
+                                    Visibility="Collapsed"
+                                    Margin="0,15,0,0">
 
                             <!-- Payroll Button - Admin only -->
                             <Grid>
@@ -357,6 +354,21 @@
                                         Click="Payroll_Click"
                                         Visibility="Collapsed"
                                         ToolTip="Payroll"/>
+                            </Grid>
+
+                            <!-- Leave Management Button - Admin only -->
+                            <Grid>
+                                <Button x:Name="LeaveManagementButtonExpanded"
+                                        Content="Leave Management" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="LeaveManagement_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="LeaveManagementButtonCollapsed"
+                                        Content="LM" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="LeaveManagement_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Leave Management"/>
                             </Grid>
 
                             <!-- Grievances Button - Admin only -->

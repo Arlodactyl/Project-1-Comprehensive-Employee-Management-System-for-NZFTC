@@ -1,0 +1,269 @@
+﻿<Page x:Class="NZFTC_EmployeeSystem.Views.MyTrainingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="900"
+      Title="My Training">
+
+    <Page.Resources>
+        <!-- Button Style -->
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Export Button Style -->
+        <Style x:Key="ExportButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TextBox Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#34495E" Padding="20">
+            <TextBlock Text="My Training Records" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="White"/>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+
+                <!-- Welcome Message -->
+                <Border Background="#ECF0F1" 
+                        Padding="15" 
+                        CornerRadius="5"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock x:Name="WelcomeText"
+                                   Text="Welcome back!" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#2C3E50"
+                                   Margin="0,0,0,5"/>
+                        <TextBlock Text="Here you can view all your training records, completion status, and who signed them off." 
+                                   FontSize="13" 
+                                   Foreground="#7F8C8D"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Training Summary Cards -->
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total Training Card -->
+                    <Border Grid.Column="0" 
+                            Background="#3498DB" 
+                            Padding="20" 
+                            CornerRadius="8"
+                            Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="Total Training" 
+                                       FontSize="14" 
+                                       Foreground="White" 
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <TextBlock x:Name="TotalTrainingText"
+                                       Text="0" 
+                                       FontSize="32" 
+                                       Foreground="White" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Completed Training Card -->
+                    <Border Grid.Column="1" 
+                            Background="#27AE60" 
+                            Padding="20" 
+                            CornerRadius="8"
+                            Margin="5,0,5,0">
+                        <StackPanel>
+                            <TextBlock Text="Completed" 
+                                       FontSize="14" 
+                                       Foreground="White" 
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <TextBlock x:Name="CompletedTrainingText"
+                                       Text="0" 
+                                       FontSize="32" 
+                                       Foreground="White" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Pending Training Card -->
+                    <Border Grid.Column="2" 
+                            Background="#E67E22" 
+                            Padding="20" 
+                            CornerRadius="8"
+                            Margin="10,0,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Pending" 
+                                       FontSize="14" 
+                                       Foreground="White" 
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
+                            <TextBlock x:Name="PendingTrainingText"
+                                       Text="0" 
+                                       FontSize="32" 
+                                       Foreground="White" 
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Section Header -->
+                <TextBlock Text="Training History" 
+                           FontSize="18" 
+                           FontWeight="Bold" 
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,5"/>
+
+                <TextBlock Text="View all your training records below. You can search by training type or export your training history." 
+                           FontSize="12" 
+                           Foreground="#7F8C8D"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,15"/>
+
+                <!-- Search and Export -->
+                <Grid Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Search:" 
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,10,0"/>
+                    <TextBox x:Name="SearchTextBox"
+                             Grid.Column="1"
+                             Style="{StaticResource ModernTextBox}"
+                             TextChanged="SearchTextBox_TextChanged"
+                             ToolTip="Search by training type"/>
+                    <Button Content="Export My Training"
+                            Grid.Column="2"
+                            Style="{StaticResource ExportButton}"
+                            Click="ExportTraining_Click"
+                            Margin="10,0,0,0"/>
+                </Grid>
+
+                <!-- Training Records Grid -->
+                <DataGrid x:Name="TrainingGrid"
+                          Height="350"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          CanUserAddRows="False"
+                          AlternatingRowBackground="#ECF0F1"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          Margin="0,0,0,15"
+                          MouseDoubleClick="TrainingGrid_MouseDoubleClick">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                        <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="200"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                        <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="130"/>
+                        <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="150"/>
+                        <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Info Panel -->
+                <Border Background="#D5F4E6" 
+                        BorderBrush="#27AE60" 
+                        BorderThickness="1"
+                        Padding="15" 
+                        CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock Text="ℹ️ Training Information" 
+                                   FontSize="14" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#27AE60"
+                                   Margin="0,0,0,8"/>
+                        <TextBlock FontSize="12" 
+                                   Foreground="#2C3E50"
+                                   TextWrapping="Wrap">
+                            <Run Text="• Double-click on any training record to view full details"/>
+                            <LineBreak/>
+                            <Run Text="• Training is managed by your supervisor or workplace trainer"/>
+                            <LineBreak/>
+                            <Run Text="• Completed training will show the completion date and who signed it off"/>
+                            <LineBreak/>
+                            <Run Text="• If you have questions about your training, contact your manager"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
