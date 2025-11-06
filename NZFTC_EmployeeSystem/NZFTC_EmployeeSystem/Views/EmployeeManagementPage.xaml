@@ -185,13 +185,15 @@
                                    Foreground="#2C3E50"
                                    Margin="0,0,0,5"/>
 
-                        <TextBlock Text="Click on an employee name to see actions. Double-click to quickly edit." 
+                        <!-- Updated instruction text -->
+                        <TextBlock Text="Double-click on an employee row to view options (View Details, Edit Employee, View Training)." 
                                    FontSize="12" 
                                    Foreground="#7F8C8D"
                                    TextWrapping="Wrap"
                                    Margin="0,0,0,10"/>
 
-                        <!-- DataGrid with Click and Double-Click handlers -->
+                        <!-- DataGrid with Double-Click handler only -->
+                        <!-- The table that displays all employees -->
                         <DataGrid x:Name="EmployeesGrid"
                                   Height="300"
                                   AutoGenerateColumns="False"
@@ -202,42 +204,23 @@
                                   GridLinesVisibility="Horizontal"
                                   HeadersVisibility="Column"
                                   Margin="0,0,0,10"
-                                  SelectionChanged="EmployeesGrid_SelectionChanged"
-                                  MouseDoubleClick="EmployeesGrid_MouseDoubleClick">
+                                  MouseDoubleClick="EmployeesGrid_MouseDoubleClick"
+                                  HorizontalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
+                                <!-- Employee ID column -->
                                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                <!-- Employee full name -->
                                 <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="150"/>
+                                <!-- Employee email address -->
                                 <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="180"/>
+                                <!-- Employee job title -->
                                 <DataGridTextColumn Header="Job Title" Binding="{Binding JobTitle}" Width="150"/>
-                                <DataGridTextColumn Header="Department" Binding="{Binding Department.Name}" Width="120"/>
+                                <!-- Department name - uses * to expand and prevent cropping -->
+                                <DataGridTextColumn Header="Department" Binding="{Binding Department.Name}" Width="*" MinWidth="120"/>
+                                <!-- Active status checkbox -->
                                 <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80"/>
                             </DataGrid.Columns>
                         </DataGrid>
-
-                        <!-- Action buttons for selected employee - Shows when employee is clicked -->
-                        <StackPanel x:Name="EmployeeActionPanel" 
-                                    Orientation="Horizontal" 
-                                    Visibility="Collapsed"
-                                    Margin="0,0,0,10">
-                            <TextBlock x:Name="SelectedEmployeeText"
-                                       Text="Selected: None"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,15,0"/>
-                            <Button Content="View Details" 
-                                    Style="{StaticResource ViewButton}"
-                                    Click="ViewDetails_Click"/>
-                            <Button Content="Edit Employee" 
-                                    Style="{StaticResource ActionButton}"
-                                    Click="EditEmployee_Click"/>
-                            <Button Content="Toggle Active Status" 
-                                    Style="{StaticResource ToggleButton}"
-                                    Click="ToggleActive_Click"/>
-                            <Button Content="View Training" 
-                                    Style="{StaticResource ActionButton}"
-                                    Click="ViewTraining_Click"/>
-                        </StackPanel>
 
                         <!-- Create New Employee Section -->
                         <Border BorderBrush="#BDC3C7" 
@@ -328,6 +311,7 @@
                                    Foreground="#2C3E50"
                                    Margin="0,0,0,5"/>
 
+                        <!-- Shows which employee is being edited -->
                         <TextBlock x:Name="EditEmployeeNameText"
                                    Text="Editing: None"
                                    FontSize="14"
@@ -385,6 +369,7 @@
                                     <TextBlock Text="Sick Leave Balance" FontSize="12" Margin="0,0,0,3"/>
                                     <TextBox x:Name="EditSickLeaveTextBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
 
+                                    <!-- Checkbox to set employee as active or inactive -->
                                     <CheckBox x:Name="EditIsActiveCheckBox" 
                                               Content="Employee is Active" 
                                               FontSize="12"
@@ -395,9 +380,11 @@
 
                         <!-- Save and Cancel buttons -->
                         <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                            <!-- Saves changes to database -->
                             <Button Content="Save Changes" 
                                     Style="{StaticResource ExportButton}"
                                     Click="SaveEmployeeChanges_Click"/>
+                            <!-- Cancels editing and returns to employee list -->
                             <Button Content="Cancel" 
                                     Style="{StaticResource ToggleButton}"
                                     Click="CancelEdit_Click"/>

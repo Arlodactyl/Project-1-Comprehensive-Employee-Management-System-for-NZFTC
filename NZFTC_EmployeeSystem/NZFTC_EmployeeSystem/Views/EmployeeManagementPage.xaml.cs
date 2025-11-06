@@ -67,52 +67,19 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Handles single-click on employee row
-        /// Shows the action buttons (View Details, Edit, etc.)
+        /// Handles double-click on employee row
+        /// Shows popup with options: View Details, Edit Employee, View Training
         /// </summary>
-        private void EmployeesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void EmployeesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // Get the selected employee from the grid
             _selectedEmployee = EmployeesGrid.SelectedItem as Employee;
 
-            // If an employee is selected, show the action panel
-            if (_selectedEmployee != null)
-            {
-                EmployeeActionPanel.Visibility = Visibility.Visible;
-                SelectedEmployeeText.Text = $"Selected: {_selectedEmployee.FullName}";
-            }
-            else
-            {
-                // No employee selected, hide the action panel
-                EmployeeActionPanel.Visibility = Visibility.Collapsed;
-                SelectedEmployeeText.Text = "Selected: None";
-            }
-        }
-
-        /// <summary>
-        /// Handles double-click on employee row
-        /// Quick shortcut to open edit tab
-        /// </summary>
-        private void EmployeesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
             // Check if an employee is selected
-            if (_selectedEmployee != null)
-            {
-                // Double-click is a shortcut to edit
-                LoadEmployeeForEditing(_selectedEmployee);
-            }
-        }
-
-        /// <summary>
-        /// View Details button click
-        /// Shows a popup window with full employee details
-        /// </summary>
-        private void ViewDetails_Click(object sender, RoutedEventArgs e)
-        {
             if (_selectedEmployee == null)
             {
                 MessageBox.Show(
-                    "Please select an employee first.",
+                    "Please select an employee from the list.",
                     "No Selection",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
@@ -120,12 +87,143 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
+            // Show the action selection popup
+            ShowEmployeeActionPopup(_selectedEmployee);
+        }
+
+        /// <summary>
+        /// Shows a popup window with action buttons for the selected employee
+        /// </summary>
+        private void ShowEmployeeActionPopup(Employee employee)
+        {
+            // Create a popup window with action buttons
+            var actionWindow = new Window
+            {
+                Title = $"Employee Actions - {employee.FullName}",
+                Width = 450,
+                Height = 300,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize
+            };
+
+            // Create stack panel for the buttons
+            var stackPanel = new StackPanel
+            {
+                Margin = new Thickness(30),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            // Add header text
+            var headerText = new TextBlock
+            {
+                Text = $"What would you like to do with {employee.FullName}?",
+                FontSize = 15,
+                FontWeight = FontWeights.SemiBold,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 0, 0, 25),
+                TextAlignment = TextAlignment.Center
+            };
+            stackPanel.Children.Add(headerText);
+
+            // Create View Details button
+            var viewButton = new Button
+            {
+                Content = "View Employee Details",
+                Height = 45,
+                Margin = new Thickness(0, 5, 0, 5),
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(155, 89, 182)),
+                Foreground = System.Windows.Media.Brushes.White,
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                Cursor = Cursors.Hand
+            };
+            viewButton.Click += (s, args) =>
+            {
+                actionWindow.Close();
+                // Pass the action window so we can go back to it
+                ShowEmployeeDetails(employee, () => ShowEmployeeActionPopup(employee));
+            };
+            stackPanel.Children.Add(viewButton);
+
+            // Create Edit Employee button
+            var editButton = new Button
+            {
+                Content = "Edit Employee",
+                Height = 45,
+                Margin = new Thickness(0, 5, 0, 5),
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 152, 219)),
+                Foreground = System.Windows.Media.Brushes.White,
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                Cursor = Cursors.Hand
+            };
+            editButton.Click += (s, args) =>
+            {
+                actionWindow.Close();
+                // Load the employee into the edit form
+                LoadEmployeeForEditing(employee);
+            };
+            stackPanel.Children.Add(editButton);
+
+            // Create View Training button
+            var trainingButton = new Button
+            {
+                Content = "View Training Records",
+                Height = 45,
+                Margin = new Thickness(0, 5, 0, 5),
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 152, 219)),
+                Foreground = System.Windows.Media.Brushes.White,
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                Cursor = Cursors.Hand
+            };
+            trainingButton.Click += (s, args) =>
+            {
+                actionWindow.Close();
+                // Load training records for this employee and switch to training tab
+                LoadTrainingRecords(employee.Id);
+                MainTabControl.SelectedIndex = 2; // Switch to training records tab
+            };
+            stackPanel.Children.Add(trainingButton);
+
+            // Set content and show window
+            actionWindow.Content = stackPanel;
+            actionWindow.ShowDialog();
+        }
+
+        /// <summary>
+        /// Shows a popup window with full employee details
+        /// backAction is called when the back button is clicked
+        /// </summary>
+        private void ShowEmployeeDetails(Employee employee, Action backAction)
+        {
+            if (employee == null) return;
+
+            // Reload employee from database to get fresh data
+            using (var db = new AppDbContext())
+            {
+                employee = db.Employees
+                    .Include(e => e.Department)
+                    .FirstOrDefault(e => e.Id == employee.Id);
+
+                if (employee == null)
+                {
+                    MessageBox.Show(
+                        "Could not load employee data.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                    return;
+                }
+            }
+
             // Create a popup window to show employee details
             var detailsWindow = new Window
             {
-                Title = $"Employee Details - {_selectedEmployee.FullName}",
-                Width = 500,
-                Height = 550,
+                Title = $"Employee Details - {employee.FullName}",
+                Width = 550,
+                Height = 600,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 ResizeMode = ResizeMode.NoResize
             };
@@ -139,14 +237,14 @@ namespace NZFTC_EmployeeSystem.Views
             // Create stack panel for details
             var stackPanel = new StackPanel
             {
-                Margin = new Thickness(25)
+                Margin = new Thickness(30)
             };
 
             // Add header
             var header = new TextBlock
             {
                 Text = "Employee Information",
-                FontSize = 20,
+                FontSize = 22,
                 FontWeight = FontWeights.Bold,
                 Margin = new Thickness(0, 0, 0, 20)
             };
@@ -174,20 +272,49 @@ namespace NZFTC_EmployeeSystem.Views
             }
 
             // Add all employee details
-            AddDetailRow("Employee ID:", _selectedEmployee.Id.ToString());
-            AddDetailRow("First Name:", _selectedEmployee.FirstName);
-            AddDetailRow("Last Name:", _selectedEmployee.LastName);
-            AddDetailRow("Full Name:", _selectedEmployee.FullName);
-            AddDetailRow("Email Address:", _selectedEmployee.Email);
-            AddDetailRow("Phone Number:", _selectedEmployee.PhoneNumber);
-            AddDetailRow("Job Title:", _selectedEmployee.JobTitle);
-            AddDetailRow("Department:", _selectedEmployee.Department?.Name);
-            AddDetailRow("Hire Date:", _selectedEmployee.HireDate.ToString("dd/MM/yyyy"));
-            AddDetailRow("Salary:", $"${_selectedEmployee.Salary:N2}");
-            AddDetailRow("Tax Rate:", $"{_selectedEmployee.TaxRate}%");
-            AddDetailRow("Annual Leave Balance:", $"{_selectedEmployee.AnnualLeaveBalance} days");
-            AddDetailRow("Sick Leave Balance:", $"{_selectedEmployee.SickLeaveBalance} days");
-            AddDetailRow("Status:", _selectedEmployee.IsActive ? "Active" : "Inactive");
+            AddDetailRow("Employee ID:", employee.Id.ToString());
+            AddDetailRow("First Name:", employee.FirstName);
+            AddDetailRow("Last Name:", employee.LastName);
+            AddDetailRow("Full Name:", employee.FullName);
+            AddDetailRow("Email Address:", employee.Email);
+            AddDetailRow("Phone Number:", employee.PhoneNumber);
+            AddDetailRow("Job Title:", employee.JobTitle);
+            AddDetailRow("Department:", employee.Department?.Name);
+            AddDetailRow("Hire Date:", employee.HireDate.ToString("dd/MM/yyyy"));
+            AddDetailRow("Salary:", $"${employee.Salary:N2}");
+            AddDetailRow("Tax Rate:", $"{employee.TaxRate}%");
+            AddDetailRow("Annual Leave Balance:", $"{employee.AnnualLeaveBalance} days");
+            AddDetailRow("Sick Leave Balance:", $"{employee.SickLeaveBalance} days");
+            AddDetailRow("Status:", employee.IsActive ? "Active" : "Inactive");
+
+            // Create button panel
+            var buttonPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 25, 0, 0)
+            };
+
+            // Add back button
+            var backButton = new Button
+            {
+                Content = "Back",
+                Width = 100,
+                Height = 35,
+                Margin = new Thickness(5, 0, 5, 0),
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 165, 166)),
+                Foreground = System.Windows.Media.Brushes.White,
+                BorderThickness = new Thickness(0),
+                FontWeight = FontWeights.SemiBold,
+                Cursor = Cursors.Hand
+            };
+            backButton.Click += (s, args) =>
+            {
+                detailsWindow.Close();
+                // Call the back action to show the previous menu
+                backAction?.Invoke();
+            };
+            buttonPanel.Children.Add(backButton);
 
             // Add close button
             var closeButton = new Button
@@ -195,7 +322,7 @@ namespace NZFTC_EmployeeSystem.Views
                 Content = "Close",
                 Width = 100,
                 Height = 35,
-                Margin = new Thickness(0, 20, 0, 0),
+                Margin = new Thickness(5, 0, 5, 0),
                 Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 152, 219)),
                 Foreground = System.Windows.Media.Brushes.White,
                 BorderThickness = new Thickness(0),
@@ -203,7 +330,9 @@ namespace NZFTC_EmployeeSystem.Views
                 Cursor = Cursors.Hand
             };
             closeButton.Click += (s, args) => detailsWindow.Close();
-            stackPanel.Children.Add(closeButton);
+            buttonPanel.Children.Add(closeButton);
+
+            stackPanel.Children.Add(buttonPanel);
 
             // Set content and show window
             scrollViewer.Content = stackPanel;
@@ -212,27 +341,8 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Edit Employee button click
-        /// Loads employee data into edit tab
-        /// </summary>
-        private void EditEmployee_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedEmployee == null)
-            {
-                MessageBox.Show(
-                    "Please select an employee first.",
-                    "No Selection",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-                return;
-            }
-
-            LoadEmployeeForEditing(_selectedEmployee);
-        }
-
-        /// <summary>
         /// Loads employee data into the edit form and switches to edit tab
+        /// Uses Dispatcher to ensure navigation happens correctly
         /// </summary>
         private void LoadEmployeeForEditing(Employee employee)
         {
@@ -276,9 +386,16 @@ namespace NZFTC_EmployeeSystem.Views
                         EditDepartmentComboBox.SelectedValue = _editingEmployee.DepartmentId;
                     }
 
-                    // Show the edit tab and switch to it
+                    // Make the edit tab visible
                     EditEmployeeTab.Visibility = Visibility.Visible;
-                    MainTabControl.SelectedItem = EditEmployeeTab;
+
+                    // Use Dispatcher to ensure the tab switch happens after UI updates
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        // Switch to the edit tab (index 1)
+                        // Tab 0 = Employees, Tab 1 = Edit Employee, Tab 2 = Training Records
+                        MainTabControl.SelectedIndex = 1;
+                    }), System.Windows.Threading.DispatcherPriority.Background);
                 }
             }
             catch (Exception ex)
@@ -696,74 +813,6 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Error
                 );
             }
-        }
-
-        /// <summary>
-        /// Toggle employee active status
-        /// </summary>
-        private void ToggleActive_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedEmployee == null)
-            {
-                MessageBox.Show(
-                    "Please select an employee from the list first.",
-                    "No Selection",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-                return;
-            }
-
-            try
-            {
-                using (var db = new AppDbContext())
-                {
-                    var employee = db.Employees.Find(_selectedEmployee.Id);
-                    if (employee != null)
-                    {
-                        employee.IsActive = !employee.IsActive;
-                        db.SaveChanges();
-                    }
-                }
-
-                MessageBox.Show(
-                    $"Employee {_selectedEmployee.FullName} status changed to {(!_selectedEmployee.IsActive ? "Inactive" : "Active")}.",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-
-                LoadEmployees();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Error toggling employee status: {ex.Message}",
-                    "Database Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-            }
-        }
-
-        /// <summary>
-        /// View training records for selected employee
-        /// </summary>
-        private void ViewTraining_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedEmployee == null)
-            {
-                MessageBox.Show(
-                    "Please select an employee from the list first.",
-                    "No Selection",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-                return;
-            }
-
-            LoadTrainingRecords(_selectedEmployee.Id);
-            MainTabControl.SelectedIndex = 2; // Switch to training records tab
         }
 
         /// <summary>
