@@ -121,6 +121,8 @@ namespace NZFTC_EmployeeSystem.Views
             LeaveManagementButtonCollapsed.Tag = null;
             HolidaysButtonExpanded.Tag = null;
             HolidaysButtonCollapsed.Tag = null;
+            AboutContactButtonExpanded.Tag = null;
+            AboutContactButtonCollapsed.Tag = null;
 
             // Clear admin button states if they exist
             if (_currentUser.Role == "Admin")
@@ -153,6 +155,10 @@ namespace NZFTC_EmployeeSystem.Views
                 case "Holidays":
                     HolidaysButtonExpanded.Tag = "Active";
                     HolidaysButtonCollapsed.Tag = "Active";
+                    break;
+                case "AboutContact":
+                    AboutContactButtonExpanded.Tag = "Active";
+                    AboutContactButtonCollapsed.Tag = "Active";
                     break;
                 case "EmployeeManagement":
                     EmployeeManagementButtonExpanded.Tag = "Active";
@@ -208,6 +214,8 @@ namespace NZFTC_EmployeeSystem.Views
             LeaveManagementButtonExpanded.IsEnabled = true;
             HolidaysButtonExpanded.Visibility = Visibility.Visible;
             HolidaysButtonExpanded.IsEnabled = true;
+            AboutContactButtonExpanded.Visibility = Visibility.Visible;
+            AboutContactButtonExpanded.IsEnabled = true;
 
             // Hide collapsed buttons (abbreviated text)
             DashboardButtonCollapsed.Visibility = Visibility.Collapsed;
@@ -218,6 +226,8 @@ namespace NZFTC_EmployeeSystem.Views
             LeaveManagementButtonCollapsed.IsEnabled = false;
             HolidaysButtonCollapsed.Visibility = Visibility.Collapsed;
             HolidaysButtonCollapsed.IsEnabled = false;
+            AboutContactButtonCollapsed.Visibility = Visibility.Collapsed;
+            AboutContactButtonCollapsed.IsEnabled = false;
 
             // Handle admin buttons if user is admin
             if (AdminMenuPanel.Visibility == Visibility.Visible)
@@ -266,6 +276,8 @@ namespace NZFTC_EmployeeSystem.Views
             LeaveManagementButtonExpanded.IsEnabled = false;
             HolidaysButtonExpanded.Visibility = Visibility.Collapsed;
             HolidaysButtonExpanded.IsEnabled = false;
+            AboutContactButtonExpanded.Visibility = Visibility.Collapsed;
+            AboutContactButtonExpanded.IsEnabled = false;
 
             // Show collapsed buttons (abbreviated versions)
             DashboardButtonCollapsed.Visibility = Visibility.Visible;
@@ -276,6 +288,8 @@ namespace NZFTC_EmployeeSystem.Views
             LeaveManagementButtonCollapsed.IsEnabled = true;
             HolidaysButtonCollapsed.Visibility = Visibility.Visible;
             HolidaysButtonCollapsed.IsEnabled = true;
+            AboutContactButtonCollapsed.Visibility = Visibility.Visible;
+            AboutContactButtonCollapsed.IsEnabled = true;
 
             // Handle admin buttons if user is admin
             if (AdminMenuPanel.Visibility == Visibility.Visible)
@@ -355,6 +369,22 @@ namespace NZFTC_EmployeeSystem.Views
                 SetActiveButton("Holidays");
             }
             catch { MessageBox.Show("Holidays page coming soon", "Info"); }
+        }
+
+        /// <summary>
+        /// Shows About/Contact information popup
+        /// Currently displays placeholder message
+        /// </summary>
+        private void AboutContact_Click(object sender, RoutedEventArgs e)
+        {
+            // Display popup message showing page is under construction
+            MessageBox.Show(
+                "Awaiting creation",
+                "About/Contact",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+            SetActiveButton("AboutContact");
         }
 
         private void Grievances_Click(object sender, RoutedEventArgs e)

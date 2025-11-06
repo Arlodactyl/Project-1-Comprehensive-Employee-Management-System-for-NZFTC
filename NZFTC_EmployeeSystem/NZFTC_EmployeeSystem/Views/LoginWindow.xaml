@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
         mc:Ignorable="d"
         Title="NZFTC Employee Login" 
-        Height="600" 
+        Height="650" 
         Width="500"
-        MinHeight="600"
+        MinHeight="650"
         MinWidth="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -94,12 +94,12 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header with Logo -->
-        <Border Grid.Row="0" Background="#2C3E50" Height="200">
+        <!-- Header with Logo - Bigger logo for better visibility -->
+        <Border Grid.Row="0" Background="#2C3E50" Height="240">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Image Source="/Images/logo.png" 
-                       Height="100" 
-                       Width="200"
+                <Image Source="/Images/logo.png"
+                       Height="150"
+                       Width="300"
                        Stretch="Uniform"
                        Margin="0,0,0,15"/>
                 <TextBlock Text="Employee Management System for NZFTC Project"
@@ -111,14 +111,14 @@
 
         <!-- Login Form -->
         <StackPanel Grid.Row="1" 
-                    Margin="50,40"
+                    Margin="50,30"
                     VerticalAlignment="Top">
 
             <TextBlock Text="Login Page"
                        FontSize="26"
                        FontWeight="Bold"
                        Foreground="#2C3E50"
-                       Margin="0,0,0,30"
+                       Margin="0,0,0,25"
                        HorizontalAlignment="Center"/>
 
             <!-- Username -->
@@ -128,16 +128,26 @@
                        Margin="0,0,0,5"/>
             <TextBox x:Name="UserNameBox" 
                      Style="{StaticResource ModernTextBox}"
-                     Margin="0,0,0,20"/>
+                     Margin="0,0,0,15"/>
 
             <!-- Password -->
-            <TextBlock Text="Password" 
-                       FontSize="14" 
+            <TextBlock Text="Password"
+                       FontSize="14"
                        Foreground="#2C3E50"
                        Margin="0,0,0,5"/>
-            <PasswordBox x:Name="PasswordBox" 
+            <PasswordBox x:Name="PasswordBox"
                          Style="{StaticResource ModernPasswordBox}"
-                         Margin="0,0,0,30"/>
+                         Margin="0,0,0,10"/>
+
+            <!-- Forgot Password Link - Clickable text that opens email input popup -->
+            <TextBlock Text="Forgot Password?"
+                       FontSize="13"
+                       Foreground="#5DADE2"
+                       Cursor="Hand"
+                       TextDecorations="Underline"
+                       HorizontalAlignment="Right"
+                       Margin="0,0,0,20"
+                       MouseLeftButtonDown="ForgotPassword_Click"/>
 
             <!-- Buttons -->
             <Grid>

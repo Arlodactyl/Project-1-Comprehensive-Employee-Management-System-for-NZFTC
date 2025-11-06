@@ -38,6 +38,99 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         // ========================================
+        // FORGOT PASSWORD LINK - Show email input popup
+        // This is a fake feature that doesn't actually send emails
+        // ========================================
+        private void ForgotPassword_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Create a simple input dialog for email entry
+            var emailWindow = new Window
+            {
+                Title = "Forgot Password",
+                Width = 400,
+                Height = 200,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize,
+                Background = System.Windows.Media.Brushes.White
+            };
+
+            // Create the layout for the popup
+            var mainStack = new System.Windows.Controls.StackPanel
+            {
+                Margin = new Thickness(30)
+            };
+
+            // Add instruction text
+            var instructionText = new System.Windows.Controls.TextBlock
+            {
+                Text = "Enter your email address to receive password reset instructions:",
+                FontSize = 14,
+                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(44, 62, 80)),
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 0, 0, 15)
+            };
+            mainStack.Children.Add(instructionText);
+
+            // Add email textbox
+            var emailBox = new System.Windows.Controls.TextBox
+            {
+                Height = 40,
+                Padding = new Thickness(10, 8, 10, 8),
+                FontSize = 14,
+                BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(189, 195, 199)),
+                BorderThickness = new Thickness(1),
+                Margin = new Thickness(0, 0, 0, 20)
+            };
+            mainStack.Children.Add(emailBox);
+
+            // Add submit button
+            var submitButton = new System.Windows.Controls.Button
+            {
+                Content = "Submit",
+                Height = 40,
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(93, 173, 226)),
+                Foreground = System.Windows.Media.Brushes.White,
+                FontSize = 14,
+                FontWeight = FontWeights.Bold,
+                BorderThickness = new Thickness(0),
+                Cursor = System.Windows.Input.Cursors.Hand
+            };
+
+            // When submit button is clicked, show confirmation message
+            submitButton.Click += (s, args) =>
+            {
+                // Validate email input
+                string email = emailBox.Text.Trim();
+                if (string.IsNullOrEmpty(email))
+                {
+                    MessageBox.Show(
+                        "Please enter your email address.",
+                        "Email Required",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
+
+                // Show fake confirmation message
+                MessageBox.Show(
+                    "A confirmation email has been sent to your email address.",
+                    "Email Sent",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+
+                // Close the email popup window
+                emailWindow.Close();
+            };
+            mainStack.Children.Add(submitButton);
+
+            // Set the content of the window and show it
+            emailWindow.Content = mainStack;
+            emailWindow.ShowDialog();
+        }
+
+        // ========================================
         // SIGN IN BUTTON - Check credentials
         // ========================================
         private void SignIn_Click(object sender, RoutedEventArgs e)

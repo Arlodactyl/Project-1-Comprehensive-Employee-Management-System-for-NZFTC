@@ -282,16 +282,31 @@
                         <!-- Holidays Button - Visible to all users -->
                         <Grid>
                             <Button x:Name="HolidaysButtonExpanded"
-                                    Content="Holidays" 
+                                    Content="Holidays"
                                     Style="{StaticResource SidebarButtonStyle}"
                                     Click="Holidays_Click"
                                     Visibility="Visible"/>
                             <Button x:Name="HolidaysButtonCollapsed"
-                                    Content="HD" 
+                                    Content="HD"
                                     Style="{StaticResource CollapsedButtonStyle}"
                                     Click="Holidays_Click"
                                     Visibility="Collapsed"
                                     ToolTip="Holidays"/>
+                        </Grid>
+
+                        <!-- About/Contact Button - Visible to all users -->
+                        <Grid>
+                            <Button x:Name="AboutContactButtonExpanded"
+                                    Content="About/Contact"
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="AboutContact_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="AboutContactButtonCollapsed"
+                                    Content="AB"
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="AboutContact_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="About/Contact"/>
                         </Grid>
 
                         <!-- Admin Section - Only visible to admin users -->
