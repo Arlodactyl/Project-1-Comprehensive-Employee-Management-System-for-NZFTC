@@ -5,8 +5,48 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="DashboardHomePage">
+      d:DesignHeight="900" d:DesignWidth="1200"
+      Title="Dashboard">
+
+    <Page.Resources>
+        <!-- Stat Card Style -->
+        <Style x:Key="StatCard" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="25,20"/>
+            <Setter Property="Margin" Value="0,0,15,0"/>
+        </Style>
+
+        <!-- Stat Number Style -->
+        <Style x:Key="StatNumber" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+
+        <!-- Stat Label Style -->
+        <Style x:Key="StatLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="0.95"/>
+        </Style>
+
+        <!-- Section Header Style -->
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <!-- News Item Style -->
+        <Style x:Key="NewsItem" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="0,15,0,15"/>
+        </Style>
+    </Page.Resources>
 
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -14,104 +54,344 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="#2C3E50" Padding="20">
+        <!-- Header - Dark Blue like Department Page -->
+        <Border Grid.Row="0" Background="#34495E" Padding="20">
             <TextBlock Text="Dashboard Overview" 
                        FontSize="24" 
                        FontWeight="Bold" 
                        Foreground="White"/>
         </Border>
 
-        <!-- Summary Cards -->
-        <Grid Grid.Row="1" Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#F5F6F7">
+            <StackPanel Margin="30">
 
-            <!-- Total Employees Card -->
-            <Border Grid.Row="0" Grid.Column="0" 
-                    Background="#3498DB" 
-                    Margin="10" 
-                    Padding="20" 
-                    CornerRadius="5">
-                <StackPanel>
-                    <TextBlock Text="Total Employees" 
-                               FontSize="16" 
-                               Foreground="White" 
-                               FontWeight="SemiBold"/>
-                    <TextBlock x:Name="TotalEmployeesText" 
-                               Text="0" 
-                               FontSize="36" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               Margin="0,10,0,0"/>
-                </StackPanel>
-            </Border>
+                <!-- Stats Cards Row - Only 3 Cards -->
+                <Grid Margin="0,0,0,25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-            <!-- Pending Leave Requests Card -->
-            <Border Grid.Row="0" Grid.Column="1" 
-                    Background="#E74C3C" 
-                    Margin="10" 
-                    Padding="20" 
-                    CornerRadius="5">
-                <StackPanel>
-                    <TextBlock Text="Pending Leave Requests" 
-                               FontSize="16" 
-                               Foreground="White" 
-                               FontWeight="SemiBold"/>
-                    <TextBlock x:Name="PendingLeaveText" 
-                               Text="0" 
-                               FontSize="36" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               Margin="0,10,0,0"/>
-                </StackPanel>
-            </Border>
+                    <!-- Total Employees Card - Blue -->
+                    <Border Grid.Column="0" 
+                            Background="#5DADE2" 
+                            Style="{StaticResource StatCard}">
+                        <StackPanel>
+                            <TextBlock Text="Total Employees" 
+                                       Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="TotalEmployeesText"
+                                       Text="12" 
+                                       Style="{StaticResource StatNumber}"/>
+                        </StackPanel>
+                    </Border>
 
-            <!-- Open Grievances Card -->
-            <Border Grid.Row="1" Grid.Column="0" 
-                    Background="#F39C12" 
-                    Margin="10" 
-                    Padding="20" 
-                    CornerRadius="5">
-                <StackPanel>
-                    <TextBlock Text="Open Grievances" 
-                               FontSize="16" 
-                               Foreground="White" 
-                               FontWeight="SemiBold"/>
-                    <TextBlock x:Name="OpenGrievanceText" 
-                               Text="0" 
-                               FontSize="36" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               Margin="0,10,0,0"/>
-                </StackPanel>
-            </Border>
+                    <!-- Pending Leave Requests Card - Red -->
+                    <Border Grid.Column="1" 
+                            Background="#EC7063" 
+                            Style="{StaticResource StatCard}">
+                        <StackPanel>
+                            <TextBlock Text="Pending Leave Requests" 
+                                       Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="PendingLeaveText"
+                                       Text="0" 
+                                       Style="{StaticResource StatNumber}"/>
+                        </StackPanel>
+                    </Border>
 
-            <!-- Upcoming Holidays Card -->
-            <Border Grid.Row="1" Grid.Column="1" 
-                    Background="#27AE60" 
-                    Margin="10" 
-                    Padding="20" 
-                    CornerRadius="5">
-                <StackPanel>
-                    <TextBlock Text="Upcoming Holidays" 
-                               FontSize="16" 
-                               Foreground="White" 
-                               FontWeight="SemiBold"/>
-                    <TextBlock x:Name="UpcomingHolidayText" 
-                               Text="0" 
-                               FontSize="36" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               Margin="0,10,0,0"/>
-                </StackPanel>
-            </Border>
-        </Grid>
+                    <!-- Open Grievances Card - Light Red -->
+                    <Border Grid.Column="2" 
+                            Background="#F1948A" 
+                            Style="{StaticResource StatCard}"
+                            Margin="0">
+                        <StackPanel>
+                            <TextBlock Text="Open Grievances" 
+                                       Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="OpenGrievanceText"
+                                       Text="0" 
+                                       Style="{StaticResource StatNumber}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Building Image Section with Overlay Text -->
+                <Border Height="360" 
+                        CornerRadius="8" 
+                        Margin="0,0,0,25"
+                        ClipToBounds="True"
+                        Background="#E0E0E0">
+                    <Grid>
+                        <!-- Background Image - Try to load, show grey if fails -->
+                        <Image x:Name="BuildingImage"
+                               Stretch="UniformToFill"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
+                        <!-- Fallback text if image doesn't load -->
+                        <TextBlock x:Name="ImagePlaceholder"
+                                   Text="NZFTC Building"
+                                   FontSize="32"
+                                   FontWeight="Bold"
+                                   Foreground="#7F8C8D"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="Collapsed"/>
+
+                        <!-- Dark Overlay for Better Text Visibility -->
+                        <Border Background="#000000" 
+                                Opacity="0.4"/>
+
+                        <!-- Centered Text Overlay -->
+                        <StackPanel VerticalAlignment="Center" 
+                                    HorizontalAlignment="Center">
+                            <TextBlock Text="Welcome to the NZFTC Employee Portal" 
+                                       FontSize="48" 
+                                       FontWeight="Bold" 
+                                       Foreground="White"
+                                       TextAlignment="Center"
+                                       Margin="0,0,0,15"/>
+                            <Border Background="#000000" 
+                                    Padding="20,10"
+                                    HorizontalAlignment="Center"
+                                    CornerRadius="4"
+                                    Opacity="0.8">
+                                <TextBlock Text="Empowering People. Driving Growth" 
+                                           FontSize="24" 
+                                           Foreground="White"
+                                           TextAlignment="Center"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Bottom Section: News and Quick Links Side by Side -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- News Section - Left Side -->
+                    <Border Grid.Column="0" 
+                            Background="White" 
+                            CornerRadius="8"
+                            Padding="25"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="News" 
+                                       Style="{StaticResource SectionHeader}"/>
+
+                            <!-- News Item 1 -->
+                            <Border Style="{StaticResource NewsItem}">
+                                <StackPanel>
+                                    <TextBlock Text="NZFTC Achieves Record Q3 Growth" 
+                                               FontSize="18" 
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Revenue up 14% YoY as trade services expand across the North island" 
+                                               FontSize="14"
+                                               Foreground="#7F8C8D"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- News Item 2 -->
+                            <Border Style="{StaticResource NewsItem}">
+                                <StackPanel>
+                                    <TextBlock Text="New Fleet Expansion Announced" 
+                                               FontSize="18" 
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Company invests $2.5M in 15 new trucks to meet growing demand in Canterbury region" 
+                                               FontSize="14"
+                                               Foreground="#7F8C8D"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- News Item 3 -->
+                            <Border Style="{StaticResource NewsItem}">
+                                <StackPanel>
+                                    <TextBlock Text="Employee Wellness Program Launch" 
+                                               FontSize="18" 
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="New health and fitness benefits available from December 1st for all staff members" 
+                                               FontSize="14"
+                                               Foreground="#7F8C8D"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- News Item 4 -->
+                            <Border Style="{StaticResource NewsItem}">
+                                <StackPanel>
+                                    <TextBlock Text="Safety Milestone: 500 Days Without Incident" 
+                                               FontSize="18" 
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Team achievement recognized with company-wide celebration planned for next month" 
+                                               FontSize="14"
+                                               Foreground="#7F8C8D"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- News Item 5 -->
+                            <Border Style="{StaticResource NewsItem}"
+                                    BorderThickness="0">
+                                <StackPanel>
+                                    <TextBlock Text="Christmas Party Details Released" 
+                                               FontSize="18" 
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Annual celebration to be held December 15th at Christchurch Convention Centre" 
+                                               FontSize="14"
+                                               Foreground="#7F8C8D"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Quick Links Section - Right Side -->
+                    <Border Grid.Column="2" 
+                            Background="White" 
+                            CornerRadius="8"
+                            Padding="25"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Quick Links" 
+                                       Style="{StaticResource SectionHeader}"/>
+
+                            <!-- Weather Widget -->
+                            <Border Background="#F8F9FA" 
+                                    CornerRadius="8"
+                                    Padding="20"
+                                    Margin="0,0,0,20">
+                                <StackPanel>
+                                    <TextBlock Text="Christchurch" 
+                                               FontSize="18" 
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,10"/>
+
+                                    <!-- Temperature Display -->
+                                    <StackPanel Orientation="Horizontal" 
+                                                Margin="0,0,0,10">
+                                        <TextBlock Text="18" 
+                                                   FontSize="48" 
+                                                   FontWeight="Bold"
+                                                   Foreground="#F39C12"
+                                                   VerticalAlignment="Top"/>
+                                        <TextBlock Text="C"
+                                                   FontSize="24" 
+                                                   FontWeight="Bold"
+                                                   Foreground="#F39C12"
+                                                   VerticalAlignment="Top"
+                                                   Margin="2,8,0,0"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Clear skies - Light NE Breeze"
+                                               FontSize="13"
+                                               Foreground="#7F8C8D"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Quick Action Buttons - ADMIN FOCUSED -->
+                            <StackPanel>
+                                <!-- Leave Management Button -->
+                                <Button Content="Leave Management" 
+                                        Background="#3498DB"
+                                        Foreground="White"
+                                        FontSize="14"
+                                        FontWeight="SemiBold"
+                                        Height="45"
+                                        BorderThickness="0"
+                                        Margin="0,0,0,10"
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="6">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#2980B9"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <!-- Payroll Button -->
+                                <Button Content="Payroll" 
+                                        Background="#27AE60"
+                                        Foreground="White"
+                                        FontSize="14"
+                                        FontWeight="SemiBold"
+                                        Height="45"
+                                        BorderThickness="0"
+                                        Margin="0,0,0,10"
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="6">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#229954"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <!-- Departments Button -->
+                                <Button Content="Departments" 
+                                        Background="#F39C12"
+                                        Foreground="White"
+                                        FontSize="14"
+                                        FontWeight="SemiBold"
+                                        Height="45"
+                                        BorderThickness="0"
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="6">
+                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#D68910"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
