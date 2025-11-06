@@ -1009,7 +1009,14 @@ namespace NZFTC_EmployeeSystem.Views
                         .ThenBy(emp => emp.FirstName)
                         .ToList();
 
+                    // Clear the ItemsSource first to force a refresh
+                    TrainingEmployeeComboBox.ItemsSource = null;
+
+                    // Then set the new list
                     TrainingEmployeeComboBox.ItemsSource = employees;
+
+                    // Force the combobox to update its items
+                    TrainingEmployeeComboBox.Items.Refresh();
                 }
             }
             catch (Exception ex)
@@ -1029,16 +1036,17 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void AddTraining_Click(object sender, RoutedEventArgs e)
         {
-            // Make sure the panel is visible
-            AddTrainingPanel.Visibility = Visibility.Visible;
-
-            // Reload employees to make sure list is current
-            LoadEmployeesForTraining();
-
-            // Reset form fields
+            // Reset form fields FIRST before reloading data
             TrainingEmployeeComboBox.SelectedIndex = -1;
             TrainingTypeComboBox.SelectedIndex = 0;
             TrainingNotesTextBox.Clear();
+
+            // Reload employees to make sure list is current
+            // This must happen AFTER clearing selection to avoid binding issues
+            LoadEmployeesForTraining();
+
+            // Make sure the panel is visible LAST
+            AddTrainingPanel.Visibility = Visibility.Visible;
         }
 
         /// <summary>
