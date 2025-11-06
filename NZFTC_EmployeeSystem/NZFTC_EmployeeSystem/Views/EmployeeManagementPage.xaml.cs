@@ -160,7 +160,7 @@ namespace NZFTC_EmployeeSystem.Views
             editButton.Click += (s, args) =>
             {
                 actionWindow.Close();
-                // Load the employee into the edit form
+                // Load the employee into the edit form and navigate to edit tab
                 LoadEmployeeForEditing(employee);
             };
             stackPanel.Children.Add(editButton);
@@ -180,15 +180,44 @@ namespace NZFTC_EmployeeSystem.Views
             trainingButton.Click += (s, args) =>
             {
                 actionWindow.Close();
-                // Load training records for this employee and switch to training tab
-                LoadTrainingRecords(employee.Id);
-                MainTabControl.SelectedIndex = 2; // Switch to training records tab
+                // Navigate to training records tab for this employee
+                NavigateToTrainingRecords(employee);
             };
             stackPanel.Children.Add(trainingButton);
 
             // Set content and show window
             actionWindow.Content = stackPanel;
             actionWindow.ShowDialog();
+        }
+
+        /// <summary>
+        /// Navigates to the Training Records tab and loads records for the specified employee
+        /// Uses Dispatcher to ensure navigation happens correctly
+        /// </summary>
+        private void NavigateToTrainingRecords(Employee employee)
+        {
+            try
+            {
+                // Load training records for this employee
+                LoadTrainingRecords(employee.Id);
+
+                // Use Dispatcher to ensure the tab switch happens after UI updates
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    // Switch to the training records tab (index 2)
+                    // Tab 0 = Employees, Tab 1 = Edit Employee, Tab 2 = Training Records
+                    MainTabControl.SelectedIndex = 2;
+                }), System.Windows.Threading.DispatcherPriority.Background);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error navigating to training records: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
         }
 
         /// <summary>
@@ -295,14 +324,14 @@ namespace NZFTC_EmployeeSystem.Views
                 Margin = new Thickness(0, 25, 0, 0)
             };
 
-            // Add back button
+            // Add back button (YELLOW COLOR)
             var backButton = new Button
             {
                 Content = "Back",
                 Width = 100,
                 Height = 35,
                 Margin = new Thickness(5, 0, 5, 0),
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 165, 166)),
+                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 156, 18)), // Yellow/Orange color
                 Foreground = System.Windows.Media.Brushes.White,
                 BorderThickness = new Thickness(0),
                 FontWeight = FontWeights.SemiBold,
