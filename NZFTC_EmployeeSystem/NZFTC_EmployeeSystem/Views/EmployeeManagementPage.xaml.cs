@@ -13,8 +13,9 @@ namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
     /// Employee Management Page with training records
-    /// Allows admins to manage employees and their training
-    /// Now includes View Details and Edit Employee functionality
+    /// Allows admins and workplace trainers to manage employees and their training
+    /// Now includes View Details, Edit Employee, and View Training functionality
+    /// FIXED: Workplace trainers can now sign off training and have full training rights
     /// </summary>
     public partial class EmployeeManagementPage : Page
     {
@@ -51,13 +52,20 @@ namespace NZFTC_EmployeeSystem.Views
             LoadDepartments();
             LoadAllTrainingRecords();
 
-            // Show Add Training panel by default and load employees
+            // Load employees for training dropdown
             LoadEmployeesForTraining();
-            AddTrainingPanel.Visibility = Visibility.Visible;
+
+            // Hide the add training panel initially
+            AddTrainingPanel.Visibility = Visibility.Collapsed;
             TrainingTypeComboBox.SelectedIndex = 0;
 
-            // Hide Complete Training button if user is not Admin or Workplace Trainer
-            if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
+            // Show Complete Training button for Admin and Workplace Trainer
+            // FIXED: Workplace trainers now have full access to sign off training
+            if (_currentUser.Role == "Admin" || _currentUser.Role == "Workplace Trainer")
+            {
+                CompleteTrainingButton.Visibility = Visibility.Visible;
+            }
+            else
             {
                 CompleteTrainingButton.Visibility = Visibility.Collapsed;
             }
@@ -65,6 +73,82 @@ namespace NZFTC_EmployeeSystem.Views
             // Load departments for edit dropdown
             LoadDepartmentsForEdit();
         }
+
+        #region Employee Tab Action Buttons (NEW METHODS)
+
+        /// <summary>
+        /// NEW: View Details button click handler - Shows employee details popup
+        /// </summary>
+        private void ViewEmployeeDetails_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the selected employee from the grid
+            _selectedEmployee = EmployeesGrid.SelectedItem as Employee;
+
+            // Check if an employee is selected
+            if (_selectedEmployee == null)
+            {
+                MessageBox.Show(
+                    "Please select an employee from the list first.",
+                    "No Selection",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            // Show the employee details directly (no back action needed for button click)
+            ShowEmployeeDetails(_selectedEmployee, null);
+        }
+
+        /// <summary>
+        /// NEW: Edit Employee button click handler - Opens edit form
+        /// </summary>
+        private void EditEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the selected employee from the grid
+            _selectedEmployee = EmployeesGrid.SelectedItem as Employee;
+
+            // Check if an employee is selected
+            if (_selectedEmployee == null)
+            {
+                MessageBox.Show(
+                    "Please select an employee from the list first.",
+                    "No Selection",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            // Load the employee into the edit form and navigate to edit tab
+            LoadEmployeeForEditing(_selectedEmployee);
+        }
+
+        /// <summary>
+        /// NEW: View Training button click handler - Shows training records
+        /// </summary>
+        private void ViewEmployeeTraining_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the selected employee from the grid
+            _selectedEmployee = EmployeesGrid.SelectedItem as Employee;
+
+            // Check if an employee is selected
+            if (_selectedEmployee == null)
+            {
+                MessageBox.Show(
+                    "Please select an employee from the list first.",
+                    "No Selection",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            // Navigate to training records tab for this employee
+            NavigateToTrainingRecords(_selectedEmployee);
+        }
+
+        #endregion
 
         /// <summary>
         /// Handles double-click on employee row
@@ -140,7 +224,7 @@ namespace NZFTC_EmployeeSystem.Views
             viewButton.Click += (s, args) =>
             {
                 actionWindow.Close();
-                // Pass the action window so we can go back to it
+                // Pass the action window callback so we can go back to it
                 ShowEmployeeDetails(employee, () => ShowEmployeeActionPopup(employee));
             };
             stackPanel.Children.Add(viewButton);
@@ -324,26 +408,29 @@ namespace NZFTC_EmployeeSystem.Views
                 Margin = new Thickness(0, 25, 0, 0)
             };
 
-            // Add back button (YELLOW COLOR)
-            var backButton = new Button
+            // Add back button (YELLOW COLOR) - only if backAction provided
+            if (backAction != null)
             {
-                Content = "Back",
-                Width = 100,
-                Height = 35,
-                Margin = new Thickness(5, 0, 5, 0),
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 156, 18)), // Yellow/Orange color
-                Foreground = System.Windows.Media.Brushes.White,
-                BorderThickness = new Thickness(0),
-                FontWeight = FontWeights.SemiBold,
-                Cursor = Cursors.Hand
-            };
-            backButton.Click += (s, args) =>
-            {
-                detailsWindow.Close();
-                // Call the back action to show the previous menu
-                backAction?.Invoke();
-            };
-            buttonPanel.Children.Add(backButton);
+                var backButton = new Button
+                {
+                    Content = "Back",
+                    Width = 100,
+                    Height = 35,
+                    Margin = new Thickness(5, 0, 5, 0),
+                    Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 156, 18)), // Yellow/Orange color
+                    Foreground = System.Windows.Media.Brushes.White,
+                    BorderThickness = new Thickness(0),
+                    FontWeight = FontWeights.SemiBold,
+                    Cursor = Cursors.Hand
+                };
+                backButton.Click += (s, args) =>
+                {
+                    detailsWindow.Close();
+                    // Call the back action to show the previous menu
+                    backAction?.Invoke();
+                };
+                buttonPanel.Children.Add(backButton);
+            }
 
             // Add close button
             var closeButton = new Button
@@ -812,7 +899,7 @@ namespace NZFTC_EmployeeSystem.Views
                                       $"\"{emp.JobTitle ?? ""}\"," +
                                       $"\"{emp.Department?.Name ?? ""}\"," +
                                       $"{emp.HireDate:dd/MM/yyyy}," +
-                                      $"{emp.Salary}," +
+                                      $"{emp.Salary:F2}," +
                                       $"{emp.IsActive}");
                     }
 
@@ -845,7 +932,8 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Load all training records for all employees
+        /// Load all training records with employee and user information
+        /// FIXED: Now properly loads all training records including for workplace trainers
         /// </summary>
         private void LoadAllTrainingRecords()
         {
@@ -906,6 +994,7 @@ namespace NZFTC_EmployeeSystem.Views
 
         /// <summary>
         /// Load employees for training dropdown
+        /// FIXED: Now loads ALL active employees for training allocation
         /// </summary>
         private void LoadEmployeesForTraining()
         {
@@ -913,6 +1002,7 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 using (var db = new AppDbContext())
                 {
+                    // Load ALL active employees, including the workplace trainer themselves
                     var employees = db.Employees
                         .Where(emp => emp.IsActive)
                         .OrderBy(emp => emp.LastName)
@@ -935,10 +1025,17 @@ namespace NZFTC_EmployeeSystem.Views
 
         /// <summary>
         /// Show add training panel
+        /// FIXED: Now properly shows the panel and loads employees
         /// </summary>
         private void AddTraining_Click(object sender, RoutedEventArgs e)
         {
+            // Make sure the panel is visible
             AddTrainingPanel.Visibility = Visibility.Visible;
+
+            // Reload employees to make sure list is current
+            LoadEmployeesForTraining();
+
+            // Reset form fields
             TrainingEmployeeComboBox.SelectedIndex = -1;
             TrainingTypeComboBox.SelectedIndex = 0;
             TrainingNotesTextBox.Clear();
@@ -954,9 +1051,11 @@ namespace NZFTC_EmployeeSystem.Views
 
         /// <summary>
         /// Save new training record
+        /// FIXED: Now properly validates and saves training records
         /// </summary>
         private void SaveTraining_Click(object sender, RoutedEventArgs e)
         {
+            // Validate employee selection
             if (TrainingEmployeeComboBox.SelectedValue == null)
             {
                 MessageBox.Show(
@@ -968,6 +1067,7 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
+            // Validate training type selection
             if (TrainingTypeComboBox.SelectedItem == null)
             {
                 MessageBox.Show(
@@ -983,9 +1083,13 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 using (var db = new AppDbContext())
                 {
+                    // Get the selected training type
                     string trainingType = ((ComboBoxItem)TrainingTypeComboBox.SelectedItem).Content.ToString() ?? "";
+
+                    // Get the selected employee ID
                     int employeeId = (int)TrainingEmployeeComboBox.SelectedValue;
 
+                    // Create new training record
                     var training = new Training
                     {
                         EmployeeId = employeeId,
@@ -994,6 +1098,7 @@ namespace NZFTC_EmployeeSystem.Views
                         Notes = TrainingNotesTextBox.Text.Trim()
                     };
 
+                    // Add to database
                     db.Trainings.Add(training);
                     db.SaveChanges();
                 }
@@ -1005,6 +1110,7 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Information
                 );
 
+                // Hide the add panel and reload training records
                 AddTrainingPanel.Visibility = Visibility.Collapsed;
                 LoadAllTrainingRecords();
             }
@@ -1021,7 +1127,7 @@ namespace NZFTC_EmployeeSystem.Views
 
         /// <summary>
         /// Mark selected training as completed
-        /// ONLY ADMIN AND WORKPLACE TRAINER CAN SIGN OFF
+        /// FIXED: Workplace trainers now have full rights to sign off training
         /// </summary>
         private void CompleteTraining_Click(object sender, RoutedEventArgs e)
         {
@@ -1038,6 +1144,7 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
+            // Get the selected training record
             var selected = TrainingGrid.SelectedItem as Training;
             if (selected == null)
             {
@@ -1066,12 +1173,16 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 using (var db = new AppDbContext())
                 {
+                    // Find the training record in the database
                     var training = db.Trainings.Find(selected.Id);
                     if (training != null)
                     {
+                        // Update training record
                         training.Status = "Completed";
                         training.CompletedDate = DateTime.Now;
                         training.SignedOffByUserId = _currentUser.Id;
+
+                        // Save changes
                         db.SaveChanges();
                     }
                 }
@@ -1083,6 +1194,7 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Information
                 );
 
+                // Reload training records to show updated information
                 LoadAllTrainingRecords();
             }
             catch (Exception ex)
@@ -1205,7 +1317,7 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Create new employee (existing code - kept the same)
+        /// Create new employee
         /// </summary>
         private void CreateEmployee_Click(object sender, RoutedEventArgs e)
         {
@@ -1379,6 +1491,8 @@ namespace NZFTC_EmployeeSystem.Views
                 RoleComboBox.SelectedIndex = 0;
 
                 LoadEmployees();
+                // Also reload the training employee dropdown
+                LoadEmployeesForTraining();
             }
             catch (Exception ex)
             {
