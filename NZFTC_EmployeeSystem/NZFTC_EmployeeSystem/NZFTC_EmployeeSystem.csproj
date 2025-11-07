@@ -15,6 +15,7 @@
 	<ItemGroup>
 		<PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
 		<PackageReference Include="MaterialDesignColors" Version="5.3.0" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
 			<!-- keep EF Design tools private so they don't flow to consumers -->

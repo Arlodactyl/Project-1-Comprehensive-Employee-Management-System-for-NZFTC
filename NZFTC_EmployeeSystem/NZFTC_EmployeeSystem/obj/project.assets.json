@@ -525,6 +525,20 @@
           }
         }
       },
+      "Microsoft.Data.Sqlite/9.0.10": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Data.Sqlite.Core": "9.0.10",
+          "SQLitePCLRaw.bundle_e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        }
+      },
       "Microsoft.Data.Sqlite.Core/9.0.10": {
         "type": "package",
         "dependencies": {
@@ -2428,6 +2442,20 @@
         "microsoft.codeanalysis.workspaces.msbuild.nuspec"
       ]
     },
+    "Microsoft.Data.Sqlite/9.0.10": {
+      "sha512": "1waeeEEM/Dp5l2laUByEEWfd6qyI00HExDduhLKGT2kPnHArjIDcMf2z9HIjeLPoR56iBHhvXTfAv1hiH/wAAQ==",
+      "type": "package",
+      "path": "microsoft.data.sqlite/9.0.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "lib/netstandard2.0/_._",
+        "microsoft.data.sqlite.9.0.10.nupkg.sha512",
+        "microsoft.data.sqlite.nuspec"
+      ]
+    },
     "Microsoft.Data.Sqlite.Core/9.0.10": {
       "sha512": "tWbN2uzG4uBxxMjcHA3Oa9ecAYjyRTfDwRbgQ7ueyx7eEgyYbBiKADY2rllF8wO3dHUvN+/8fgylwSGMfiCtVg==",
       "type": "package",
@@ -3469,29 +3497,30 @@
       "CommunityToolkit.Mvvm >= 8.3.2",
       "MaterialDesignColors >= 5.3.0",
       "MaterialDesignThemes >= 5.3.0",
+      "Microsoft.Data.Sqlite >= 9.0.10",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.10",
       "Microsoft.EntityFrameworkCore.Sqlite >= 9.0.10",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.10"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\64204\\.nuget\\packages\\": {},
+    "C:\\Users\\Bailey's PC\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\64204\\Desktop\\codingnfc\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+      "projectUniqueName": "C:\\Users\\Bailey's PC\\Documents\\GitHub\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
       "projectName": "NZFTC_EmployeeSystem",
-      "projectPath": "C:\\Users\\64204\\Desktop\\codingnfc\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
-      "packagesPath": "C:\\Users\\64204\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\64204\\Desktop\\codingnfc\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
+      "projectPath": "C:\\Users\\Bailey's PC\\Documents\\GitHub\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+      "packagesPath": "C:\\Users\\Bailey's PC\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Bailey's PC\\Documents\\GitHub\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\64204\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Bailey's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3500,7 +3529,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3536,6 +3564,10 @@
           "MaterialDesignThemes": {
             "target": "Package",
             "version": "[5.3.0, )"
+          },
+          "Microsoft.Data.Sqlite": {
+            "target": "Package",
+            "version": "[9.0.10, )"
           },
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -3573,7 +3605,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -572,14 +572,22 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void AboutContact_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-                "Awaiting creation",
-                "About/Contact",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-            PageTitleText.Text = "About/Contact";
-            SetActiveButton("AboutContact");
+            // Display popup message showing page is under construction
+
+            try
+            {
+
+                ContentFrame.Navigate(new Contact_AboutUsPage(_currentUser));
+                SetActiveButton("AboutContact");
+            }
+            catch
+            {
+                MessageBox.Show(
+                    "Awaiting creation",
+                    "About/Contact",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
         }
 
         /// <summary>
