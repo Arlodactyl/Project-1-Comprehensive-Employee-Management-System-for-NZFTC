@@ -1,4 +1,4 @@
-<Page x:Class="NZFTC_EmployeeSystem.Views.EmployeeManagementPage"
+﻿<Page x:Class="NZFTC_EmployeeSystem.Views.EmployeeManagementPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -97,6 +97,35 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#8E44AD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ENHANCEMENT 1: Info Button Style -->
+        <Style x:Key="InfoButton" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="15"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -412,143 +441,186 @@
 
             <!-- Tab 3: Training Records -->
             <TabItem Header="Training Records" FontSize="14">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="20">
+                <!-- ENHANCEMENT 2: Add Grid wrapper for Info button positioning -->
+                <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="20">
 
-                        <!-- Training Section Header -->
-                        <TextBlock Text="All Employee Training Records" 
-                                   FontSize="18" 
-                                   FontWeight="Bold" 
-                                   Foreground="#2C3E50"
-                                   Margin="0,0,0,5"/>
+                            <!-- Training Section Header -->
+                            <TextBlock Text="All Employee Training Records" 
+                                       FontSize="18" 
+                                       FontWeight="Bold" 
+                                       Foreground="#2C3E50"
+                                       Margin="0,0,0,5"/>
 
-                        <TextBlock Text="View and manage training records for all employees. Use search to filter by employee name or training type." 
-                                   FontSize="12" 
-                                   Foreground="#7F8C8D"
-                                   TextWrapping="Wrap"
-                                   Margin="0,0,0,15"/>
+                            <TextBlock Text="View and manage training records for all employees. Use search to filter by employee name or training type." 
+                                       FontSize="12" 
+                                       Foreground="#7F8C8D"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,0,15"/>
 
-                        <!-- Search Box -->
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                            <!-- Search Box -->
+                            <Grid Margin="0,0,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="Search:" 
-                                       Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,10,0"/>
-                            <TextBox x:Name="TrainingSearchTextBox"
-                                     Grid.Column="1"
-                                     Style="{StaticResource ModernTextBox}"
-                                     TextChanged="TrainingSearchTextBox_TextChanged"/>
-                            <Button Content="Refresh All"
-                                    Grid.Column="2"
-                                    Style="{StaticResource ActionButton}"
-                                    Click="RefreshTraining_Click"
-                                    Margin="10,0,0,0"/>
-                        </Grid>
+                                <TextBlock Text="Search:" 
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,10,0"/>
+                                <TextBox x:Name="TrainingSearchTextBox"
+                                         Grid.Column="1"
+                                         Style="{StaticResource ModernTextBox}"
+                                         TextChanged="TrainingSearchTextBox_TextChanged"/>
+                                <Button Content="Refresh All"
+                                        Grid.Column="2"
+                                        Style="{StaticResource ActionButton}"
+                                        Click="RefreshTraining_Click"
+                                        Margin="10,0,0,0"/>
+                            </Grid>
 
-                        <!-- Training Records Grid with Double-Click handler -->
-                        <DataGrid x:Name="TrainingGrid"
-                                  Height="350"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  SelectionMode="Single"
-                                  CanUserAddRows="False"
-                                  AlternatingRowBackground="#ECF0F1"
-                                  GridLinesVisibility="Horizontal"
-                                  HeadersVisibility="Column"
-                                  Margin="0,0,0,15"
-                                  MouseDoubleClick="TrainingGrid_MouseDoubleClick">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                                <DataGridTextColumn Header="Employee Name" Binding="{Binding Employee.FullName}" Width="180"/>
-                                <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="180"/>
-                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
-                                <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="120"/>
-                                <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="140"/>
-                                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                            <!-- ENHANCEMENT 3: Training Records Grid with Empty State -->
+                            <Grid>
+                                <!-- Training Records DataGrid -->
+                                <DataGrid x:Name="TrainingGrid"
+                                          Height="350"
+                                          AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionMode="Single"
+                                          CanUserAddRows="False"
+                                          AlternatingRowBackground="#ECF0F1"
+                                          GridLinesVisibility="Horizontal"
+                                          HeadersVisibility="Column"
+                                          Margin="0,0,0,15"
+                                          MouseDoubleClick="TrainingGrid_MouseDoubleClick">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                                        <DataGridTextColumn Header="Employee Name" Binding="{Binding Employee.FullName}" Width="180"/>
+                                        <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="180"/>
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                                        <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                                        <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="140"/>
+                                        <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
 
-                        <!-- Training Action Buttons -->
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                            <Button Content="Add Training" 
-                                    Style="{StaticResource ActionButton}"
-                                    Click="AddTraining_Click"/>
-                            <Button x:Name="CompleteTrainingButton"
-                                    Content="Complete Training" 
-                                    Style="{StaticResource ExportButton}"
-                                    Click="CompleteTraining_Click"/>
-                            <Button Content="Export Training Records" 
-                                    Style="{StaticResource ExportButton}"
-                                    Click="ExportTraining_Click"/>
-                        </StackPanel>
+                                <!-- Empty State Message (Shows when no training records) -->
+                                <Border x:Name="EmptyTrainingMessage"
+                                        Background="#F8F9FA"
+                                        BorderBrush="#BDC3C7"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Height="350"
+                                        Margin="0,0,0,15"
+                                        Visibility="Collapsed">
+                                    <StackPanel VerticalAlignment="Center" 
+                                                HorizontalAlignment="Center"
+                                                Margin="20">
+                                        <TextBlock x:Name="EmptyMessageText"
+                                                   Text="No training records found"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#7F8C8D"
+                                                   TextAlignment="Center"
+                                                   Margin="0,0,0,15"/>
+                                        <Button x:Name="EmptyStateAddButton"
+                                                Content="Add Training Records"
+                                                Style="{StaticResource ActionButton}"
+                                                Click="AddTraining_Click"
+                                                HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
 
-                        <!-- Add Training Form -->
-                        <Border x:Name="AddTrainingPanel"
-                                BorderBrush="#BDC3C7" 
-                                BorderThickness="1" 
-                                Padding="20" 
-                                Background="#F8F9FA"
-                                CornerRadius="5"
-                                Visibility="Collapsed">
-                            <StackPanel>
-                                <TextBlock Text="Add New Training Record" 
-                                           FontSize="16" 
-                                           FontWeight="Bold" 
-                                           Foreground="#2C3E50"
-                                           Margin="0,0,0,15"/>
-
-                                <TextBlock Text="Employee *" FontSize="12" Margin="0,0,0,3"/>
-                                <ComboBox x:Name="TrainingEmployeeComboBox" 
-                                          Style="{StaticResource ModernComboBox}" 
-                                          DisplayMemberPath="FullName"
-                                          SelectedValuePath="Id"
-                                          IsEditable="True"
-                                          IsTextSearchEnabled="True"
-                                          Margin="0,0,0,10"/>
-
-                                <TextBlock Text="Training Type *" FontSize="12" Margin="0,0,0,3"/>
-                                <ComboBox x:Name="TrainingTypeComboBox" 
-                                          Style="{StaticResource ModernComboBox}" 
-                                          Margin="0,0,0,10">
-                                    <ComboBoxItem Content="Ethics Training"/>
-                                    <ComboBoxItem Content="Induction"/>
-                                    <ComboBoxItem Content="Health and Safety"/>
-                                    <ComboBoxItem Content="Fire Safety"/>
-                                    <ComboBoxItem Content="First Aid"/>
-                                    <ComboBoxItem Content="Data Privacy"/>
-                                    <ComboBoxItem Content="Workplace Harassment"/>
-                                    <ComboBoxItem Content="Other"/>
-                                </ComboBox>
-
-                                <TextBlock Text="Notes" FontSize="12" Margin="0,0,0,3"/>
-                                <TextBox x:Name="TrainingNotesTextBox" 
-                                         Style="{StaticResource ModernTextBox}" 
-                                         Height="60"
-                                         TextWrapping="Wrap"
-                                         AcceptsReturn="True"
-                                         Margin="0,0,0,15"/>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="Save Training" 
-                                            Style="{StaticResource ActionButton}"
-                                            Click="SaveTraining_Click"/>
-                                    <Button Content="Cancel" 
-                                            Style="{StaticResource ToggleButton}"
-                                            Click="CancelAddTraining_Click"/>
-                                </StackPanel>
+                            <!-- Training Action Buttons -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Button Content="Add Training" 
+                                        Style="{StaticResource ActionButton}"
+                                        Click="AddTraining_Click"/>
+                                <Button x:Name="CompleteTrainingButton"
+                                        Content="Complete Training" 
+                                        Style="{StaticResource ExportButton}"
+                                        Click="CompleteTraining_Click"/>
+                                <Button Content="Export Training Records" 
+                                        Style="{StaticResource ExportButton}"
+                                        Click="ExportTraining_Click"/>
                             </StackPanel>
-                        </Border>
 
-                    </StackPanel>
-                </ScrollViewer>
+                            <!-- Add Training Form -->
+                            <Border x:Name="AddTrainingPanel"
+                                    BorderBrush="#BDC3C7" 
+                                    BorderThickness="1" 
+                                    Padding="20" 
+                                    Background="#F8F9FA"
+                                    CornerRadius="5"
+                                    Visibility="Collapsed">
+                                <StackPanel>
+                                    <TextBlock Text="Add New Training Record" 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,15"/>
+
+                                    <TextBlock Text="Employee *" FontSize="12" Margin="0,0,0,3"/>
+                                    <ComboBox x:Name="TrainingEmployeeComboBox" 
+                                              Style="{StaticResource ModernComboBox}" 
+                                              DisplayMemberPath="FullName"
+                                              SelectedValuePath="Id"
+                                              IsEditable="True"
+                                              IsTextSearchEnabled="True"
+                                              Margin="0,0,0,10"/>
+
+                                    <TextBlock Text="Training Type *" FontSize="12" Margin="0,0,0,3"/>
+                                    <ComboBox x:Name="TrainingTypeComboBox" 
+                                              Style="{StaticResource ModernComboBox}" 
+                                              Margin="0,0,0,10">
+                                        <ComboBoxItem Content="Ethics Training"/>
+                                        <ComboBoxItem Content="Induction"/>
+                                        <ComboBoxItem Content="Health and Safety"/>
+                                        <ComboBoxItem Content="Fire Safety"/>
+                                        <ComboBoxItem Content="First Aid"/>
+                                        <ComboBoxItem Content="Data Privacy"/>
+                                        <ComboBoxItem Content="Workplace Harassment"/>
+                                        <ComboBoxItem Content="Other"/>
+                                    </ComboBox>
+
+                                    <TextBlock Text="Notes" FontSize="12" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="TrainingNotesTextBox" 
+                                             Style="{StaticResource ModernTextBox}" 
+                                             Height="60"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             Margin="0,0,0,15"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Save Training" 
+                                                Style="{StaticResource ActionButton}"
+                                                Click="SaveTraining_Click"/>
+                                        <Button Content="Cancel" 
+                                                Style="{StaticResource ToggleButton}"
+                                                Click="CancelAddTraining_Click"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- ENHANCEMENT 4: Info Button (Bottom Right) -->
+                    <Button x:Name="TrainingInfoButton"
+                            Style="{StaticResource InfoButton}"
+                            Content="i"
+                            Click="InfoButton_Click"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,20,20"
+                            ToolTip="Click for help on how to use this page"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
