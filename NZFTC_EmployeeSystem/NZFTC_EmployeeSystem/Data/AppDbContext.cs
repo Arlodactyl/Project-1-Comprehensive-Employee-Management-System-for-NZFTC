@@ -125,11 +125,12 @@ namespace NZFTC_EmployeeSystem.Data
                     SaveChanges();
                 }
 
-                // Create admin user
+                // Create admin user with HASHED password
+                // PasswordHasher.HashPassword() converts plain text to secure hash
                 adminUser = new User
                 {
                     Username = "admin",
-                    Password = "admin123",
+                    Password = PasswordHasher.HashPassword("admin123"), // Hashed password
                     Role = "Admin",
                     EmployeeId = 1,
                     IsActive = true,
@@ -319,17 +320,19 @@ namespace NZFTC_EmployeeSystem.Data
                 }
             );
 
-            // Create a default admin user account - FIXED: Use fixed date
+            // Create a default admin user account with HASHED password
+            // PasswordHasher.HashPassword() converts "admin123" to secure BCrypt hash
+            // The hash will be stored in database, but you can still login with "admin123"
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
                     Id = 1,
                     Username = "admin",
-                    Password = "admin123", // Stored in plain text (for demonstration)
+                    Password = PasswordHasher.HashPassword("admin123"), // Hashed with BCrypt
                     Role = "Admin",
                     EmployeeId = 1,
                     IsActive = true,
-                    CreatedDate = new DateTime(2024, 1, 1) // FIXED: Use fixed date instead of DateTime.Now
+                    CreatedDate = new DateTime(2024, 1, 1)
                 }
             );
 
@@ -741,19 +744,20 @@ namespace NZFTC_EmployeeSystem.Data
                 new Employee { Id = 12, FirstName = "Sarah", LastName = "Wilson", Email = "sarah.wilson@nzftc.co.nz", PhoneNumber = "022-345-6790", JobTitle = "Workplace Trainer", DepartmentId = 2, HireDate = new DateTime(2021, 3, 15), Salary = 72000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true }
             );
 
-            // Seed user accounts for test employees
+            // Seed user accounts for test employees with HASHED passwords
+            // All test users can login with "password123" but it's stored as BCrypt hash
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 2, Username = "james.smith", Password = "password123", Role = "Employee", EmployeeId = 2, IsActive = true, CreatedDate = new DateTime(2023, 6, 15) },
-                new User { Id = 3, Username = "emma.johnson", Password = "password123", Role = "Employee", EmployeeId = 3, IsActive = true, CreatedDate = new DateTime(2022, 9, 20) },
-                new User { Id = 4, Username = "oliver.williams", Password = "password123", Role = "Employee", EmployeeId = 4, IsActive = true, CreatedDate = new DateTime(2024, 1, 10) },
-                new User { Id = 5, Username = "sophia.brown", Password = "password123", Role = "Employee", EmployeeId = 5, IsActive = true, CreatedDate = new DateTime(2023, 4, 5) },
-                new User { Id = 6, Username = "william.jones", Password = "password123", Role = "Employee", EmployeeId = 6, IsActive = true, CreatedDate = new DateTime(2023, 7, 12) },
-                new User { Id = 7, Username = "ava.garcia", Password = "password123", Role = "Employee", EmployeeId = 7, IsActive = true, CreatedDate = new DateTime(2024, 3, 1) },
-                new User { Id = 8, Username = "lucas.miller", Password = "password123", Role = "Employee", EmployeeId = 8, IsActive = true, CreatedDate = new DateTime(2022, 12, 8) },
-                new User { Id = 9, Username = "isabella.davis", Password = "password123", Role = "Employee", EmployeeId = 9, IsActive = true, CreatedDate = new DateTime(2023, 8, 25) },
-                new User { Id = 10, Username = "mason.rodriguez", Password = "password123", Role = "Employee", EmployeeId = 10, IsActive = true, CreatedDate = new DateTime(2023, 5, 18) },
-                new User { Id = 11, Username = "mia.martinez", Password = "password123", Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = new DateTime(2023, 11, 30) },
-                new User { Id = 12, Username = "trainer", Password = "password123", Role = "Workplace Trainer", EmployeeId = 12, IsActive = true, CreatedDate = new DateTime(2021, 3, 15) }
+                new User { Id = 2, Username = "james.smith", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 2, IsActive = true, CreatedDate = new DateTime(2023, 6, 15) },
+                new User { Id = 3, Username = "emma.johnson", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 3, IsActive = true, CreatedDate = new DateTime(2022, 9, 20) },
+                new User { Id = 4, Username = "oliver.williams", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 4, IsActive = true, CreatedDate = new DateTime(2024, 1, 10) },
+                new User { Id = 5, Username = "sophia.brown", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 5, IsActive = true, CreatedDate = new DateTime(2023, 4, 5) },
+                new User { Id = 6, Username = "william.jones", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 6, IsActive = true, CreatedDate = new DateTime(2023, 7, 12) },
+                new User { Id = 7, Username = "ava.garcia", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 7, IsActive = true, CreatedDate = new DateTime(2024, 3, 1) },
+                new User { Id = 8, Username = "lucas.miller", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 8, IsActive = true, CreatedDate = new DateTime(2022, 12, 8) },
+                new User { Id = 9, Username = "isabella.davis", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 9, IsActive = true, CreatedDate = new DateTime(2023, 8, 25) },
+                new User { Id = 10, Username = "mason.rodriguez", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 10, IsActive = true, CreatedDate = new DateTime(2023, 5, 18) },
+                new User { Id = 11, Username = "mia.martinez", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = new DateTime(2023, 11, 30) },
+                new User { Id = 12, Username = "trainer", Password = PasswordHasher.HashPassword("password123"), Role = "Workplace Trainer", EmployeeId = 12, IsActive = true, CreatedDate = new DateTime(2021, 3, 15) }
             );
 
             // Assign Employee role to test users

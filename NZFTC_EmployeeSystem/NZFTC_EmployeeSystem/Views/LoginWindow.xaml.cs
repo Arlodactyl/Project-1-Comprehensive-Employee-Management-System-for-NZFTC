@@ -156,15 +156,23 @@ namespace NZFTC_EmployeeSystem.Views
             // 'using' ensures the database connection is properly closed after use
             using (var db = new AppDbContext())
             {
-                // Search the Users table for a matching username and password
+                // Search the Users table for a matching username only (not password yet)
                 // Include(u => u.Employee) loads the related Employee data too
+                // We check username first, then verify the hashed password separately
                 var user = db.Users
                     .Include(u => u.Employee) // This loads Employee data along with User
                     .FirstOrDefault(u =>
                         u.Username == username &&
-                        u.Password == password &&
                         u.IsActive == true
                     );
+
+                // Step 3.5: Verify the password using BCrypt
+                // This compares the entered password with the hashed password in database
+                // BCrypt.Verify() safely checks if the plain text password matches the hash
+                if (user != null && !PasswordHasher.VerifyPassword(password, user.Password))
+                {
+                    user = null; // Password didn't match, treat as if user doesn't exist
+                }
 
                 // Step 4: Check if we found a matching user
                 if (user == null)
