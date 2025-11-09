@@ -9,29 +9,30 @@ namespace NZFTC_EmployeeSystem
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            // Initialize database silently in the background
             InitializeDatabase();
         }
 
+        /// <summary>
+        /// Initialize the database when the application starts
+        /// Creates tables and seeds data if database doesn't exist
+        /// Runs silently without showing any messages
+        /// </summary>
         private void InitializeDatabase()
         {
             try
             {
                 using (var db = new AppDbContext())
                 {
-                    // CHANGED: Use EnsureCreated instead of Migrate
-                    // This creates all tables and seeds the data
+                    // Create database and seed data if it doesn't exist
+                    // This runs silently - no console output or message boxes
                     db.Database.EnsureCreated();
-
-                    MessageBox.Show(
-                        "Database initialized successfully!\n\nAdmin login:\nUsername: admin\nPassword: admin123",
-                        "Database Ready",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information
-                    );
                 }
             }
             catch (System.Exception ex)
             {
+                // Only show error if database initialization fails
                 MessageBox.Show(
                     $"Failed to initialize database:\n{ex.Message}",
                     "Database Error",

@@ -1516,3 +1516,5 @@ D:\Users\270063836\OneDrive - UP Education\Desktop\git\Project-1-Comprehensive-E
 D:\Users\270063836\OneDrive - UP Education\Desktop\git\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.genruntimeconfig.cache
 D:\Users\270063836\OneDrive - UP Education\Desktop\git\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\ref\NZFTC_EmployeeSystem.dll
 D:\Users\270063836\OneDrive - UP Education\Desktop\git\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\BCrypt.Net-Next.dll
+D:\Users\270063836\OneDrive - UP Education\Desktop\git\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\SplashScreen.baml
+D:\Users\270063836\OneDrive - UP Education\Desktop\git\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\Views\SplashScreen.g.cs

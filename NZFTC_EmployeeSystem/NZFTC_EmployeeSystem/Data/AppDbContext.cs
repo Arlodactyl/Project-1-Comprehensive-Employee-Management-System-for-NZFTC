@@ -91,7 +91,7 @@ namespace NZFTC_EmployeeSystem.Data
 
             if (adminUser == null)
             {
-                Console.WriteLine("⚠ Admin account not found. Creating...");
+                // Admin account not found - creating silently without console output
 
                 // First ensure the admin employee exists
                 var adminEmployee = Employees.FirstOrDefault(e => e.Id == 1);

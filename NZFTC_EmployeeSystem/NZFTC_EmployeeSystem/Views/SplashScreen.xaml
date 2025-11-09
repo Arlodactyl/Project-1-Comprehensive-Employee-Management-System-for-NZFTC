@@ -1,0 +1,51 @@
+<Window x:Class="NZFTC_EmployeeSystem.Views.SplashScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="NZFTC Employee System"
+        Height="600"
+        Width="800"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Border Background="White" CornerRadius="10">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Direction="0" ShadowDepth="0" Opacity="0.3" BlurRadius="20"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Splash Image -->
+            <Image x:Name="SplashImage"
+                   Grid.Row="0"
+                   Source="/Images/splash.png"
+                   Stretch="Uniform"
+                   Margin="50"/>
+
+            <!-- Loading Progress Bar -->
+            <StackPanel Grid.Row="1" Margin="50,0,50,50">
+                <TextBlock Text="Loading..."
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="#2C3E50"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10"/>
+
+                <ProgressBar x:Name="LoadingProgressBar"
+                             Height="6"
+                             IsIndeterminate="True"
+                             Foreground="#5DADE2"
+                             Background="#ECF0F1"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
