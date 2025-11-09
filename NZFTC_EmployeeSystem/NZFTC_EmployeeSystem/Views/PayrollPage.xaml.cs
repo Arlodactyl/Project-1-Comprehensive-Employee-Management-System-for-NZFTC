@@ -328,6 +328,14 @@ namespace NZFTC_EmployeeSystem.Views
                 decimal taxDeduction = grossSalary * (employee.TaxRate / 100m);
                 decimal netSalary = grossSalary - taxDeduction;
 
+                DateOnly employeeHiringDate = DateOnly.FromDateTime(employee.HireDate.AddDays(7));
+                DateOnly weekEndingOnly = DateOnly.FromDateTime(weekEnding);
+                if (weekEndingOnly < employeeHiringDate)
+                {
+                    MessageBox.Show("Please select a starting date after : " + employeeHiringDate);
+                    return;
+                }
+
                 // Create new payslip
                 var payslip = new Payslip
                 {

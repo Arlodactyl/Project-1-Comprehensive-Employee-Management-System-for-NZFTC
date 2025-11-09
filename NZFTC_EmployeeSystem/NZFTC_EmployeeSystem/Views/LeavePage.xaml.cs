@@ -82,6 +82,23 @@ namespace NZFTC_EmployeeSystem.Views
             var endDate = EndDatePicker.SelectedDate.Value;
             var days = (int)(endDate - startDate).TotalDays + 1;
 
+            DateOnly startDateOnly = DateOnly.FromDateTime(startDate);
+            DateOnly endDateOnly = DateOnly.FromDateTime(endDate);
+            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+
+            if (startDateOnly < currentDate) // Making sure the user cant select a starting date beyond the current date
+            {
+                MessageBox.Show("Please enter the starting date from : " + currentDate);
+                return;
+            }
+
+            if (endDateOnly < currentDate)
+            {
+                MessageBox.Show("Please enter the ending date from : " + currentDate);// Making sure the user cant select a ending date beyond the current date
+                return;
+            }
+
+
             if (days <= 0)
             {
                 MessageBox.Show("End date must be after start date", "Validation Error");
