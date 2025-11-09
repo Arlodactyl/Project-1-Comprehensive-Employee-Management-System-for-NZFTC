@@ -61,28 +61,31 @@ namespace NZFTC_EmployeeSystem.Views
                 // Show admin-only items
                 AdminOnlyMenuPanel.Visibility = Visibility.Visible;
 
-                // Hide employee-specific buttons
+                // Show holidays for admin (they can see company holidays)
+                HolidaysButtonGrid.Visibility = Visibility.Visible;
+
+                // Hide employee-specific buttons (My Training and My Pay)
                 MyTrainingButtonGrid.Visibility = Visibility.Collapsed;
                 MyPayButtonGrid.Visibility = Visibility.Collapsed;
-                HolidaysButtonGrid.Visibility = Visibility.Collapsed;
             }
             // WORKPLACE TRAINER - Training and department management access
             else if (_currentUser.Role == "Workplace Trainer")
             {
-                // Show: Dashboard, Account, Employee Management, Departments, About
-                // Hide: Holidays, Leave Management, Payroll, Grievances
+                // Show: Dashboard, Account, Employee Management, Departments, Holidays, About
+                // Hide: Leave Management, Payroll, Grievances, My Training, My Pay
 
                 // Show admin and trainer menu items (Employee Management, Departments)
-                // FIXED: Trainers now have full access to Departments
                 AdminTrainerMenuPanel.Visibility = Visibility.Visible;
 
                 // Hide admin-only items (Payroll, Leave Management, Grievances)
                 AdminOnlyMenuPanel.Visibility = Visibility.Collapsed;
 
-                // Hide employee-specific buttons
+                // Show holidays for trainers
+                HolidaysButtonGrid.Visibility = Visibility.Visible;
+
+                // Hide employee-specific buttons (My Training and My Pay)
                 MyTrainingButtonGrid.Visibility = Visibility.Collapsed;
                 MyPayButtonGrid.Visibility = Visibility.Collapsed;
-                HolidaysButtonGrid.Visibility = Visibility.Collapsed;
             }
             // EMPLOYEE - Basic access
             else // Default to Employee role
@@ -550,7 +553,7 @@ namespace NZFTC_EmployeeSystem.Views
         /// <summary>
         /// Navigates to Holidays page
         /// Shows company holidays and countdown
-        /// Available to Employees only
+        /// Available to all roles
         /// </summary>
         private void Holidays_Click(object sender, RoutedEventArgs e)
         {
@@ -572,12 +575,10 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         private void AboutContact_Click(object sender, RoutedEventArgs e)
         {
-            // Display popup message showing page is under construction
-
             try
             {
-
                 ContentFrame.Navigate(new Contact_AboutUsPage(_currentUser));
+                PageTitleText.Text = "About/Contact";
                 SetActiveButton("AboutContact");
             }
             catch
