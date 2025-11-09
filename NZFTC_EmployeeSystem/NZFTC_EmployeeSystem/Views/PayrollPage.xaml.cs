@@ -28,13 +28,16 @@ namespace NZFTC_EmployeeSystem.Views
             InitializeComponent();
             _currentUser = currentUser;
 
+            // Load payslip data first
+            LoadPayslipData();
+
             // Configure page based on user role
             if (_currentUser.Role != "Admin")
             {
                 // Hide admin-only tab for regular employees
                 AllPayslipsTab.Visibility = Visibility.Collapsed;
-                // Start on My Payslips tab for employees
-                PayrollTabControl.SelectedIndex = 0;
+                // Start on My Payslips tab for employees (which is now index 1, but will be 0 after hiding All Payslips)
+                PayrollTabControl.SelectedItem = MyPayslipsTab;
 
                 // ENHANCEMENT: Auto-generate missing payslips for this employee
                 AutoGenerateMissingPayslips();
@@ -43,10 +46,9 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 // Admin can see everything
                 LoadEmployeeList();
+                // Admin starts on All Payslips tab
+                PayrollTabControl.SelectedItem = AllPayslipsTab;
             }
-
-            // Load payslip data
-            LoadPayslipData();
         }
 
         /// <summary>
@@ -642,19 +644,19 @@ Key NZ Payroll Terms:
 • Tax Code: Determines how much tax is deducted
 
 Employer Obligations (NZ):
-✓ Pay at least minimum wage ($23.15/hour as of 2024)
-✓ Deduct and pay PAYE to IRD
-✓ Provide accurate payslips showing all deductions
-✓ Keep wage and time records for 6 years
-✓ Pay employees on time as per employment agreement
-✓ Calculate and pay holiday pay and leave entitlements
+• Pay at least minimum wage ($23.15/hour as of 2024)
+• Deduct and pay PAYE to IRD
+• Provide accurate payslips showing all deductions
+• Keep wage and time records for 6 years
+• Pay employees on time as per employment agreement
+• Calculate and pay holiday pay and leave entitlements
 
 Employee Rights:
-✓ Receive accurate payslips for each pay period
-✓ Be paid at least minimum wage
-✓ Have correct tax deducted
-✓ Receive holiday pay and leave entitlements
-✓ Access your payroll records
+• Receive accurate payslips for each pay period
+• Be paid at least minimum wage
+• Have correct tax deducted
+• Receive holiday pay and leave entitlements
+• Access your payroll records
 
 Common Deductions:
 • PAYE Tax (10.5% - 39% depending on income)

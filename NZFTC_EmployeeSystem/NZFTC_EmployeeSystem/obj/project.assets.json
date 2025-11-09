@@ -3504,23 +3504,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Bailey's PC\\.nuget\\packages\\": {},
+    "D:\\Users\\270063836\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Bailey's PC\\Documents\\GitHub\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+      "projectUniqueName": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\git\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
       "projectName": "NZFTC_EmployeeSystem",
-      "projectPath": "C:\\Users\\Bailey's PC\\Documents\\GitHub\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
-      "packagesPath": "C:\\Users\\Bailey's PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Bailey's PC\\Documents\\GitHub\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
+      "projectPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\git\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+      "packagesPath": "D:\\Users\\270063836\\.nuget\\packages\\",
+      "outputPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\git\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Bailey's PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "D:\\Users\\270063836\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3529,6 +3529,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3547,7 +3548,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0-windows7.0": {
@@ -3605,7 +3606,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
