@@ -24,12 +24,13 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Splash Image -->
+            <!-- Splash Image with settings I have now fixed settings to avoid stretching -->
             <Image x:Name="SplashImage"
                    Grid.Row="0"
                    Source="/Images/splash.png"
                    Stretch="Uniform"
-                   Margin="50"/>
+                   Margin="50"
+                   RenderOptions.BitmapScalingMode="HighQuality"/>
 
             <!-- Loading Progress Bar -->
             <StackPanel Grid.Row="1" Margin="50,0,50,50">

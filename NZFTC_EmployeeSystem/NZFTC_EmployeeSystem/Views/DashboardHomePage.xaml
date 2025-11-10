@@ -46,6 +46,34 @@
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
             <Setter Property="Padding" Value="0,15,0,15"/>
         </Style>
+
+        <!-- Help Button Style -->
+        <Style x:Key="HelpButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="17.5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid Background="White">
@@ -66,7 +94,7 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#F5F6F7">
             <StackPanel Margin="30">
 
-                <!-- Stats Cards Row - Only 3 Cards -->
+                <!-- Stats Cards Row - All Same Background Color -->
                 <Grid Margin="0,0,0,25">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -87,7 +115,7 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Pending Leave Requests Card - Red -->
+                    <!-- Pending Leave Requests Card - Same Red as Open Grievances -->
                     <Border Grid.Column="1" 
                             Background="#EC7063" 
                             Style="{StaticResource StatCard}">
@@ -100,9 +128,9 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Open Grievances Card - Light Red -->
+                    <!-- Open Grievances Card - Same Red as Pending Leave -->
                     <Border Grid.Column="2" 
-                            Background="#F1948A" 
+                            Background="#EC7063" 
                             Style="{StaticResource StatCard}"
                             Margin="0">
                         <StackPanel>
@@ -150,22 +178,17 @@
                                        FontWeight="Bold" 
                                        Foreground="White"
                                        TextAlignment="Center"
-                                       Margin="0,0,0,15"/>
-                            <Border Background="#000000" 
-                                    Padding="20,10"
-                                    HorizontalAlignment="Center"
-                                    CornerRadius="4"
-                                    Opacity="0.8">
-                                <TextBlock Text="Empowering People. Driving Growth" 
-                                           FontSize="24" 
-                                           Foreground="White"
-                                           TextAlignment="Center"/>
-                            </Border>
+                                       Margin="0,0,0,10"/>
+                            <TextBlock Text="Your gateway to employee services and information" 
+                                       FontSize="18" 
+                                       Foreground="White"
+                                       TextAlignment="Center"
+                                       Opacity="0.9"/>
                         </StackPanel>
                     </Grid>
                 </Border>
 
-                <!-- Bottom Section: News and Quick Links Side by Side -->
+                <!-- Bottom Section - News and Quick Links -->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
@@ -173,7 +196,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- News Section - Left Side -->
+                    <!-- Company News Section - Left Side -->
                     <Border Grid.Column="0" 
                             Background="White" 
                             CornerRadius="8"
@@ -181,18 +204,18 @@
                             BorderBrush="#E0E0E0"
                             BorderThickness="1">
                         <StackPanel>
-                            <TextBlock Text="News" 
+                            <TextBlock Text="Company News" 
                                        Style="{StaticResource SectionHeader}"/>
 
                             <!-- News Item 1 -->
                             <Border Style="{StaticResource NewsItem}">
                                 <StackPanel>
-                                    <TextBlock Text="NZFTC Achieves Record Q3 Growth" 
+                                    <TextBlock Text="New Safety Training Program Launched" 
                                                FontSize="18" 
                                                FontWeight="Bold"
                                                Foreground="#2C3E50"
                                                Margin="0,0,0,8"/>
-                                    <TextBlock Text="Revenue up 14% YoY as trade services expand across the North island" 
+                                    <TextBlock Text="All employees required to complete updated workplace safety training by end of quarter" 
                                                FontSize="14"
                                                Foreground="#7F8C8D"
                                                TextWrapping="Wrap"/>
@@ -202,12 +225,12 @@
                             <!-- News Item 2 -->
                             <Border Style="{StaticResource NewsItem}">
                                 <StackPanel>
-                                    <TextBlock Text="New Fleet Expansion Announced" 
+                                    <TextBlock Text="Office Expansion Completed" 
                                                FontSize="18" 
                                                FontWeight="Bold"
                                                Foreground="#2C3E50"
                                                Margin="0,0,0,8"/>
-                                    <TextBlock Text="Company invests $2.5M in 15 new trucks to meet growing demand in Canterbury region" 
+                                    <TextBlock Text="New wing of Auckland office now open with modern collaboration spaces" 
                                                FontSize="14"
                                                Foreground="#7F8C8D"
                                                TextWrapping="Wrap"/>
@@ -215,36 +238,6 @@
                             </Border>
 
                             <!-- News Item 3 -->
-                            <Border Style="{StaticResource NewsItem}">
-                                <StackPanel>
-                                    <TextBlock Text="Employee Wellness Program Launch" 
-                                               FontSize="18" 
-                                               FontWeight="Bold"
-                                               Foreground="#2C3E50"
-                                               Margin="0,0,0,8"/>
-                                    <TextBlock Text="New health and fitness benefits available from December 1st for all staff members" 
-                                               FontSize="14"
-                                               Foreground="#7F8C8D"
-                                               TextWrapping="Wrap"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- News Item 4 -->
-                            <Border Style="{StaticResource NewsItem}">
-                                <StackPanel>
-                                    <TextBlock Text="Safety Milestone: 500 Days Without Incident" 
-                                               FontSize="18" 
-                                               FontWeight="Bold"
-                                               Foreground="#2C3E50"
-                                               Margin="0,0,0,8"/>
-                                    <TextBlock Text="Team achievement recognized with company-wide celebration planned for next month" 
-                                               FontSize="14"
-                                               Foreground="#7F8C8D"
-                                               TextWrapping="Wrap"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- News Item 5 -->
                             <Border Style="{StaticResource NewsItem}"
                                     BorderThickness="0">
                                 <StackPanel>
@@ -308,10 +301,11 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Quick Action Buttons - ADMIN FOCUSED -->
+                            <!-- Quick Action Buttons - Role-based labels set in code-behind -->
                             <StackPanel>
-                                <!-- Leave Management Button -->
-                                <Button Content="Leave Management" 
+                                <!-- First Quick Link Button -->
+                                <Button x:Name="LeaveManagementButton"
+                                        Content="Leave Management" 
                                         Background="#3498DB"
                                         Foreground="White"
                                         FontSize="14"
@@ -336,8 +330,9 @@
                                     </Button.Template>
                                 </Button>
 
-                                <!-- Payroll Button -->
-                                <Button Content="Payroll" 
+                                <!-- Second Quick Link Button -->
+                                <Button x:Name="PayrollButton"
+                                        Content="Payroll" 
                                         Background="#27AE60"
                                         Foreground="White"
                                         FontSize="14"
@@ -362,8 +357,9 @@
                                     </Button.Template>
                                 </Button>
 
-                                <!-- Departments Button -->
-                                <Button Content="Departments" 
+                                <!-- Third Quick Link Button -->
+                                <Button x:Name="DepartmentsButton"
+                                        Content="Departments" 
                                         Background="#F39C12"
                                         Foreground="White"
                                         FontSize="14"
@@ -393,5 +389,15 @@
 
             </StackPanel>
         </ScrollViewer>
+
+        <!-- Help Button - Bottom Right Corner -->
+        <Button Content="i"
+                Style="{StaticResource HelpButtonStyle}"
+                Grid.Row="1"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="0,0,20,20"
+                ToolTip="Dashboard Help"
+                Click="HelpButton_Click"/>
     </Grid>
 </Page>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,18 +22,20 @@ using System.IO;
 namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
-    /// Interaction logic for Contact_AbousUsPage.xaml
+    /// Interaction logic for Contact_AboutUsPage.xaml
+    /// Allows admins to edit company contact information
+    /// Includes validation for phone numbers
     /// </summary>
     public partial class Contact_AboutUsPage : Page
     {
-        private readonly User _currentUser; // Getting current User
+        private readonly User _currentUser;
+
         public Contact_AboutUsPage(User currentUser)
         {
-
             _currentUser = currentUser;
-
             InitializeComponent();
 
+            // Only show edit buttons for admin users
             if (_currentUser.Role != "Admin")
             {
                 EditModeButton.Visibility = Visibility.Collapsed;
@@ -40,6 +43,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
+        /// <summary>
+        /// Enables edit mode for admin users
+        /// </summary>
         private void EditMode(object sender, RoutedEventArgs e)
         {
             // Hiding Edit Button and Showing Save Button
@@ -50,8 +56,48 @@ namespace NZFTC_EmployeeSystem.Views
             ToggleEditMode(true);
         }
 
+        /// <summary>
+        /// Validates phone numbers to ensure they contain only numbers, hyphens, and spaces
+        /// </summary>
+        private bool ValidatePhoneNumber(string phoneNumber)
+        {
+            // Allow empty phone numbers
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return true;
+
+            // Regex pattern: only digits, spaces, hyphens, and parentheses
+            // This allows formats like: 0800-123-456, (03) 123 4567, 021 123 4567, etc.
+            return Regex.IsMatch(phoneNumber, @"^[\d\s\-\(\)]+$");
+        }
+
+        /// <summary>
+        /// Saves changes and validates input
+        /// </summary>
         private void SaveMode(object sender, RoutedEventArgs e)
         {
+            // Validate phone numbers before saving
+            if (!ValidatePhoneNumber(SupportNumberEditBox.Text))
+            {
+                MessageBox.Show(
+                    "Support Number can only contain numbers, spaces, hyphens, and parentheses.\nLetters and special characters are not allowed.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            if (!ValidatePhoneNumber(ContactEdit.Text))
+            {
+                MessageBox.Show(
+                    "Contact Number can only contain numbers, spaces, hyphens, and parentheses.\nLetters and special characters are not allowed.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
             // Save the new values from textboxes into textblocks
             TitleText.Text = TitleEdit.Text;
             ContextText.Text = ContextEdit.Text;
@@ -70,8 +116,19 @@ namespace NZFTC_EmployeeSystem.Views
 
             // Disabling Edit Mode
             ToggleEditMode(false);
+
+            // Show success message
+            MessageBox.Show(
+                "Contact information updated successfully!",
+                "Success",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
+        /// <summary>
+        /// Toggles between view mode and edit mode
+        /// </summary>
         private void ToggleEditMode(bool isEditing)
         {
             // For each section its toggle between visible textblock and collapsed textbox
@@ -114,6 +171,39 @@ namespace NZFTC_EmployeeSystem.Views
             ContactDisplay.Visibility = isEditing ? Visibility.Collapsed : Visibility.Visible;
             ContactEdit.Visibility = isEditing ? Visibility.Visible : Visibility.Collapsed;
             ContactEdit.Text = ContactDisplay.Text;
+        }
+
+        /// <summary>
+        /// Shows help information for the Contact/About page
+        /// </summary>
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            string helpMessage = "Contact / About Us Help\n\n" +
+                "This page displays company contact information and support details.\n\n";
+
+            if (_currentUser.Role == "Admin")
+            {
+                helpMessage += "Admin Features:\n" +
+                    "- Click 'Edit' to modify company information\n" +
+                    "- Update announcements, contact details, and company info\n" +
+                    "- Phone numbers can only contain numbers, spaces, hyphens, and parentheses\n" +
+                    "- Click 'Save' when finished to update the information\n\n";
+            }
+
+            helpMessage += "Contact Information:\n" +
+                "- Support Email: For general employee support\n" +
+                "- Admin Email: For administrative inquiries\n" +
+                "- Support Number: Phone support line\n\n" +
+                "Company Information:\n" +
+                "- View company details and contact information\n" +
+                "- All staff can view this information";
+
+            MessageBox.Show(
+                helpMessage,
+                "Contact/About Help",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
     }
 }

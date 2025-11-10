@@ -44,9 +44,153 @@ namespace NZFTC_EmployeeSystem.Views
             // Load all the statistics from the database
             LoadSummary();
 
+            // Customize quick links based on user role
+            CustomizeQuickLinks();
+
             // Subscribe to the Unloaded event to clean up resources
             // This ensures the database connection is closed when the page is removed
             this.Unloaded += DashboardHomePage_Unloaded;
+        }
+
+        /// <summary>
+        /// Customizes quick links based on the user's role
+        /// Admin sees Leave Management, Payroll, Departments
+        /// Employees see My Leave, My Pay, My Training
+        /// </summary>
+        private void CustomizeQuickLinks()
+        {
+            // Admin role - show admin-specific buttons
+            if (_currentUser.Role == "Admin")
+            {
+                LeaveManagementButton.Content = "Leave Management";
+                LeaveManagementButton.Click += LeaveManagement_Click;
+
+                PayrollButton.Content = "Payroll";
+                PayrollButton.Click += Payroll_Click;
+
+                DepartmentsButton.Content = "Departments";
+                DepartmentsButton.Click += Departments_Click;
+            }
+            // Employee role - show employee-specific buttons
+            else if (_currentUser.Role == "Employee")
+            {
+                LeaveManagementButton.Content = "My Leave";
+                LeaveManagementButton.Click += MyLeave_Click;
+
+                PayrollButton.Content = "My Pay";
+                PayrollButton.Click += MyPay_Click;
+
+                DepartmentsButton.Content = "My Training";
+                DepartmentsButton.Click += MyTraining_Click;
+            }
+            // Workplace Trainer role - show trainer-specific buttons
+            else if (_currentUser.Role == "Workplace Trainer")
+            {
+                LeaveManagementButton.Content = "Employee Management";
+                LeaveManagementButton.Click += EmployeeManagement_Click;
+
+                PayrollButton.Content = "Training Records";
+                PayrollButton.Click += TrainingRecords_Click;
+
+                DepartmentsButton.Content = "Departments";
+                DepartmentsButton.Click += Departments_Click;
+            }
+        }
+
+        /// <summary>
+        /// Navigates to Leave Management page for Admin
+        /// </summary>
+        private void LeaveManagement_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToLeaveManagement();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to Payroll page for Admin
+        /// </summary>
+        private void Payroll_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToPayroll();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to Departments page for Admin and Workplace Trainer
+        /// </summary>
+        private void Departments_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToDepartments();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to My Leave page for Employee
+        /// </summary>
+        private void MyLeave_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToLeaveManagement();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to My Pay page for Employee
+        /// </summary>
+        private void MyPay_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToMyPay();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to My Training page for Employee
+        /// </summary>
+        private void MyTraining_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToMyTraining();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to Employee Management page for Workplace Trainer
+        /// </summary>
+        private void EmployeeManagement_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToEmployeeManagement();
+            }
+        }
+
+        /// <summary>
+        /// Navigates to Training Records page for Workplace Trainer
+        /// </summary>
+        private void TrainingRecords_Click(object sender, RoutedEventArgs e)
+        {
+            var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+            if (dashboardWindow != null)
+            {
+                dashboardWindow.NavigateToEmployeeManagement();
+            }
         }
 
         /// <summary>
@@ -181,6 +325,31 @@ namespace NZFTC_EmployeeSystem.Views
             // Dispose the database context to free up resources
             // The question mark checks if _dbContext is not null before calling Dispose
             _dbContext?.Dispose();
+        }
+
+        /// <summary>
+        /// Shows help information for using the dashboard
+        /// </summary>
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            string helpMessage = "Dashboard Overview Help\n\n" +
+                "This dashboard provides a quick overview of company statistics and shortcuts to common tasks.\n\n" +
+                "Statistics Cards:\n" +
+                "- Total Employees: Shows the current number of active employees\n" +
+                "- Pending Leave Requests: Leave requests awaiting approval\n" +
+                "- Open Grievances: Unresolved employee grievances\n\n" +
+                "Quick Links:\n" +
+                "- Use the buttons on the right to quickly navigate to frequently used pages\n" +
+                "- Button labels change based on your role (Admin, Employee, or Trainer)\n\n" +
+                "Company News:\n" +
+                "- View important company announcements and updates";
+
+            MessageBox.Show(
+                helpMessage,
+                "Dashboard Help",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
     }
 }

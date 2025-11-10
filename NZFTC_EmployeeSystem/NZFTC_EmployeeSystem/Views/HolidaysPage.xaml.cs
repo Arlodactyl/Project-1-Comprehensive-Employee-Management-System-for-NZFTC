@@ -19,6 +19,9 @@ namespace NZFTC_EmployeeSystem.Views
         // Store the current logged-in user so we know who's viewing the page
         private readonly User _currentUser;
 
+        // Track whether we're showing all holidays or just next 6 months
+        private bool _showingAllHolidays = false;
+
         /// <summary>
         /// Constructor - runs when the page is first created
         /// </summary>
@@ -71,8 +74,16 @@ namespace NZFTC_EmployeeSystem.Views
                         DaysUntil = CalculateCountdown(h.Date)
                     }).ToList();
 
+                    // Filter based on whether showing all or just next 6 months
+                    var displayHolidays = _showingAllHolidays
+                        ? holidayViewModels
+                        : holidayViewModels.Where(h => h.Date >= DateTime.Today && h.Date <= DateTime.Today.AddMonths(6)).ToList();
+
                     // Bind the holidays to the DataGrid so they appear on screen
-                    HolidaysGrid.ItemsSource = holidayViewModels;
+                    HolidaysGrid.ItemsSource = displayHolidays;
+
+                    // Update button text based on current filter state
+                    ViewMoreButton.Content = _showingAllHolidays ? "Show Next 6 Months Only" : "View All Holidays";
 
                     // Filter to only show upcoming holidays in the timeline (next 12 months)
                     // This prevents the timeline from becoming cluttered with old holidays
@@ -245,6 +256,120 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Error
                 );
             }
+        }
+
+        /// <summary>
+        /// Handles the Delete Holiday button click in the DataGrid
+        /// Confirms deletion with the user before removing the holiday
+        /// </summary>
+        private void DeleteHoliday_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the holiday ID from the button's Tag property
+            if (sender is Button button && button.Tag is int holidayId)
+            {
+                // Ask for confirmation before deleting
+                var result = MessageBox.Show(
+                    "Are you sure you want to delete this holiday?",
+                    "Confirm Delete",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                );
+
+                // If user clicked "No", stop here
+                if (result != MessageBoxResult.Yes)
+                    return;
+
+                try
+                {
+                    using (var db = new AppDbContext())
+                    {
+                        // Find the holiday in the database
+                        var holiday = db.Holidays.Find(holidayId);
+
+                        if (holiday == null)
+                        {
+                            MessageBox.Show(
+                                "Holiday not found in the database.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error
+                            );
+                            return;
+                        }
+
+                        // Remove the holiday
+                        db.Holidays.Remove(holiday);
+
+                        // Save changes to the database
+                        db.SaveChanges();
+                    }
+
+                    // Show success message
+                    MessageBox.Show(
+                        "Holiday deleted successfully.",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+
+                    // Reload the holidays grid and timeline
+                    LoadHolidayData();
+                }
+                catch (Exception ex)
+                {
+                    // If something goes wrong, show an error message
+                    MessageBox.Show(
+                        $"Error deleting holiday: {ex.Message}",
+                        "Database Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
+            }
+        }
+
+        /// <summary>
+        /// Toggles between showing all holidays and showing only the next 6 months
+        /// </summary>
+        private void ViewMore_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle the state
+            _showingAllHolidays = !_showingAllHolidays;
+
+            // Reload the data with the new filter
+            LoadHolidayData();
+        }
+
+        /// <summary>
+        /// Shows help information for using the holidays page
+        /// </summary>
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            string helpMessage = "Holidays Page Help\n\n" +
+                "View Holidays Tab:\n" +
+                "- See all company holidays with countdown timers\n" +
+                "- By default, shows holidays in the next 6 months\n" +
+                "- Click 'View All Holidays' to see all holidays\n" +
+                "- Timeline shows upcoming holidays visually\n";
+
+            if (_currentUser.Role == "Admin")
+            {
+                helpMessage += "\nAdd Holiday Tab (Admin Only):\n" +
+                    "- Add new company or public holidays\n" +
+                    "- Fill in holiday name, date, type, and description\n" +
+                    "- Check 'Recurring' for annual holidays\n" +
+                    "- Click 'Add Holiday' to save\n\n" +
+                    "Delete Holidays:\n" +
+                    "- Click the 'Delete' button next to any holiday to remove it\n" +
+                    "- You will be asked to confirm before deletion";
+            }
+
+            MessageBox.Show(
+                helpMessage,
+                "Holidays Help",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
     }
 

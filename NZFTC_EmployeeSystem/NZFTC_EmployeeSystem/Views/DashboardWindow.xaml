@@ -198,7 +198,7 @@
                         x:Name="MenuToggleButton"
                         Content="☰" 
                         Style="{StaticResource CollapsedButtonStyle}"
-                        Click="MenuToggle_Click"
+                        Click="HamburgerButton_Click"
                         HorizontalAlignment="Left"
                         Margin="5,15,5,20"/>
 
@@ -229,12 +229,12 @@
                             <Button x:Name="AccountButtonExpanded"
                                     Content="Account" 
                                     Style="{StaticResource SidebarButtonStyle}"
-                                    Click="MyProfile_Click"
+                                    Click="Account_Click"
                                     Visibility="Visible"/>
                             <Button x:Name="AccountButtonCollapsed"
                                     Content="AC" 
                                     Style="{StaticResource CollapsedButtonStyle}"
-                                    Click="MyProfile_Click"
+                                    Click="Account_Click"
                                     Visibility="Collapsed"
                                     ToolTip="Account"/>
                         </Grid>

@@ -220,7 +220,7 @@ namespace NZFTC_EmployeeSystem.Views
                 GrievancesButtonCollapsed.Tag = null;
             }
 
-            // Set the active button based on which page is loaded
+            // Set the active button based on the current page
             switch (buttonName)
             {
                 case "Dashboard":
@@ -231,30 +231,21 @@ namespace NZFTC_EmployeeSystem.Views
                     AccountButtonExpanded.Tag = "Active";
                     AccountButtonCollapsed.Tag = "Active";
                     break;
-                case "MyTraining":
-                    if (MyTrainingButtonGrid.Visibility == Visibility.Visible)
-                    {
-                        MyTrainingButtonExpanded.Tag = "Active";
-                        MyTrainingButtonCollapsed.Tag = "Active";
-                    }
-                    break;
-                case "MyPay":
-                    if (MyPayButtonGrid.Visibility == Visibility.Visible)
-                    {
-                        MyPayButtonExpanded.Tag = "Active";
-                        MyPayButtonCollapsed.Tag = "Active";
-                    }
-                    break;
-                case "Holidays":
-                    if (HolidaysButtonGrid.Visibility == Visibility.Visible)
-                    {
-                        HolidaysButtonExpanded.Tag = "Active";
-                        HolidaysButtonCollapsed.Tag = "Active";
-                    }
-                    break;
                 case "AboutContact":
                     AboutContactButtonExpanded.Tag = "Active";
                     AboutContactButtonCollapsed.Tag = "Active";
+                    break;
+                case "MyTraining":
+                    MyTrainingButtonExpanded.Tag = "Active";
+                    MyTrainingButtonCollapsed.Tag = "Active";
+                    break;
+                case "MyPay":
+                    MyPayButtonExpanded.Tag = "Active";
+                    MyPayButtonCollapsed.Tag = "Active";
+                    break;
+                case "Holidays":
+                    HolidaysButtonExpanded.Tag = "Active";
+                    HolidaysButtonCollapsed.Tag = "Active";
                     break;
                 case "EmployeeManagement":
                     EmployeeManagementButtonExpanded.Tag = "Active";
@@ -279,200 +270,168 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
+        #region Hamburger Menu
+
         /// <summary>
-        /// Toggles the sidebar menu between expanded and collapsed states
+        /// Handles the hamburger button click to toggle menu collapse/expand
         /// </summary>
-        private void MenuToggle_Click(object sender, RoutedEventArgs e)
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
+            // Get the storyboard resources for animation
+            var collapseStoryboard = (Storyboard)this.Resources["CollapseMenu"];
+            var expandStoryboard = (Storyboard)this.Resources["ExpandMenu"];
+
+            // Toggle the collapse state
             if (_isMenuCollapsed)
             {
-                ExpandMenu();
+                // Expand the menu
+                expandStoryboard.Begin();
+
+                // Show expanded buttons, hide collapsed buttons
+                ShowExpandedButtons();
+
+                // Update state
+                _isMenuCollapsed = false;
             }
             else
             {
-                CollapseMenu();
-            }
+                // Collapse the menu
+                collapseStoryboard.Begin();
 
-            _isMenuCollapsed = !_isMenuCollapsed;
+                // Show collapsed buttons, hide expanded buttons
+                ShowCollapsedButtons();
+
+                // Update state
+                _isMenuCollapsed = true;
+            }
         }
 
         /// <summary>
-        /// Expands the sidebar menu to show full button text
-        /// Uses animation defined in XAML resources
+        /// Shows expanded menu buttons and hides collapsed versions
         /// </summary>
-        private void ExpandMenu()
+        private void ShowExpandedButtons()
         {
-            // Start expand animation
-            var storyboard = (Storyboard)FindResource("ExpandMenu");
-            storyboard.Begin();
-
-            // Show expanded buttons (full text versions)
+            // Dashboard button
             DashboardButtonExpanded.Visibility = Visibility.Visible;
-            DashboardButtonExpanded.IsEnabled = true;
-            AccountButtonExpanded.Visibility = Visibility.Visible;
-            AccountButtonExpanded.IsEnabled = true;
-            AboutContactButtonExpanded.Visibility = Visibility.Visible;
-            AboutContactButtonExpanded.IsEnabled = true;
-
-            // Hide collapsed buttons (abbreviated versions)
             DashboardButtonCollapsed.Visibility = Visibility.Collapsed;
-            DashboardButtonCollapsed.IsEnabled = false;
-            AccountButtonCollapsed.Visibility = Visibility.Collapsed;
-            AccountButtonCollapsed.IsEnabled = false;
-            AboutContactButtonCollapsed.Visibility = Visibility.Collapsed;
-            AboutContactButtonCollapsed.IsEnabled = false;
 
-            // Handle employee-specific buttons
+            // Account button
+            AccountButtonExpanded.Visibility = Visibility.Visible;
+            AccountButtonCollapsed.Visibility = Visibility.Collapsed;
+
+            // About/Contact button
+            AboutContactButtonExpanded.Visibility = Visibility.Visible;
+            AboutContactButtonCollapsed.Visibility = Visibility.Collapsed;
+
+            // Employee-specific buttons
             if (MyTrainingButtonGrid.Visibility == Visibility.Visible)
             {
                 MyTrainingButtonExpanded.Visibility = Visibility.Visible;
-                MyTrainingButtonExpanded.IsEnabled = true;
                 MyTrainingButtonCollapsed.Visibility = Visibility.Collapsed;
-                MyTrainingButtonCollapsed.IsEnabled = false;
             }
+
             if (MyPayButtonGrid.Visibility == Visibility.Visible)
             {
                 MyPayButtonExpanded.Visibility = Visibility.Visible;
-                MyPayButtonExpanded.IsEnabled = true;
                 MyPayButtonCollapsed.Visibility = Visibility.Collapsed;
-                MyPayButtonCollapsed.IsEnabled = false;
             }
+
             if (HolidaysButtonGrid.Visibility == Visibility.Visible)
             {
                 HolidaysButtonExpanded.Visibility = Visibility.Visible;
-                HolidaysButtonExpanded.IsEnabled = true;
                 HolidaysButtonCollapsed.Visibility = Visibility.Collapsed;
-                HolidaysButtonCollapsed.IsEnabled = false;
             }
 
-            // Handle admin/trainer buttons
+            // Admin/Trainer buttons
             if (AdminTrainerMenuPanel.Visibility == Visibility.Visible)
             {
                 EmployeeManagementButtonExpanded.Visibility = Visibility.Visible;
-                EmployeeManagementButtonExpanded.IsEnabled = true;
                 EmployeeManagementButtonCollapsed.Visibility = Visibility.Collapsed;
-                EmployeeManagementButtonCollapsed.IsEnabled = false;
 
                 DepartmentsButtonExpanded.Visibility = Visibility.Visible;
-                DepartmentsButtonExpanded.IsEnabled = true;
                 DepartmentsButtonCollapsed.Visibility = Visibility.Collapsed;
-                DepartmentsButtonCollapsed.IsEnabled = false;
             }
 
-            // Handle admin-only buttons
+            // Admin-only buttons
             if (AdminOnlyMenuPanel.Visibility == Visibility.Visible)
             {
                 PayrollButtonExpanded.Visibility = Visibility.Visible;
-                PayrollButtonExpanded.IsEnabled = true;
                 PayrollButtonCollapsed.Visibility = Visibility.Collapsed;
-                PayrollButtonCollapsed.IsEnabled = false;
 
                 LeaveManagementButtonExpanded.Visibility = Visibility.Visible;
-                LeaveManagementButtonExpanded.IsEnabled = true;
                 LeaveManagementButtonCollapsed.Visibility = Visibility.Collapsed;
-                LeaveManagementButtonCollapsed.IsEnabled = false;
 
                 GrievancesButtonExpanded.Visibility = Visibility.Visible;
-                GrievancesButtonExpanded.IsEnabled = true;
                 GrievancesButtonCollapsed.Visibility = Visibility.Collapsed;
-                GrievancesButtonCollapsed.IsEnabled = false;
             }
-
-            // Show logo at bottom
-            LogoPanel.Visibility = Visibility.Visible;
         }
 
         /// <summary>
-        /// Collapses the sidebar menu to show only icons/abbreviations
-        /// Uses animation defined in XAML resources
+        /// Shows collapsed menu buttons and hides expanded versions
         /// </summary>
-        private void CollapseMenu()
+        private void ShowCollapsedButtons()
         {
-            // Start collapse animation
-            var storyboard = (Storyboard)FindResource("CollapseMenu");
-            storyboard.Begin();
-
-            // Hide expanded buttons (full text versions)
+            // Dashboard button
             DashboardButtonExpanded.Visibility = Visibility.Collapsed;
-            DashboardButtonExpanded.IsEnabled = false;
-            AccountButtonExpanded.Visibility = Visibility.Collapsed;
-            AccountButtonExpanded.IsEnabled = false;
-            AboutContactButtonExpanded.Visibility = Visibility.Collapsed;
-            AboutContactButtonExpanded.IsEnabled = false;
-
-            // Show collapsed buttons (abbreviated versions)
             DashboardButtonCollapsed.Visibility = Visibility.Visible;
-            DashboardButtonCollapsed.IsEnabled = true;
-            AccountButtonCollapsed.Visibility = Visibility.Visible;
-            AccountButtonCollapsed.IsEnabled = true;
-            AboutContactButtonCollapsed.Visibility = Visibility.Visible;
-            AboutContactButtonCollapsed.IsEnabled = true;
 
-            // Handle employee-specific buttons
+            // Account button
+            AccountButtonExpanded.Visibility = Visibility.Collapsed;
+            AccountButtonCollapsed.Visibility = Visibility.Visible;
+
+            // About/Contact button
+            AboutContactButtonExpanded.Visibility = Visibility.Collapsed;
+            AboutContactButtonCollapsed.Visibility = Visibility.Visible;
+
+            // Employee-specific buttons
             if (MyTrainingButtonGrid.Visibility == Visibility.Visible)
             {
                 MyTrainingButtonExpanded.Visibility = Visibility.Collapsed;
-                MyTrainingButtonExpanded.IsEnabled = false;
                 MyTrainingButtonCollapsed.Visibility = Visibility.Visible;
-                MyTrainingButtonCollapsed.IsEnabled = true;
             }
+
             if (MyPayButtonGrid.Visibility == Visibility.Visible)
             {
                 MyPayButtonExpanded.Visibility = Visibility.Collapsed;
-                MyPayButtonExpanded.IsEnabled = false;
                 MyPayButtonCollapsed.Visibility = Visibility.Visible;
-                MyPayButtonCollapsed.IsEnabled = true;
             }
+
             if (HolidaysButtonGrid.Visibility == Visibility.Visible)
             {
                 HolidaysButtonExpanded.Visibility = Visibility.Collapsed;
-                HolidaysButtonExpanded.IsEnabled = false;
                 HolidaysButtonCollapsed.Visibility = Visibility.Visible;
-                HolidaysButtonCollapsed.IsEnabled = true;
             }
 
-            // Handle admin/trainer buttons
+            // Admin/Trainer buttons
             if (AdminTrainerMenuPanel.Visibility == Visibility.Visible)
             {
                 EmployeeManagementButtonExpanded.Visibility = Visibility.Collapsed;
-                EmployeeManagementButtonExpanded.IsEnabled = false;
                 EmployeeManagementButtonCollapsed.Visibility = Visibility.Visible;
-                EmployeeManagementButtonCollapsed.IsEnabled = true;
 
                 DepartmentsButtonExpanded.Visibility = Visibility.Collapsed;
-                DepartmentsButtonExpanded.IsEnabled = false;
                 DepartmentsButtonCollapsed.Visibility = Visibility.Visible;
-                DepartmentsButtonCollapsed.IsEnabled = true;
             }
 
-            // Handle admin-only buttons
+            // Admin-only buttons
             if (AdminOnlyMenuPanel.Visibility == Visibility.Visible)
             {
                 PayrollButtonExpanded.Visibility = Visibility.Collapsed;
-                PayrollButtonExpanded.IsEnabled = false;
                 PayrollButtonCollapsed.Visibility = Visibility.Visible;
-                PayrollButtonCollapsed.IsEnabled = true;
 
                 LeaveManagementButtonExpanded.Visibility = Visibility.Collapsed;
-                LeaveManagementButtonExpanded.IsEnabled = false;
                 LeaveManagementButtonCollapsed.Visibility = Visibility.Visible;
-                LeaveManagementButtonCollapsed.IsEnabled = true;
 
                 GrievancesButtonExpanded.Visibility = Visibility.Collapsed;
-                GrievancesButtonExpanded.IsEnabled = false;
                 GrievancesButtonCollapsed.Visibility = Visibility.Visible;
-                GrievancesButtonCollapsed.IsEnabled = true;
             }
-
-            // Hide logo when collapsed
-            LogoPanel.Visibility = Visibility.Collapsed;
         }
 
-        #region Navigation Button Click Handlers
+        #endregion
+
+        #region Navigation Methods
 
         /// <summary>
         /// Navigates to Dashboard home page
-        /// Shows summary statistics for the company
         /// </summary>
         private void Dashboard_Click(object sender, RoutedEventArgs e)
         {
@@ -489,10 +448,9 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Navigates to My Account/Profile page
-        /// Shows employee's personal information and settings
+        /// Navigates to Profile/Account page
         /// </summary>
-        private void MyProfile_Click(object sender, RoutedEventArgs e)
+        private void Account_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -684,6 +642,64 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 MessageBox.Show("Error loading Grievances page", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        #endregion
+
+        #region Public Navigation Methods for Quick Links
+
+        /// <summary>
+        /// Public method to navigate to Leave Management
+        /// Called by DashboardHomePage quick links
+        /// </summary>
+        public void NavigateToLeaveManagement()
+        {
+            LeaveManagement_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Public method to navigate to Payroll
+        /// Called by DashboardHomePage quick links
+        /// </summary>
+        public void NavigateToPayroll()
+        {
+            Payroll_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Public method to navigate to Departments
+        /// Called by DashboardHomePage quick links
+        /// </summary>
+        public void NavigateToDepartments()
+        {
+            Departments_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Public method to navigate to My Pay
+        /// Called by DashboardHomePage quick links for employees
+        /// </summary>
+        public void NavigateToMyPay()
+        {
+            MyPay_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Public method to navigate to My Training
+        /// Called by DashboardHomePage quick links for employees
+        /// </summary>
+        public void NavigateToMyTraining()
+        {
+            MyTraining_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Public method to navigate to Employee Management
+        /// Called by DashboardHomePage quick links for trainers
+        /// </summary>
+        public void NavigateToEmployeeManagement()
+        {
+            ManageEmployees_Click(this, new RoutedEventArgs());
         }
 
         #endregion

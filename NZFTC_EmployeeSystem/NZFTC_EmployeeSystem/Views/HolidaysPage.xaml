@@ -37,6 +37,56 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Delete Button Style -->
+        <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Help Button Style -->
+        <Style x:Key="HelpButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="17.5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid Background="White">
@@ -60,39 +110,67 @@
             <TabItem Header="View Holidays">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <!-- Row for the holidays grid -->
-                        <RowDefinition Height="2*"/>
-                        <!-- Row for the visual timeline map -->
+                        <!-- Row for the holidays grid - smaller now -->
+                        <RowDefinition Height="250"/>
+                        <!-- Row for the visual timeline map - more space -->
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Holidays Grid with Countdown Column -->
-                    <DataGrid x:Name="HolidaysGrid"
-                              Grid.Row="0"
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True"
-                              SelectionMode="Single"
-                              CanUserAddRows="False"
-                              AlternatingRowBackground="#ECF0F1"
-                              GridLinesVisibility="Horizontal"
-                              HeadersVisibility="Column"
-                              Margin="20">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Holiday Name" Binding="{Binding Name}" Width="*"/>
-                            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="120"/>
-                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
-                            <!-- New Countdown Column - shows days until the holiday -->
-                            <DataGridTextColumn Header="Countdown" Binding="{Binding DaysUntil}" Width="120"/>
-                            <DataGridCheckBoxColumn Header="Recurring" Binding="{Binding IsRecurring}" Width="100"/>
-                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <!-- Holidays Grid with Countdown Column and Delete Button -->
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <DataGrid x:Name="HolidaysGrid"
+                                  Grid.Row="0"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single"
+                                  CanUserAddRows="False"
+                                  AlternatingRowBackground="#ECF0F1"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  Margin="20">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Holiday Name" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="100"/>
+                                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="80"/>
+                                <!-- Countdown Column - shows days until the holiday -->
+                                <DataGridTextColumn Header="Countdown" Binding="{Binding DaysUntil}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Recurring" Binding="{Binding IsRecurring}" Width="80"/>
+                                <!-- Delete Button Column - Admin only -->
+                                <DataGridTemplateColumn Header="Actions" Width="80">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Delete"
+                                                    Tag="{Binding Id}"
+                                                    Click="DeleteHoliday_Click"
+                                                    Style="{StaticResource DeleteButton}"
+                                                    Padding="8,4"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- View More Button -->
+                        <Button x:Name="ViewMoreButton"
+                                Grid.Row="1"
+                                Content="View All Holidays"
+                                Click="ViewMore_Click"
+                                Style="{StaticResource ActionButton}"
+                                Width="150"
+                                HorizontalAlignment="Right"
+                                Margin="0,5,20,5"/>
+                    </Grid>
 
                     <!-- Visual Timeline Map Section -->
                     <Border Grid.Row="1" 
                             BorderBrush="#BDC3C7" 
                             BorderThickness="1" 
-                            Margin="20,0,20,20"
+                            Margin="20,10,20,20"
                             Background="#F8F9FA"
                             CornerRadius="8">
                         <Grid>
@@ -269,5 +347,15 @@
                 </ScrollViewer>
             </TabItem>
         </TabControl>
+
+        <!-- Help Button - Bottom Right Corner -->
+        <Button Content="i"
+                Style="{StaticResource HelpButtonStyle}"
+                Grid.Row="1"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="0,0,20,20"
+                ToolTip="Holidays Help"
+                Click="HelpButton_Click"/>
     </Grid>
 </Page>

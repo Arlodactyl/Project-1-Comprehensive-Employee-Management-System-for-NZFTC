@@ -3,6 +3,7 @@ using NZFTC_EmployeeSystem.Data;
 using NZFTC_EmployeeSystem.Models;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -29,7 +30,6 @@ namespace NZFTC_EmployeeSystem.Views
             _currentUser = currentUser;
 
             // Security check: Only admins and trainers should access this page
-            // FIXED: Allow both Admin and Trainer roles
             if (_currentUser.Role != "Admin" && _currentUser.Role != "Trainer")
             {
                 MessageBox.Show(
@@ -166,9 +166,22 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
+            // Step 4: Validate that the department name contains only letters and spaces
+            // This regex pattern matches only letters (uppercase and lowercase) and spaces
+            if (!Regex.IsMatch(deptName, @"^[a-zA-Z\s]+$"))
+            {
+                MessageBox.Show(
+                    "Department name can only contain letters and spaces.\nSpecial characters and numbers are not allowed.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
             try
             {
-                // Step 4: Check for duplicates and add the department
+                // Step 5: Check for duplicates and add the department
                 using (var db = new AppDbContext())
                 {
                     // Check if a department with this name already exists (case insensitive)
@@ -185,20 +198,20 @@ namespace NZFTC_EmployeeSystem.Views
                         return; // Stop here if duplicate found
                     }
 
-                    // Step 5: Create a new Department object
+                    // Step 6: Create a new Department object
                     var department = new Department
                     {
                         Name = deptName
                     };
 
-                    // Step 6: Add the department to the database
+                    // Step 7: Add the department to the database
                     db.Departments.Add(department);
 
-                    // Step 7: Save changes to the database (this actually writes to the database file)
+                    // Step 8: Save changes to the database (this actually writes to the database file)
                     db.SaveChanges();
                 }
 
-                // Step 8: Show success message
+                // Step 9: Show success message
                 MessageBox.Show(
                     $"Department '{deptName}' added successfully!",
                     "Success",
@@ -206,10 +219,10 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Information
                 );
 
-                // Step 9: Clear the text box so admin can add another department
+                // Step 10: Clear the text box so admin can add another department
                 DepartmentNameTextBox.Clear();
 
-                // Step 10: Reload the departments grid to show the newly added department
+                // Step 11: Reload the departments grid to show the newly added department
                 LoadDepartmentData();
             }
             catch (Exception ex)
@@ -334,6 +347,34 @@ namespace NZFTC_EmployeeSystem.Views
                     );
                 }
             }
+        }
+
+        /// <summary>
+        /// Shows help information for using the departments page
+        /// </summary>
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            string helpMessage = "Departments Page Help\n\n" +
+                "View Departments:\n" +
+                "- See all company departments listed on the left\n" +
+                "- Click 'View' to see employees in that department\n" +
+                "- Click 'Delete' to remove empty departments\n\n" +
+                "Add Department:\n" +
+                "- Enter a department name (letters and spaces only)\n" +
+                "- Name must be at least 2 characters\n" +
+                "- Cannot use numbers or special characters like @, #, etc.\n" +
+                "- Click 'Add Department' to save\n\n" +
+                "Delete Department:\n" +
+                "- Can only delete departments with no employees\n" +
+                "- Reassign employees first before deleting\n" +
+                "- You will be asked to confirm deletion";
+
+            MessageBox.Show(
+                helpMessage,
+                "Departments Help",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
     }
 }
