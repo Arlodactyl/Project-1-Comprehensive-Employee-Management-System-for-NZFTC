@@ -176,5 +176,41 @@ namespace NZFTC_EmployeeSystem.Views
                 MessageBox.Show($"Error uploading picture: {ex.Message}", "Error");
             }
         }
+
+        /// <summary>
+        /// Shows help information for the Profile page
+        /// </summary>
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            string helpMessage = "Profile Page Help\n\n" +
+                "View Your Information:\n" +
+                "- Your personal details are displayed here\n" +
+                "- This includes contact info, job title, and department\n" +
+                "- Leave balances show your remaining days off\n\n" +
+                "Profile Picture:\n" +
+                "- Click 'Upload Picture' to add your photo\n" +
+                "- Accepted formats: JPG, PNG, BMP\n" +
+                "- Your picture will appear throughout the system\n\n" +
+                "Salary Information:\n" +
+                "- Your current salary is displayed\n" +
+                "- Contact HR or your manager for salary inquiries\n\n" +
+                "Leave Balances:\n" +
+                "- Annual Leave: Yearly vacation days\n" +
+                "- Sick Leave: Days available for illness\n" +
+                "- Balances update when leave is approved\n\n";
+
+            if (_currentUser.Role == "Admin")
+            {
+                helpMessage += "Admin Note:\n" +
+                    "To edit employee information, use Employee Management page";
+            }
+
+            MessageBox.Show(
+                helpMessage,
+                "Profile Help",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+        }
     }
 }
