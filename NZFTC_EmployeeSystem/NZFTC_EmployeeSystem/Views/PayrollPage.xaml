@@ -1,4 +1,5 @@
-﻿<Page x:Class="NZFTC_EmployeeSystem.Views.PayrollPage"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="NZFTC_EmployeeSystem.Views.PayrollPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,6 +8,7 @@
       d:DesignHeight="600" d:DesignWidth="900"
       Title="Payroll">
     <Page.Resources>
+        <!-- Action Button Style -->
         <Style x:Key="ActionButton" TargetType="Button">
             <Setter Property="Background" Value="#3498DB"/>
             <Setter Property="Foreground" Value="White"/>
@@ -16,28 +18,66 @@
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
+
+        <!-- Export Button Style -->
         <Style x:Key="ExportButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
             <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
-        <Style x:Key="ViewButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
-            <Setter Property="Background" Value="#9B59B6"/>
-            <Setter Property="Padding" Value="10,5"/>
-        </Style>
+
+        <!-- Modern TextBox Style -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="32"/>
             <Setter Property="Padding" Value="8,5"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
+
+        <!-- Modern ComboBox Style -->
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Height" Value="32"/>
             <Setter Property="FontSize" Value="13"/>
         </Style>
+
+        <!-- Help Button Style -->
         <Style x:Key="InfoButton" TargetType="Button">
             <Setter Property="Background" Value="#3498DB"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Height" Value="35"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -46,7 +86,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="15"
+                                CornerRadius="17.5"
                                 BorderThickness="0">
                             <ContentPresenter HorizontalAlignment="Center"
                                             VerticalAlignment="Center"/>
@@ -61,19 +101,20 @@
             </Setter>
         </Style>
     </Page.Resources>
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="106*"/>
-            <ColumnDefinition Width="119*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="#34495E" Padding="20" Grid.ColumnSpan="2" Margin="0,0,0,528" Grid.RowSpan="2">
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#34495E" Padding="20">
             <TextBlock x:Name="PageHeaderText" Text="Payroll" FontSize="24" FontWeight="Bold" Foreground="White"/>
         </Border>
-        <TabControl x:Name="PayrollTabControl" Grid.Row="1" Grid.ColumnSpan="2">
+
+        <!-- Tab Control -->
+        <TabControl x:Name="PayrollTabControl" Grid.Row="1">
             <TabItem x:Name="AllPayslipsTab" Header="All Payslips" FontSize="14">
                 <ScrollViewer>
                     <StackPanel Margin="20">
@@ -102,17 +143,9 @@
                         </DataGrid>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                             <Button Content="Export Visible Payslips" Style="{StaticResource ExportButton}" Click="ExportPayslips_Click" Margin="0,0,10,0"/>
-                            <TextBlock Text="💡 Tip: Use search to filter, then export only those results" VerticalAlignment="Center" FontSize="11" Foreground="#7F8C8D" FontStyle="Italic"/>
+                            <TextBlock Text="Tip: Use search to filter, then export only those results" VerticalAlignment="Center" FontSize="11" Foreground="#7F8C8D" FontStyle="Italic"/>
                         </StackPanel>
-                        <Border BorderBrush="#BDC3C7" BorderThickness="1" Padding="20" Background="#F8F9FA" CornerRadius="5" RenderTransformOrigin="0.5,0.5">
-                            <Border.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform AngleY="-0.102"/>
-                                    <RotateTransform/>
-                                    <TranslateTransform Y="-0.748"/>
-                                </TransformGroup>
-                            </Border.RenderTransform>
+                        <Border BorderBrush="#BDC3C7" BorderThickness="1" Padding="20" Background="#F8F9FA" CornerRadius="5">
                             <StackPanel>
                                 <TextBlock Text="Generate Weekly Payslip" FontSize="16" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,15"/>
                                 <TextBlock Text="Employee *" FontSize="12" Margin="0,0,0,3"/>
@@ -148,14 +181,14 @@
             </TabItem>
         </TabControl>
 
-        <!-- Info Button (bottom right corner) -->
+        <!-- Help Button - Bottom Right Corner -->
         <Button Grid.Row="1"
                 Content="i"
                 Style="{StaticResource InfoButton}"
                 Click="InfoButton_Click"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Margin="0,0,42,806"
-                ToolTip="Payroll Information &amp; Help" Grid.Column="1" Height="20" Width="18" RenderTransformOrigin="0.739,1.295"/>
+                Margin="0,0,20,20"
+                ToolTip="Payroll Information &amp; Help"/>
     </Grid>
 </Page>

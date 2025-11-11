@@ -238,5 +238,170 @@ namespace NZFTC_EmployeeSystem.Views
                 );
             }
         }
+
+        /// <summary>
+        /// Shows essential help information for My Training page
+        /// </summary>
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            string helpMessage = @"My Training Help - EMPLOYEE
+
+HOW TO USE THIS PAGE:
+
+View Training Records:
+• This page shows all training assigned to you
+• Training is read-only (managed by your supervisor)
+• Summary cards show your progress at a glance
+
+Understanding the Summary:
+• Total Training: All courses assigned to you
+• Completed: Training you've finished
+• Pending: Not Started or In Progress
+
+Using the Training Grid:
+• Double-click any row for full details
+• Use search box to filter by training type
+• Click 'Export My Training' to save as CSV
+
+═══════════════════════════════════════
+
+WHAT IS WORKPLACE TRAINING?
+
+Training refers to organized learning activities that help you develop job skills, meet safety requirements, and comply with regulations. Under New Zealand employment law:
+
+Your Rights:
+• Access to necessary training for your role
+• Paid time during work hours for mandatory training
+• Training records kept confidential
+• Recognition of completed training
+
+Your Responsibilities:
+• Complete assigned training on time
+• Attend scheduled training sessions
+• Apply what you learn in your work
+• Notify supervisor if you have questions
+
+═══════════════════════════════════════
+
+TRAINING STATUS TYPES:
+
+Not Started:
+Training has been assigned but you haven't begun yet. Check with your supervisor about when to start.
+
+In Progress:
+You are currently working on this training. Continue until completion and ensure it's signed off.
+
+Completed:
+Training is finished and has been signed off by your supervisor or trainer. This creates an official record.
+
+═══════════════════════════════════════
+
+UNDERSTANDING SIGN-OFF:
+
+What is Sign-Off?
+When you complete training, your supervisor reviews and verifies completion. This is called 'signing off' the training.
+
+Why It Matters:
+• Creates official record of your qualifications
+• Proves you met legal or regulatory requirements
+• Documents your professional development
+• May be required for promotions or new roles
+
+Who Signs Off:
+Training is typically signed off by your direct supervisor, workplace trainer, or training coordinator. Their name appears in the 'Signed Off By' column.
+
+═══════════════════════════════════════
+
+TYPES OF WORKPLACE TRAINING:
+
+Health & Safety Training:
+Required for workplace safety. Examples: First Aid, Fire Safety, Manual Handling, PPE Use
+
+Compliance Training:
+Legal or regulatory requirements for your role. Examples: Privacy, Security, Industry Regulations
+
+Skills Development:
+Job-specific capabilities. Examples: Software Training, Equipment Operation, Customer Service
+
+Professional Development:
+Career advancement opportunities. Examples: Leadership, Communication, Time Management
+
+═══════════════════════════════════════
+
+WHY TRAINING MATTERS:
+
+Safety:
+Ensures you can perform your job safely without risk to yourself or others
+
+Legal Compliance:
+Some roles require specific training by law (e.g., forklift operation, food handling)
+
+Job Performance:
+Helps you work more effectively and efficiently
+
+Career Growth:
+Demonstrates your commitment to professional development and can lead to promotions
+
+Industry Standards:
+Keeps you current with best practices and new technologies
+
+═══════════════════════════════════════
+
+EXPORTING YOUR RECORDS:
+
+How to Export:
+1. Click 'Export My Training' button
+2. File saves automatically to your Downloads folder
+3. Opens as CSV file in Excel or any spreadsheet program
+
+Why Export:
+• Keep personal records for your portfolio
+• Provide proof of training for job applications
+• Track your professional development over time
+• Have backup copies for your own files
+
+═══════════════════════════════════════
+
+NEED HELP?
+
+Training Questions:
+• Contact your direct supervisor
+• Speak to your training coordinator
+• Ask HR about training opportunities
+
+Cannot Access Training:
+• Report technical issues to IT support
+• Inform supervisor if materials unavailable
+• Request alternative training if needed
+
+Training Not Showing:
+• Allow time for supervisor to assign training
+• Check with HR if training seems missing
+• Ensure you're viewing the correct period
+
+═══════════════════════════════════════
+
+IMPORTANT NOTES:
+
+This is a View-Only Page:
+You cannot add, edit, or delete training records. Only supervisors and training coordinators can manage training assignments.
+
+Training is Automatic:
+New training automatically appears when assigned by your supervisor. You'll be notified when new training is available.
+
+Contact Your Supervisor:
+If you have questions about specific training, when to complete it, or how to access materials, contact your direct supervisor or training coordinator.
+
+═══════════════════════════════════════
+
+Questions? Contact your supervisor or HR department.";
+
+            MessageBox.Show(
+                helpMessage,
+                "My Training Help",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+        }
     }
 }
