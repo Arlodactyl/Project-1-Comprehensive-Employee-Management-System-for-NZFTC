@@ -143,6 +143,34 @@
             </Setter>
         </Style>
 
+        <!-- Information Button Style -->
+        <Style x:Key="InfoButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Close Button Style -->
         <Style x:Key="CloseButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -282,6 +310,36 @@
                                     Click="Holidays_Click"
                                     Visibility="Collapsed"
                                     ToolTip="Holidays"/>
+                        </Grid>
+
+                        <!-- Leave Button - Visible to Employee only -->
+                        <Grid x:Name="LeaveButtonGrid">
+                            <Button x:Name="LeaveButtonExpanded"
+                                    Content="Leave"
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="Leave_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="LeaveButtonCollapsed"
+                                    Content="LV"
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="Leave_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="Leave"/>
+                        </Grid>
+
+                        <!-- Grievance Button - Visible to Employee only -->
+                        <Grid x:Name="GrievanceButtonGrid">
+                            <Button x:Name="GrievanceButtonExpanded"
+                                    Content="Grievance"
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="Grievance_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="GrievanceButtonCollapsed"
+                                    Content="GV"
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="Grievance_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="Grievance"/>
                         </Grid>
 
                         <!-- About/Contact Button - Visible to ALL users -->
@@ -467,7 +525,14 @@
                                    FontWeight="SemiBold"
                                    Foreground="#2C3E50"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,20,0"/>
+                                   Margin="0,0,15,0"/>
+
+                        <!-- Information Button -->
+                        <Button Content="i" 
+                                Style="{StaticResource InfoButtonStyle}"
+                                Click="Information_Click"
+                                Margin="0,0,15,0"
+                                ToolTip="Information"/>
 
                         <!-- Sign Out Button -->
                         <Button Content="Sign Out" 

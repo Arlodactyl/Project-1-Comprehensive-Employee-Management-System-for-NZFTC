@@ -64,15 +64,17 @@ namespace NZFTC_EmployeeSystem.Views
                 // Show holidays for admin (they can see company holidays)
                 HolidaysButtonGrid.Visibility = Visibility.Visible;
 
-                // Hide employee-specific buttons (My Training and My Pay)
+                // Hide employee-specific buttons (My Training, My Pay, Leave, Grievance)
                 MyTrainingButtonGrid.Visibility = Visibility.Collapsed;
                 MyPayButtonGrid.Visibility = Visibility.Collapsed;
+                LeaveButtonGrid.Visibility = Visibility.Collapsed;
+                GrievanceButtonGrid.Visibility = Visibility.Collapsed;
             }
             // WORKPLACE TRAINER - Training and department management access
             else if (_currentUser.Role == "Workplace Trainer")
             {
                 // Show: Dashboard, Account, Employee Management, Departments, Holidays, About
-                // Hide: Leave Management, Payroll, Grievances, My Training, My Pay
+                // Hide: Leave Management, Payroll, Grievances, My Training, My Pay, Leave, Grievance
 
                 // Show admin and trainer menu items (Employee Management, Departments)
                 AdminTrainerMenuPanel.Visibility = Visibility.Visible;
@@ -83,14 +85,16 @@ namespace NZFTC_EmployeeSystem.Views
                 // Show holidays for trainers
                 HolidaysButtonGrid.Visibility = Visibility.Visible;
 
-                // Hide employee-specific buttons (My Training and My Pay)
+                // Hide employee-specific buttons (My Training, My Pay, Leave, Grievance)
                 MyTrainingButtonGrid.Visibility = Visibility.Collapsed;
                 MyPayButtonGrid.Visibility = Visibility.Collapsed;
+                LeaveButtonGrid.Visibility = Visibility.Collapsed;
+                GrievanceButtonGrid.Visibility = Visibility.Collapsed;
             }
             // EMPLOYEE - Basic access
             else // Default to Employee role
             {
-                // Show: Dashboard, Account, My Training, My Pay, Holidays, About
+                // Show: Dashboard, Account, My Training, My Pay, Holidays, Leave, Grievance, About
                 // Hide: Employee Management, Departments, Payroll, Leave Management, Grievances
 
                 // Hide admin and trainer sections
@@ -101,6 +105,8 @@ namespace NZFTC_EmployeeSystem.Views
                 MyTrainingButtonGrid.Visibility = Visibility.Visible;
                 MyPayButtonGrid.Visibility = Visibility.Visible;
                 HolidaysButtonGrid.Visibility = Visibility.Visible;
+                LeaveButtonGrid.Visibility = Visibility.Visible;
+                GrievanceButtonGrid.Visibility = Visibility.Visible;
             }
         }
 
@@ -199,6 +205,16 @@ namespace NZFTC_EmployeeSystem.Views
                 HolidaysButtonExpanded.Tag = null;
                 HolidaysButtonCollapsed.Tag = null;
             }
+            if (LeaveButtonGrid.Visibility == Visibility.Visible)
+            {
+                LeaveButtonExpanded.Tag = null;
+                LeaveButtonCollapsed.Tag = null;
+            }
+            if (GrievanceButtonGrid.Visibility == Visibility.Visible)
+            {
+                GrievanceButtonExpanded.Tag = null;
+                GrievanceButtonCollapsed.Tag = null;
+            }
 
             // Clear admin/trainer buttons if visible
             if (AdminTrainerMenuPanel.Visibility == Visibility.Visible)
@@ -246,6 +262,14 @@ namespace NZFTC_EmployeeSystem.Views
                 case "Holidays":
                     HolidaysButtonExpanded.Tag = "Active";
                     HolidaysButtonCollapsed.Tag = "Active";
+                    break;
+                case "Leave":
+                    LeaveButtonExpanded.Tag = "Active";
+                    LeaveButtonCollapsed.Tag = "Active";
+                    break;
+                case "Grievance":
+                    GrievanceButtonExpanded.Tag = "Active";
+                    GrievanceButtonCollapsed.Tag = "Active";
                     break;
                 case "EmployeeManagement":
                     EmployeeManagementButtonExpanded.Tag = "Active";
@@ -342,6 +366,18 @@ namespace NZFTC_EmployeeSystem.Views
                 HolidaysButtonCollapsed.Visibility = Visibility.Collapsed;
             }
 
+            if (LeaveButtonGrid.Visibility == Visibility.Visible)
+            {
+                LeaveButtonExpanded.Visibility = Visibility.Visible;
+                LeaveButtonCollapsed.Visibility = Visibility.Collapsed;
+            }
+
+            if (GrievanceButtonGrid.Visibility == Visibility.Visible)
+            {
+                GrievanceButtonExpanded.Visibility = Visibility.Visible;
+                GrievanceButtonCollapsed.Visibility = Visibility.Collapsed;
+            }
+
             // Admin/Trainer buttons
             if (AdminTrainerMenuPanel.Visibility == Visibility.Visible)
             {
@@ -400,6 +436,18 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 HolidaysButtonExpanded.Visibility = Visibility.Collapsed;
                 HolidaysButtonCollapsed.Visibility = Visibility.Visible;
+            }
+
+            if (LeaveButtonGrid.Visibility == Visibility.Visible)
+            {
+                LeaveButtonExpanded.Visibility = Visibility.Collapsed;
+                LeaveButtonCollapsed.Visibility = Visibility.Visible;
+            }
+
+            if (GrievanceButtonGrid.Visibility == Visibility.Visible)
+            {
+                GrievanceButtonExpanded.Visibility = Visibility.Collapsed;
+                GrievanceButtonCollapsed.Visibility = Visibility.Visible;
             }
 
             // Admin/Trainer buttons
@@ -528,6 +576,42 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
+        /// Navigates to Leave page (employee-only)
+        /// Shows employee's leave requests and allows submitting new requests
+        /// </summary>
+        private void Leave_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ContentFrame.Navigate(new LeavePage(_currentUser));
+                PageTitleText.Text = "Leave";
+                SetActiveButton("Leave");
+            }
+            catch
+            {
+                MessageBox.Show("Error loading Leave page", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Navigates to Grievance page (employee-only)
+        /// Shows employee's grievances and allows submitting new grievances
+        /// </summary>
+        private void Grievance_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ContentFrame.Navigate(new GrievancesPage(_currentUser));
+                PageTitleText.Text = "Grievance";
+                SetActiveButton("Grievance");
+            }
+            catch
+            {
+                MessageBox.Show("Error loading Grievance page", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
         /// Shows About/Contact information popup
         /// Available to all users
         /// </summary>
@@ -547,6 +631,33 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
+        }
+
+        /// <summary>
+        /// Shows information dialog with system details
+        /// Available to all users
+        /// </summary>
+        private void Information_Click(object sender, RoutedEventArgs e)
+        {
+            string roleInfo = _currentUser.Role switch
+            {
+                "Admin" => "You have full administrative access to all system features including employee management, payroll, leave management, and grievances.",
+                "Workplace Trainer" => "You have access to employee management, departments, and training coordination features.",
+                _ => "You have access to your personal information, training records, pay slips, holidays, leave requests, and grievances."
+            };
+
+            string message = $"NZFTC Employee Management System\n\n" +
+                           $"Logged in as: {_currentUser.Employee?.FullName ?? _currentUser.Username}\n" +
+                           $"Role: {_currentUser.Role}\n\n" +
+                           $"{roleInfo}\n\n" +
+                           $"For support, please contact your system administrator.";
+
+            MessageBox.Show(
+                message,
+                "System Information",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
         /// <summary>
@@ -655,6 +766,24 @@ namespace NZFTC_EmployeeSystem.Views
         public void NavigateToLeaveManagement()
         {
             LeaveManagement_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Public method to navigate to Leave
+        /// Called by DashboardHomePage quick links for employees
+        /// </summary>
+        public void NavigateToLeave()
+        {
+            Leave_Click(this, new RoutedEventArgs());
+        }
+
+        /// <summary>
+        /// Public method to navigate to Grievance
+        /// Called by DashboardHomePage quick links for employees
+        /// </summary>
+        public void NavigateToGrievance()
+        {
+            Grievance_Click(this, new RoutedEventArgs());
         }
 
         /// <summary>
