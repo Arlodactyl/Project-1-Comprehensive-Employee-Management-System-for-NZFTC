@@ -28,26 +28,47 @@ namespace NZFTC_EmployeeSystem.Views
             InitializeComponent();
             _currentUser = currentUser;
 
-            // Load payslip data first
-            LoadPayslipData();
-
-            // Configure page based on user role
-            if (_currentUser.Role != "Admin")
+            try
             {
-                // Hide admin-only tab for regular employees
-                AllPayslipsTab.Visibility = Visibility.Collapsed;
-                // Start on My Payslips tab for employees (which is now index 1, but will be 0 after hiding All Payslips)
-                PayrollTabControl.SelectedItem = MyPayslipsTab;
+                // Load payslip data first
+                LoadPayslipData();
 
-                // ENHANCEMENT: Auto-generate missing payslips for this employee
-                AutoGenerateMissingPayslips();
+                // Configure page based on user role
+                if (_currentUser.Role != "Admin")
+                {
+                    // Hide admin-only tab for regular employees
+                    AllPayslipsTab.Visibility = Visibility.Collapsed;
+                    // Start on My Payslips tab for employees (which is now index 1, but will be 0 after hiding All Payslips)
+                    PayrollTabControl.SelectedItem = MyPayslipsTab;
+
+                    // ENHANCEMENT: Auto-generate missing payslips for this employee
+                    AutoGenerateMissingPayslips();
+                }
+                else
+                {
+                    // Admin can see everything
+                    LoadEmployeeList();
+                    // Admin starts on All Payslips tab
+                    PayrollTabControl.SelectedItem = AllPayslipsTab;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // Admin can see everything
-                LoadEmployeeList();
-                // Admin starts on All Payslips tab
-                PayrollTabControl.SelectedItem = AllPayslipsTab;
+                // If page breaks during load, show error and offer reload
+                var result = MessageBox.Show(
+                    $"Error loading payroll page:\n{ex.Message}\n\nWould you like to reload the page?",
+                    "Page Load Error",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Error);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Reload page by creating new instance
+                    if (NavigationService != null)
+                    {
+                        NavigationService.Navigate(new PayrollPage(_currentUser));
+                    }
+                }
             }
         }
 
@@ -206,7 +227,17 @@ namespace NZFTC_EmployeeSystem.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading payslips: {ex.Message}", "Error");
+                // Offer to reload page if data load fails
+                var result = MessageBox.Show(
+                    $"Error loading payslips:\n{ex.Message}\n\nWould you like to reload the page?",
+                    "Data Load Error",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Error);
+
+                if (result == MessageBoxResult.Yes && NavigationService != null)
+                {
+                    NavigationService.Navigate(new PayrollPage(_currentUser));
+                }
             }
         }
 
@@ -219,8 +250,11 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 using (var db = new AppDbContext())
                 {
+                    // Load employees then sort by computed property FullName on client-side
+                    // Cannot use OrderBy(e => e.FullName) directly in LINQ-to-SQL as FullName is computed
                     var employees = db.Employees
-                        .OrderBy(e => e.FullName)
+                        .ToList()  // Execute query first - brings data to client
+                        .OrderBy(e => e.FullName)  // Now sort in-memory using FullName property
                         .ToList();
 
                     EmployeeComboBox.ItemsSource = employees;
@@ -228,7 +262,17 @@ namespace NZFTC_EmployeeSystem.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading employees: {ex.Message}", "Error");
+                // Offer to reload page if employee list load fails
+                var result = MessageBox.Show(
+                    $"Error loading employees:\n{ex.Message}\n\nWould you like to reload the page?",
+                    "Data Load Error",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Error);
+
+                if (result == MessageBoxResult.Yes && NavigationService != null)
+                {
+                    NavigationService.Navigate(new PayrollPage(_currentUser));
+                }
             }
         }
 
