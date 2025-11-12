@@ -82,9 +82,9 @@
             </Setter>
         </Style>
 
-        <!-- View Button Style (Purple) -->
+        <!-- View Button Style (Blue - matches ActionButton) -->
         <Style x:Key="ViewButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
-            <Setter Property="Background" Value="#9B59B6"/>
+            <Setter Property="Background" Value="#3498DB"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -96,7 +96,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#8E44AD"/>
+                                <Setter Property="Background" Value="#2980B9"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
