@@ -89,12 +89,49 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
+        <!-- Header with Info Button -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
-            <TextBlock Text="Leave Management" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="White"/>
+            <Grid>
+                <TextBlock Text="Leave Management" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+
+                <!-- Info Button in Header -->
+                <Button Content="i"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Width="35"
+                        Height="35"
+                        Click="HelpButton_Click"
+                        ToolTip="Leave Management Help">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#3498DB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#2980B9"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </Border>
 
         <!-- Tab Control for Employee/Admin views -->
@@ -220,48 +257,15 @@
                         <Button Content="Approve"
                                 Click="ApproveLeave_Click"
                                 Style="{StaticResource ApproveButton}"
-                                Margin="0,0,10,0"/>
+                                Width="82"
+                                Margin="0,0,10,0" Height="47"/>
                         <Button Content="Reject"
                                 Click="RejectLeave_Click"
                                 Style="{StaticResource RejectButton}"
-                                Margin="0,0,10,0"/>
+                                Width="102" Height="42"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
-        <!-- Help Button - Bottom Right Corner -->
-        <Button Content="i"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
-                Margin="0,0,20,20"
-                Width="35"
-                Height="35"
-                Click="HelpButton_Click"
-                ToolTip="Leave Management Help">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Background" Value="#3498DB"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="FontSize" Value="16"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#2980B9"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
     </Grid>
 </Page>

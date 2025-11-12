@@ -81,35 +81,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- Info Button Style (for the help icon) -->
-        <Style x:Key="InfoButton" TargetType="Button">
-            <Setter Property="Background" Value="#3498DB"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="15"
-                                BorderThickness="0">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#2980B9"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Page.Resources>
 
     <Grid Background="White">
@@ -118,12 +89,49 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
+        <!-- Header with Info Button -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
-            <TextBlock Text="Grievance Management" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="White"/>
+            <Grid>
+                <TextBlock Text="Grievance Management" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+
+                <!-- Info Button in Header -->
+                <Button Content="i"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Width="35"
+                        Height="35"
+                        Click="InfoButton_Click"
+                        ToolTip="What is a grievance?">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#3498DB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#2980B9"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </Border>
 
         <!-- Tab Control for different views -->
@@ -131,7 +139,7 @@
                     x:Name="GrievanceTabControl"
                     Margin="20">
 
-            <!-- Tab 1: New Grievance Form -->
+            <!-- Tab 1: New Grievance Form - ALWAYS VISIBLE -->
             <TabItem Header="Submit New Grievance" 
                      x:Name="NewGrievanceTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -249,7 +257,7 @@
                 </ScrollViewer>
             </TabItem>
 
-            <!-- Tab 2: My Grievances (Status View) -->
+            <!-- Tab 2: My Grievances (Status View) - ALWAYS VISIBLE -->
             <TabItem Header="My Grievances" 
                      x:Name="MyGrievancesTab">
                 <Grid Margin="20">
@@ -307,7 +315,7 @@
                 </Grid>
             </TabItem>
 
-            <!-- Tab 3: Admin View -->
+            <!-- Tab 3: Admin View - ADMIN ONLY -->
             <TabItem Header="Manage Grievances (Admin)" 
                      x:Name="AdminGrievancesTab">
                 <Grid Margin="20">
@@ -400,15 +408,5 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
-        <!-- Info Button (bottom right corner) -->
-        <Button Grid.Row="1"
-                Content="i"
-                Style="{StaticResource InfoButton}"
-                Click="InfoButton_Click"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="0,0,30,30"
-                ToolTip="What is a grievance?"/>
     </Grid>
 </Page>

@@ -179,13 +179,15 @@
                                                 Tag="{Binding Id}"
                                                 Click="ViewEmployees_Click"
                                                 Style="{StaticResource ViewButton}"
-                                                Padding="15,4"
+                                                Width="70"
+                                                Padding="8,4"
                                                 Margin="0,0,5,0"/>
                                         <Button Content="Delete"
                                                 Tag="{Binding Id}"
                                                 Click="DeleteDepartment_Click"
                                                 Style="{StaticResource DeleteButton}"
-                                                Padding="15,4"/>
+                                                Width="70"
+                                                Padding="8,4"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -241,7 +243,7 @@
                                     Style="{StaticResource ActionButton}"
                                     Width="150"
                                     Height="35"
-                                    VerticalAlignment="Top" Margin="5,22,5,0"/>
+                                    VerticalAlignment="Bottom"/>
                         </Grid>
                     </Grid>
                 </Border>
