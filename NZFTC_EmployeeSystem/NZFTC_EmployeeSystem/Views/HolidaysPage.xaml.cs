@@ -36,6 +36,11 @@ namespace NZFTC_EmployeeSystem.Views
                 AdminHolidayTab.Visibility = Visibility.Collapsed;
             }
 
+            // Set date picker to only allow today or future dates
+            HolidayDatePicker.DisplayDateStart = DateTime.Today;
+            // Set maximum date to 10 years in future
+            HolidayDatePicker.DisplayDateEnd = DateTime.Today.AddYears(10);
+
             // Load all holidays from the database and display them
             LoadHolidayData();
 
@@ -180,6 +185,42 @@ namespace NZFTC_EmployeeSystem.Views
                 return; // Stop here if validation fails
             }
 
+            // Step 1b: Validate holiday name length - must be at least 3 characters
+            if (HolidayNameTextBox.Text.Trim().Length < 3)
+            {
+                MessageBox.Show(
+                    "Holiday name must be at least 3 characters long.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            // Step 1c: Validate holiday name length - cannot exceed 100 characters
+            if (HolidayNameTextBox.Text.Trim().Length > 100)
+            {
+                MessageBox.Show(
+                    "Holiday name cannot exceed 100 characters.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            // Step 1d: Validate holiday name contains some letters (not just numbers/symbols)
+            if (!HolidayNameTextBox.Text.Any(char.IsLetter))
+            {
+                MessageBox.Show(
+                    "Holiday name must contain at least one letter.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
             // Step 2: Validate that a date has been selected
             if (!HolidayDatePicker.SelectedDate.HasValue)
             {
@@ -190,6 +231,30 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Warning
                 );
                 return; // Stop here if validation fails
+            }
+
+            // Step 2b: Validate that the date is not in the past (at least today or future)
+            if (HolidayDatePicker.SelectedDate.Value.Date < DateTime.Today)
+            {
+                MessageBox.Show(
+                    "Holiday date cannot be in the past.\nPlease select today or a future date.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            // Step 2c: Validate that the date is not too far in the future (within 10 years)
+            if (HolidayDatePicker.SelectedDate.Value.Date > DateTime.Today.AddYears(10))
+            {
+                MessageBox.Show(
+                    "Holiday date cannot be more than 10 years in the future.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
             }
 
             // Step 3: Validate that a holiday type has been selected
@@ -204,16 +269,49 @@ namespace NZFTC_EmployeeSystem.Views
                 return; // Stop here if validation fails
             }
 
+            // Step 3b: Validate description length if provided
+            if (!string.IsNullOrWhiteSpace(HolidayDescriptionTextBox.Text) &&
+                HolidayDescriptionTextBox.Text.Trim().Length > 500)
+            {
+                MessageBox.Show(
+                    "Holiday description cannot exceed 500 characters.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
             try
             {
-                // Step 4: Create and save the new holiday to the database
+                // Step 4: Check for duplicate holidays (same name and date)
                 using (var db = new AppDbContext())
                 {
+                    var holidayName = HolidayNameTextBox.Text.Trim();
+                    var holidayDate = HolidayDatePicker.SelectedDate.Value.Date;
+
+                    // Check if a holiday with the same name already exists on this date
+                    var existingHoliday = db.Holidays
+                        .FirstOrDefault(h => h.Name.ToLower() == holidayName.ToLower() &&
+                                           h.Date.Date == holidayDate);
+
+                    if (existingHoliday != null)
+                    {
+                        MessageBox.Show(
+                            $"A holiday named '{holidayName}' already exists on {holidayDate:dd/MM/yyyy}.\n\n" +
+                            "Please use a different name or date.",
+                            "Duplicate Holiday",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning
+                        );
+                        return;
+                    }
+
                     // Create a new Holiday object with all the details from the form
                     var holiday = new Holiday
                     {
-                        Name = HolidayNameTextBox.Text.Trim(),
-                        Date = HolidayDatePicker.SelectedDate.Value,
+                        Name = holidayName,
+                        Date = holidayDate,
                         Type = ((ComboBoxItem)HolidayTypeComboBox.SelectedItem)?.Content?.ToString() ?? "Public",
                         Description = HolidayDescriptionTextBox.Text.Trim(),
                         IsRecurring = RecurringCheckBox.IsChecked ?? false,
