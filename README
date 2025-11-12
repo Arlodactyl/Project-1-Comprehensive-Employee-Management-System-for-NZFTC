@@ -1,0 +1,89 @@
+######################################################################
+This file contains all information about the Employee Management System
+######################################################################
+
+(Login Users)
+- Admin
+- Employee
+- Trainer 
+
+######################################################################
+
+######################################################################
+
+(Admin Controls)
+---------------------
+
+- Holidays
+  - Allow Recurring With Holiday Events
+  - Delete Holiday Events
+  - Can Add Holiday Events 
+
+- About / Contact
+  - Can Edit All Information on the page (Located : Bottom Right)
+
+- Employee Management 
+  - Can View All Current Employees
+  - Can View Each Individual information of a Employee
+  - Can Edit Each Individual information of a Employee
+  - Can Add a new Employee
+  - Can Export Employees Details to a CSV file (Located : Top Right)
+  - Can View Training Sessions
+  - Can Add Training Sessions to a Employee
+  - Can Mark of Trainings
+  - Can Export Training Records 
+
+- Departments
+  - Can View all Departments
+  - Can View all Employees inside each Department
+  - Can Delete Any Department
+  - Can Add a new Department
+
+- Payroll
+  - Can View all Employees Payslips
+  - Can Export Payslips 
+  - Can Generate new Weekly Payslips
+  - Can View Personal Payslip
+
+- Leave Management
+  - Can Apply For Leave
+  - Can View all Leave Forms
+  - Can Approve or Reject Leave Forms
+  - Can View all Personal Leave Forms
+  
+- Grievances Management
+  - Can Sumbit new Grievances Forms
+  - Can View Personal Grievances Forms
+  - Can View All Grievances Forms
+  - Can Respond and Close Grievances Forms3
+  - Can Export all Grievances Forms
+
+######################################################################
+
+######################################################################
+
+(Employee Controls) 
+---------------------
+
+- My Training
+  - Can View All Personal Training 
+  - Can Export All Personal Training 
+- My Pay
+  - Can view All Payslips 
+  - Note : When clicked on a Payslip it will show all Details
+  - Can Export All Payslips
+- Holidays
+  - Can View all Upcoming Holiday Events
+  - Can Allpy For Leave (Which takes you to the Leave Form)
+- About / Contact
+  - Can View All Information on the Contact Page
+- Leave Form
+  - Can apply For Leave
+  - Can View all Personal Leave Forms
+
+######################################################################
+
+######################################################################
+
+
+
