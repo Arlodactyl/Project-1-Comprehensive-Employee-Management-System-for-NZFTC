@@ -17,11 +17,13 @@ namespace NZFTC_EmployeeSystem.Views
         private Employee _selectedEmployee = null;
         private Employee _editingEmployee = null;
 
+        // Below initializes page and loads data
         public EmployeeManagementPage(User currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;
 
+            // Check permissions
             if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
             {
                 MessageBox.Show(
@@ -34,6 +36,7 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
+            // Load all data
             LoadEmployees();
             RoleComboBox.SelectedIndex = 0;
             LoadDepartments();
@@ -43,6 +46,7 @@ namespace NZFTC_EmployeeSystem.Views
             AddTrainingPanel.Visibility = Visibility.Collapsed;
             TrainingTypeComboBox.SelectedIndex = 0;
 
+            // Set button visibility based on role
             if (_currentUser.Role == "Admin" || _currentUser.Role == "Workplace Trainer")
             {
                 CompleteTrainingButton.Visibility = Visibility.Visible;
@@ -55,8 +59,9 @@ namespace NZFTC_EmployeeSystem.Views
             LoadDepartmentsForEdit();
         }
 
-        #region Employee Tab Action Buttons
+        #region Employee Tab Actions
 
+        // Below shows selected employee details
         private void ViewEmployeeDetails_Click(object sender, RoutedEventArgs e)
         {
             _selectedEmployee = EmployeesGrid.SelectedItem as Employee;
@@ -75,6 +80,7 @@ namespace NZFTC_EmployeeSystem.Views
             ShowEmployeeDetails(_selectedEmployee, null);
         }
 
+        // Below loads employee data for editing
         private void EditEmployee_Click(object sender, RoutedEventArgs e)
         {
             _selectedEmployee = EmployeesGrid.SelectedItem as Employee;
@@ -93,6 +99,7 @@ namespace NZFTC_EmployeeSystem.Views
             LoadEmployeeForEditing(_selectedEmployee);
         }
 
+        // Below shows training records for selected employee
         private void ViewEmployeeTraining_Click(object sender, RoutedEventArgs e)
         {
             _selectedEmployee = EmployeesGrid.SelectedItem as Employee;
@@ -659,6 +666,7 @@ namespace NZFTC_EmployeeSystem.Views
             );
         }
 
+        // Below loads all employees from database
         private void LoadEmployees()
         {
             try
@@ -684,6 +692,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
+        // Below loads departments for dropdown
         private void LoadDepartments()
         {
             try
