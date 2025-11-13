@@ -126,32 +126,59 @@ namespace NZFTC_EmployeeSystem.Views
                     // Check if employee has a profile picture path set
                     if (employee != null && !string.IsNullOrEmpty(employee.ProfilePicturePath))
                     {
-                        string fullPath = GetProfilePicturePath(employee.ProfilePicturePath);
-
-                        // Verify file exists before trying to load it
-                        if (File.Exists(fullPath))
+                        // Check if it's a preset avatar or custom picture
+                        if (employee.ProfilePicturePath.StartsWith("avatar_"))
                         {
-                            try
-                            {
-                                // Load image file into bitmap
-                                var bitmap = new BitmapImage();
-                                bitmap.BeginInit();
-                                bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
-                                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                                bitmap.EndInit();
+                            // Load preset avatar from resources
+                            LoadDashboardAvatarImage(employee.ProfilePicturePath);
+                        }
+                        else
+                        {
+                            // Load custom uploaded picture
+                            string fullPath = GetProfilePicturePath(employee.ProfilePicturePath);
 
-                                // Display profile picture and hide default avatar
-                                UserProfilePicture.Source = bitmap;
-                                UserProfilePicture.Visibility = Visibility.Visible;
-                                DefaultUserAvatar.Visibility = Visibility.Collapsed;
-                            }
-                            catch
+                            // Verify file exists before trying to load it
+                            if (File.Exists(fullPath))
                             {
-                                // If image fails to load, show default avatar
+                                try
+                                {
+                                    // Load image file into bitmap with cache busting
+                                    using (var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                                    {
+                                        var bitmap = new BitmapImage();
+                                        bitmap.BeginInit();
+                                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                        bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                                        bitmap.StreamSource = stream;
+                                        bitmap.EndInit();
+                                        bitmap.Freeze();
+
+                                        // Display profile picture and hide default avatar
+                                        UserProfilePicture.Source = bitmap;
+                                        UserProfilePicture.Visibility = Visibility.Visible;
+                                        DefaultUserAvatar.Visibility = Visibility.Collapsed;
+                                    }
+                                }
+                                catch
+                                {
+                                    // If image fails to load, show default avatar
+                                    UserProfilePicture.Visibility = Visibility.Collapsed;
+                                    DefaultUserAvatar.Visibility = Visibility.Visible;
+                                }
+                            }
+                            else
+                            {
+                                // File doesn't exist, show default
                                 UserProfilePicture.Visibility = Visibility.Collapsed;
                                 DefaultUserAvatar.Visibility = Visibility.Visible;
                             }
                         }
+                    }
+                    else
+                    {
+                        // No picture set, show default
+                        UserProfilePicture.Visibility = Visibility.Collapsed;
+                        DefaultUserAvatar.Visibility = Visibility.Visible;
                     }
                 }
             }
@@ -161,6 +188,43 @@ namespace NZFTC_EmployeeSystem.Views
                 UserProfilePicture.Visibility = Visibility.Collapsed;
                 DefaultUserAvatar.Visibility = Visibility.Visible;
             }
+        }
+
+        /// <summary>
+        /// Loads a preset avatar image from resources
+        /// </summary>
+        private void LoadDashboardAvatarImage(string avatarFileName)
+        {
+            try
+            {
+                string actualFileName = avatarFileName.Replace("avatar_", "");
+                string packUri = $"pack://application:,,,/Images/{actualFileName}";
+
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(packUri, UriKind.Absolute);
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                bitmap.EndInit();
+                bitmap.Freeze();
+
+                UserProfilePicture.Source = bitmap;
+                UserProfilePicture.Visibility = Visibility.Visible;
+                DefaultUserAvatar.Visibility = Visibility.Collapsed;
+            }
+            catch
+            {
+                UserProfilePicture.Visibility = Visibility.Collapsed;
+                DefaultUserAvatar.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// Public method to refresh the user avatar - called when avatar is changed
+        /// </summary>
+        public void RefreshUserAvatar()
+        {
+            LoadUserProfilePicture();
         }
 
         /// <summary>
