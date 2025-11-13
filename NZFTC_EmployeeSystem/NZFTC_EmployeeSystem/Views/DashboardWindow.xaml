@@ -527,12 +527,6 @@
                                    VerticalAlignment="Center"
                                    Margin="0,0,15,0"/>
 
-                        <!-- Information Button -->
-                        <Button Content="i" 
-                                Style="{StaticResource InfoButtonStyle}"
-                                Click="Information_Click"
-                                Margin="0,0,15,0"
-                                ToolTip="Information"/>
 
                         <!-- Sign Out Button -->
                         <Button Content="Sign Out" 

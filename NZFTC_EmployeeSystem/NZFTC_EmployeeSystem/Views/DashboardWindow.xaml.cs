@@ -634,33 +634,6 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
-        /// Shows information dialog with system details
-        /// Available to all users
-        /// </summary>
-        private void Information_Click(object sender, RoutedEventArgs e)
-        {
-            string roleInfo = _currentUser.Role switch
-            {
-                "Admin" => "You have full administrative access to all system features including employee management, payroll, leave management, and grievances.",
-                "Workplace Trainer" => "You have access to employee management, departments, and training coordination features.",
-                _ => "You have access to your personal information, training records, pay slips, holidays, leave requests, and grievances."
-            };
-
-            string message = $"NZFTC Employee Management System\n\n" +
-                           $"Logged in as: {_currentUser.Employee?.FullName ?? _currentUser.Username}\n" +
-                           $"Role: {_currentUser.Role}\n\n" +
-                           $"{roleInfo}\n\n" +
-                           $"For support, please contact your system administrator.";
-
-            MessageBox.Show(
-                message,
-                "System Information",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-        }
-
-        /// <summary>
         /// Navigates to Employee Management page
         /// Manages all employees and their training
         /// Available to Admin and Workplace Trainer

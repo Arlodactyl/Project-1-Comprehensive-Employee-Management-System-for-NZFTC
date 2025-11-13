@@ -3555,11 +3555,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\gith0b\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+      "projectUniqueName": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\bogg\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
       "projectName": "NZFTC_EmployeeSystem",
-      "projectPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\gith0b\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+      "projectPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\bogg\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
       "packagesPath": "D:\\Users\\270063836\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\gith0b\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
+      "outputPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\bogg\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
