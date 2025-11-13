@@ -16,7 +16,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Images\bee.png" />
+	  <None Remove="Images\frog.jpg" />
+	  <None Remove="Images\frog.png" />
+	  <None Remove="Images\hamster.png" />
 	  <None Remove="Images\logo.png" />
+	  <None Remove="Images\panda.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Images\bee.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,9 +47,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Images\frog.png" />
+	  <Resource Include="Images\hamster.png" />
 	  <Resource Include="Images\logo.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Resource>
+	  <Resource Include="Images\panda.png" />
 	</ItemGroup>
 
 </Project>

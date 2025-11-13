@@ -8,13 +8,14 @@ using System.Windows.Controls;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-  
+
     /// This page displays a list of company holidays with countdown timers.
-   
+
     public partial class HolidaysPage : Page
     {
         // Store the current logged-in user so we know who's viewing the page aka admin or employee
         private readonly User _currentUser;
+        private List<HolidayViewModel> _allHolidays = new List<HolidayViewModel>();
 
         /// <summary>
         /// Constructor - runs when the page is first created
@@ -140,7 +141,7 @@ namespace NZFTC_EmployeeSystem.Views
                         .ToList();
 
                     // Convert the holidays to HolidayViewModel which includes countdown calculation
-                    var holidayViewModels = holidays.Select(h => new HolidayViewModel
+                    _allHolidays = holidays.Select(h => new HolidayViewModel
                     {
                         Id = h.Id,
                         Name = h.Name,
@@ -154,20 +155,31 @@ namespace NZFTC_EmployeeSystem.Views
                         DaysUntil = CalculateCountdown(h.Date)
                     }).ToList();
 
-                    // Show all holidays in the grid
+                    // For admin grid: filter out passed holidays
+                    // For employee grid: show all holidays
+                    var displayHolidays = _allHolidays;
+
+                    if (_currentUser.Role == "Admin")
+                    {
+                        // Admins only see current and future holidays in the grid
+                        displayHolidays = _allHolidays
+                            .Where(h => h.Date >= DateTime.Today)
+                            .ToList();
+                    }
+
+                    // Show holidays in the grid
                     if (HolidaysGrid != null)
                     {
-                        HolidaysGrid.ItemsSource = holidayViewModels;
+                        HolidaysGrid.ItemsSource = displayHolidays;
                     }
 
                     // Filter to only show upcoming holidays in the timeline (next 12 months)
-                  
-                    var upcomingHolidays = holidayViewModels
+                    var upcomingHolidays = _allHolidays
                         .Where(h => h.Date >= DateTime.Today && h.Date <= DateTime.Today.AddMonths(12))
                         .Take(10) // Limit to 10 holidays to prevent overcrowding
                         .ToList();
 
-                    
+                    // Bind the upcoming holidays to the timeline control
                     if (HolidayTimeline != null)
                     {
                         HolidayTimeline.ItemsSource = upcomingHolidays;
@@ -190,7 +202,7 @@ namespace NZFTC_EmployeeSystem.Views
         /// Calculates and formats a user-friendly countdown message for a holiday
         /// </summary>
         /// <param name="holidayDate">The date of the holiday</param>
- 
+
         private string CalculateCountdown(DateTime holidayDate)
         {
             try
@@ -221,7 +233,7 @@ namespace NZFTC_EmployeeSystem.Views
 
         /// <summary>
         /// Shows or hides the Add Holiday form panel (Admin only)
-   
+
         private void ShowAddHolidayForm_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -260,9 +272,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        
+
         /// Handles the Add Holiday button click
-     
+
         private void AddHoliday_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -396,9 +408,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-       
+
         /// Clears all fields in the Add Holiday form
-        
+
         private void ClearAddHolidayForm()
         {
             try
@@ -434,9 +446,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-       
+
         /// Handles the Delete button click on a holiday row
-       
+
         private void DeleteHoliday_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -521,7 +533,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-      
+
         private void ApplyForLeave_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -551,7 +563,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-       
+
         private void HelpButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -590,9 +602,51 @@ namespace NZFTC_EmployeeSystem.Views
                 System.Diagnostics.Debug.WriteLine($"Error showing help: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Handles the search box text changed event
+        /// Filters the holidays grid based on the search text
+        /// </summary>
+        private void HolidaySearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            try
+            {
+                if (HolidaysGrid == null || _allHolidays == null)
+                    return;
+
+                var searchText = HolidaySearchTextBox?.Text?.ToLower() ?? string.Empty;
+
+                // Start with all holidays or only future holidays for admins
+                var filteredHolidays = _allHolidays.AsEnumerable();
+
+                // Filter out passed holidays for admins
+                if (_currentUser.Role == "Admin")
+                {
+                    filteredHolidays = filteredHolidays.Where(h => h.Date >= DateTime.Today);
+                }
+
+                // Apply search filter if search text is not empty
+                if (!string.IsNullOrWhiteSpace(searchText))
+                {
+                    filteredHolidays = filteredHolidays.Where(h =>
+                        h.Name.ToLower().Contains(searchText) ||
+                        h.Type.ToLower().Contains(searchText) ||
+                        h.Date.ToString("dd/MM/yyyy").Contains(searchText) ||
+                        h.Description.ToLower().Contains(searchText)
+                    );
+                }
+
+                // Update the grid
+                HolidaysGrid.ItemsSource = filteredHolidays.ToList();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error filtering holidays: {ex.Message}");
+            }
+        }
     }
 
-   
+
     public class HolidayViewModel
     {
         // All the standard Holiday properties

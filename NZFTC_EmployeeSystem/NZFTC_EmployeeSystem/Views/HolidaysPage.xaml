@@ -298,6 +298,7 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
@@ -309,9 +310,44 @@
                                        Foreground="#2C3E50"
                                        Margin="0,0,0,15"/>
 
-                            <!-- DataGrid with cleaner styling -->
-                            <DataGrid Grid.Row="1"
-                                      x:Name="HolidaysGrid"
+                            <!-- Search Box -->
+                            <Border Grid.Row="1"
+                                    Background="#F8F9FA"
+                                    CornerRadius="5"
+                                    Padding="10"
+                                    Margin="0,0,0,15"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="Search:"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="#34495E"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,10,0"/>
+
+                                    <TextBox Grid.Column="1"
+                                             x:Name="HolidaySearchTextBox"
+                                             Height="35"
+                                             Padding="10,8"
+                                             FontSize="13"
+                                             VerticalContentAlignment="Center"
+                                             BorderBrush="#BDC3C7"
+                                             TextChanged="HolidaySearchTextBox_TextChanged"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- DataGrid with ScrollViewer -->
+                            <ScrollViewer Grid.Row="2"
+                                          VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
+                                <DataGrid x:Name="HolidaysGrid"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"
                                       SelectionMode="Single"
@@ -321,42 +357,44 @@
                                       HeadersVisibility="Column"
                                       BorderThickness="0"
                                       Background="White"
-                                      RowHeight="40">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Holiday Name" 
+                                      RowHeight="40"
+                                      MaxHeight="500">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Holiday Name" 
                                                         Binding="{Binding Name}" 
                                                         Width="2*"
                                                         FontSize="13"/>
-                                    <DataGridTextColumn Header="Date" 
+                                        <DataGridTextColumn Header="Date" 
                                                         Binding="{Binding Date, StringFormat=dd/MM/yyyy}" 
                                                         Width="100"
                                                         FontSize="13"/>
-                                    <DataGridTextColumn Header="Type" 
+                                        <DataGridTextColumn Header="Type" 
                                                         Binding="{Binding Type}" 
                                                         Width="90"
                                                         FontSize="13"/>
-                                    <DataGridTextColumn Header="Countdown" 
+                                        <DataGridTextColumn Header="Countdown" 
                                                         Binding="{Binding DaysUntil}" 
                                                         Width="110"
                                                         FontSize="13"/>
-                                    <DataGridCheckBoxColumn Header="Recurring" 
+                                        <DataGridCheckBoxColumn Header="Recurring" 
                                                             Binding="{Binding IsRecurring}" 
                                                             Width="80"/>
-                                    <!-- Delete Button Column - Admin only -->
-                                    <DataGridTemplateColumn Header="Actions" Width="90" x:Name="AdminActionsColumn">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Content="Delete"
+                                        <!-- Delete Button Column - Admin only -->
+                                        <DataGridTemplateColumn Header="Actions" Width="90" x:Name="AdminActionsColumn">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="Delete"
                                                         Tag="{Binding Id}"
                                                         Click="DeleteHoliday_Click"
                                                         Style="{StaticResource DeleteButton}"
                                                         Padding="8,4"
                                                         FontSize="12"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
                         </Grid>
                     </Border>
 

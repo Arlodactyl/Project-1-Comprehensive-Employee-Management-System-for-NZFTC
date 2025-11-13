@@ -12,8 +12,9 @@ using System.Windows.Media.Imaging;
 namespace NZFTC_EmployeeSystem.Views
 {
     /// <summary>
-    /// Profile page - shows employee info and lets them upload a picture.
-    /// Pictures are saved in the ProfilePictures folder so they work on any computer.
+    /// Profile page - shows employee info and lets them upload a picture or choose from preset avatars.
+    /// Pictures are saved in the ProfilePictures folder.
+    /// Avatars are stored in Images folder in the project.
     /// </summary>
     public partial class ProfilePage : Page
     {
@@ -26,7 +27,9 @@ namespace NZFTC_EmployeeSystem.Views
             LoadProfile();
         }
 
-        // Load employee details and show them on the page
+        /// <summary>
+        /// Load employee details and show them on the page
+        /// </summary>
         private void LoadProfile()
         {
             try
@@ -55,39 +58,102 @@ namespace NZFTC_EmployeeSystem.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading profile: {ex.Message}", "Error");
+                MessageBox.Show(
+                    $"Error loading profile: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
-        // Load and show the profile picture
+        /// <summary>
+        /// Load and show the profile picture or avatar
+        /// </summary>
         private void LoadProfilePicture(string? picturePath)
         {
-            if (!string.IsNullOrEmpty(picturePath))
+            if (string.IsNullOrEmpty(picturePath))
             {
-                string fullPath = GetProfilePicturePath(picturePath);
+                ProfilePictureImage.Visibility = Visibility.Collapsed;
+                DefaultAvatar.Visibility = Visibility.Visible;
+                return;
+            }
 
-                if (File.Exists(fullPath))
+            try
+            {
+                // Check if it's a preset avatar
+                if (picturePath.StartsWith("avatar_"))
                 {
-                    try
-                    {
-                        var bitmap = new BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
-                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmap.EndInit();
-
-                        ProfilePictureImage.Source = bitmap;
-                        ProfilePictureImage.Visibility = Visibility.Visible;
-                        DefaultAvatar.Visibility = Visibility.Collapsed;
-                    }
-                    catch
-                    {
-                        ProfilePictureImage.Visibility = Visibility.Collapsed;
-                        DefaultAvatar.Visibility = Visibility.Visible;
-                    }
+                    LoadAvatarImage(picturePath);
                 }
                 else
                 {
+                    // It's a custom uploaded picture
+                    LoadCustomPicture(picturePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading picture: {ex.Message}");
+                ProfilePictureImage.Visibility = Visibility.Collapsed;
+                DefaultAvatar.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// Load a preset avatar from Images folder
+        /// </summary>
+        private void LoadAvatarImage(string avatarFileName)
+        {
+            try
+            {
+                // Extract the actual filename (hamster.png, panda.png, etc.)
+                string actualFileName = avatarFileName.Replace("avatar_", "");
+
+                // Build pack URI for embedded resource
+                string packUri = $"/Images/{actualFileName}";
+
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(packUri, UriKind.Relative);
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+
+                ProfilePictureImage.Source = bitmap;
+                ProfilePictureImage.Visibility = Visibility.Visible;
+                DefaultAvatar.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading avatar: {ex.Message}");
+                ProfilePictureImage.Visibility = Visibility.Collapsed;
+                DefaultAvatar.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// Load a custom uploaded picture from ProfilePictures folder
+        /// </summary>
+        private void LoadCustomPicture(string picturePath)
+        {
+            string fullPath = GetProfilePicturePath(picturePath);
+
+            if (File.Exists(fullPath))
+            {
+                try
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(fullPath, UriKind.Absolute);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+
+                    ProfilePictureImage.Source = bitmap;
+                    ProfilePictureImage.Visibility = Visibility.Visible;
+                    DefaultAvatar.Visibility = Visibility.Collapsed;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error loading custom picture: {ex.Message}");
                     ProfilePictureImage.Visibility = Visibility.Collapsed;
                     DefaultAvatar.Visibility = Visibility.Visible;
                 }
@@ -99,7 +165,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        // Get full path to profile picture in ProfilePictures folder
+        /// <summary>
+        /// Get full path to profile picture in ProfilePictures folder
+        /// </summary>
         private string GetProfilePicturePath(string fileName)
         {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -108,7 +176,9 @@ namespace NZFTC_EmployeeSystem.Views
             return Path.Combine(picturesFolder, fileName);
         }
 
-        // Make sure ProfilePictures folder exists
+        /// <summary>
+        /// Make sure ProfilePictures folder exists
+        /// </summary>
         private string EnsureProfilePicturesFolder()
         {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -123,7 +193,48 @@ namespace NZFTC_EmployeeSystem.Views
             return picturesFolder;
         }
 
-        // Handle Upload Picture button click
+        /// <summary>
+        /// Handle avatar selection button click
+        /// </summary>
+        private void SelectAvatar_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (sender is Button button && button.Tag is string avatarFileName)
+                {
+                    // Save avatar selection to database with "avatar_" prefix
+                    using (var db = new AppDbContext())
+                    {
+                        var employee = db.Employees.Find(_currentUser.EmployeeId);
+                        if (employee != null)
+                        {
+                            employee.ProfilePicturePath = $"avatar_{avatarFileName}";
+                            db.SaveChanges();
+
+                            MessageBox.Show(
+                                "Avatar selected successfully!",
+                                "Success",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+
+                            LoadProfilePicture(employee.ProfilePicturePath);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error selecting avatar: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Handle Upload Picture button click
+        /// </summary>
         private void UploadPicture_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -141,7 +252,11 @@ namespace NZFTC_EmployeeSystem.Views
 
                     if (!File.Exists(selectedFile))
                     {
-                        MessageBox.Show("File not found.", "Error");
+                        MessageBox.Show(
+                            "File not found.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
                         return;
                     }
 
@@ -167,13 +282,22 @@ namespace NZFTC_EmployeeSystem.Views
                         }
                     }
 
-                    MessageBox.Show("Picture uploaded successfully!", "Success");
+                    MessageBox.Show(
+                        "Picture uploaded successfully!",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
                     LoadProfilePicture(newFileName);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error uploading picture: {ex.Message}", "Error");
+                MessageBox.Show(
+                    $"Error uploading picture: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -188,7 +312,8 @@ namespace NZFTC_EmployeeSystem.Views
                 "- This includes contact info, job title, and department\n" +
                 "- Leave balances show your remaining days off\n\n" +
                 "Profile Picture:\n" +
-                "- Click 'Upload Picture' to add your photo\n" +
+                "- Choose from 4 preset avatars (hamster, panda, bee, frog)\n" +
+                "- Or click 'Upload Custom' for your own photo\n" +
                 "- Accepted formats: JPG, PNG, BMP\n" +
                 "- Your picture will appear throughout the system\n\n" +
                 "Salary Information:\n" +

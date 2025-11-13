@@ -5,15 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="800"
+      d:DesignHeight="700" d:DesignWidth="900"
       Title="My Profile">
-    <!--
-      ProfilePage
-      This page displays the logged-in employee's personal information,
-      including their profile picture, contact details, job information,
-      and leave balances. Employees can upload a profile picture which
-      is saved to the ProfilePictures folder.
-    -->
 
     <Page.Resources>
         <!-- TextBox Style for displaying read-only employee information -->
@@ -26,13 +19,13 @@
             <Setter Property="Background" Value="White"/>
         </Style>
 
-        <!-- Button Style for the Upload Picture button -->
+        <!-- Button Style -->
         <Style x:Key="ActionButton" TargetType="Button">
-            <Setter Property="Background" Value="#5DADE2"/>
+            <Setter Property="Background" Value="#3498DB"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="15,8"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -41,13 +34,62 @@
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
                                 CornerRadius="5"
-                                Padding="10,0">
+                                Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center"
                                             VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#3498DB"/>
+                                <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Success Button Style -->
+        <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Avatar Selection Button Style -->
+        <Style x:Key="AvatarButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#BDC3C7"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#3498DB"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -59,216 +101,324 @@
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Header section -->
             <RowDefinition Height="*"/>
-            <!-- Scrollable content section -->
         </Grid.RowDefinitions>
 
-        <!-- Header with page title -->
+        <!-- Header with Info Button -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
-            <TextBlock Text="My Profile" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="White"/>
+            <Grid>
+                <TextBlock Text="My Profile" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+
+                <!-- Info Button in Header -->
+                <Button Content="i"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Width="35"
+                        Height="35"
+                        Click="HelpButton_Click"
+                        ToolTip="Profile Help">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#3498DB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#2980B9"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </Border>
 
-        <!-- Main content area with scrolling -->
+        <!-- Main Content -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <Grid Margin="40,30">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Profile picture section -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Personal information section -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Leave balance section -->
                 </Grid.RowDefinitions>
 
                 <!-- Profile Picture Section -->
-                <StackPanel Grid.Row="0" Margin="0,0,0,30" HorizontalAlignment="Left">
-                    <TextBlock Text="Profile Picture" 
-                               FontSize="16" 
-                               FontWeight="Bold"
-                               Foreground="#2C3E50"
-                               Margin="0,0,0,10"/>
-
-                    <!-- Profile Picture Display -->
-                    <!-- Border can only have ONE child, so we wrap Ellipse and Image in a Grid -->
-                    <Border Width="150" 
-                            Height="150" 
-                            CornerRadius="75"
-                            BorderBrush="#BDC3C7"
-                            BorderThickness="3"
-                            Margin="0,0,0,15">
-                        <!-- Clip makes the Border circular -->
-                        <Border.Clip>
-                            <EllipseGeometry Center="75,75" RadiusX="75" RadiusY="75"/>
-                        </Border.Clip>
-
-                        <!-- Grid is the single child of Border and contains both avatar elements -->
-                        <Grid>
-                            <!-- Default Red Circle shows when no profile picture is uploaded -->
-                            <Ellipse x:Name="DefaultAvatar"
-                                     Fill="#E74C3C"/>
-
-                            <!-- Profile Picture Image shows when a picture has been uploaded -->
-                            <Image x:Name="ProfilePictureImage"
-                                   Stretch="UniformToFill"
-                                   Visibility="Collapsed"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Upload Picture Button -->
-                    <Button Content="Upload Picture"
-                            Style="{StaticResource ActionButton}"
-                            Width="150"
-                            Click="UploadPicture_Click"/>
-                </StackPanel>
-
-                <!-- Personal Information Section -->
-                <Border Grid.Row="1" 
-                        BorderBrush="#BDC3C7" 
-                        BorderThickness="0,0,0,1"
-                        Padding="0,0,0,20"
-                        Margin="0,0,0,20">
+                <Border Grid.Row="0"
+                        Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="25"
+                        Margin="0,0,0,25">
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
-                            <!-- Left column for fields -->
-                            <ColumnDefinition Width="20"/>
-                            <!-- Spacing between columns -->
-                            <ColumnDefinition Width="*"/>
-                            <!-- Right column for fields -->
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <!-- Full Name (spans both columns) -->
-                            <RowDefinition Height="Auto"/>
-                            <!-- Email and Phone -->
-                            <RowDefinition Height="Auto"/>
-                            <!-- Job Title and Department -->
-                            <RowDefinition Height="Auto"/>
-                            <!-- Hire Date and Salary -->
-                        </Grid.RowDefinitions>
 
-                        <!-- Full Name (spans full width) -->
-                        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
-                            <TextBlock Text="Full Name" 
-                                       FontSize="13" 
-                                       Foreground="#7F8C8D"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="FullNameText" 
-                                     Style="{StaticResource ProfileTextBox}"
-                                     IsReadOnly="True"/>
+                        <!-- Left: Profile Picture Display -->
+                        <StackPanel Grid.Column="0" Margin="0,0,30,0">
+                            <TextBlock Text="Profile Picture" 
+                                       FontSize="16" 
+                                       FontWeight="Bold"
+                                       Foreground="#2C3E50"
+                                       Margin="0,0,0,15"/>
+
+                            <!-- Current Profile Picture -->
+                            <Border Width="150" 
+                                    Height="150" 
+                                    CornerRadius="75"
+                                    BorderBrush="#3498DB"
+                                    BorderThickness="3"
+                                    HorizontalAlignment="Left">
+                                <Border.Clip>
+                                    <EllipseGeometry Center="75,75" RadiusX="75" RadiusY="75"/>
+                                </Border.Clip>
+                                <Grid>
+                                    <Ellipse x:Name="DefaultAvatar"
+                                             Fill="#E74C3C"/>
+                                    <Image x:Name="ProfilePictureImage"
+                                           Stretch="UniformToFill"
+                                           Visibility="Collapsed"/>
+                                </Grid>
+                            </Border>
                         </StackPanel>
 
-                        <!-- Email (left column) -->
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,15">
-                            <TextBlock Text="Email" 
-                                       FontSize="13" 
-                                       Foreground="#7F8C8D"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="EmailText" 
-                                     Style="{StaticResource ProfileTextBox}"
-                                     IsReadOnly="True"/>
-                        </StackPanel>
+                        <!-- Right: Avatar Selection -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Choose Avatar or Upload Custom Picture" 
+                                       FontSize="14" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#34495E"
+                                       Margin="0,0,0,15"/>
 
-                        <!-- Phone Number (right column) -->
-                        <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,15">
-                            <TextBlock Text="Phone Number" 
-                                       FontSize="13" 
-                                       Foreground="#7F8C8D"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="PhoneText" 
-                                     Style="{StaticResource ProfileTextBox}"
-                                     IsReadOnly="True"/>
-                        </StackPanel>
+                            <!-- Avatar Selection - Horizontal -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                <Button Style="{StaticResource AvatarButton}"
+                                        Width="80" Height="80"
+                                        Margin="0,0,10,0"
+                                        Click="SelectAvatar_Click"
+                                        Tag="hamster.png"
+                                        ToolTip="Hamster Avatar">
+                                    <Image Source="/Images/hamster.png" 
+                                           Stretch="Uniform"
+                                           Width="70" Height="70"/>
+                                </Button>
 
-                        <!-- Job Title (left column) -->
-                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,15">
-                            <TextBlock Text="Job Title" 
-                                       FontSize="13" 
-                                       Foreground="#7F8C8D"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="JobTitleText" 
-                                     Style="{StaticResource ProfileTextBox}"
-                                     IsReadOnly="True"/>
-                        </StackPanel>
+                                <Button Style="{StaticResource AvatarButton}"
+                                        Width="80" Height="80"
+                                        Margin="0,0,10,0"
+                                        Click="SelectAvatar_Click"
+                                        Tag="panda.png"
+                                        ToolTip="Panda Avatar">
+                                    <Image Source="/Images/panda.png" 
+                                           Stretch="Uniform"
+                                           Width="70" Height="70"/>
+                                </Button>
 
-                        <!-- Department (right column) -->
-                        <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,15">
-                            <TextBlock Text="Department" 
-                                       FontSize="13" 
-                                       Foreground="#7F8C8D"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="DepartmentText" 
-                                     Style="{StaticResource ProfileTextBox}"
-                                     IsReadOnly="True"/>
-                        </StackPanel>
+                                <Button Style="{StaticResource AvatarButton}"
+                                        Width="80" Height="80"
+                                        Margin="0,0,10,0"
+                                        Click="SelectAvatar_Click"
+                                        Tag="bee.png"
+                                        ToolTip="Bee Avatar">
+                                    <Image Source="/Images/bee.png" 
+                                           Stretch="Uniform"
+                                           Width="70" Height="70"/>
+                                </Button>
 
-                        <!-- Hire Date (left column) -->
-                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,15">
-                            <TextBlock Text="Hire Date" 
-                                       FontSize="13" 
-                                       Foreground="#7F8C8D"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="HireDateText" 
-                                     Style="{StaticResource ProfileTextBox}"
-                                     IsReadOnly="True"/>
-                        </StackPanel>
+                                <Button Style="{StaticResource AvatarButton}"
+                                        Width="80" Height="80"
+                                        Margin="0,0,10,0"
+                                        Click="SelectAvatar_Click"
+                                        Tag="frog.png"
+                                        ToolTip="Frog Avatar">
+                                    <Image Source="/Images/frog.png" 
+                                           Stretch="Uniform"
+                                           Width="70" Height="70"/>
+                                </Button>
 
-                        <!-- Salary (right column) -->
-                        <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,15">
-                            <TextBlock Text="Salary" 
-                                       FontSize="13" 
-                                       Foreground="#7F8C8D"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="SalaryText" 
-                                     Style="{StaticResource ProfileTextBox}"
-                                     IsReadOnly="True"/>
+                                <Button Content="Upload Custom"
+                                        Style="{StaticResource SuccessButton}"
+                                        Click="UploadPicture_Click"
+                                        Width="140"
+                                        Height="80"
+                                        Margin="10,0,0,0"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </Border>
 
-                <!-- Leave Balance Section -->
-                <Border Grid.Row="2" 
-                        BorderBrush="#BDC3C7" 
+                <!-- Personal Information Section -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        BorderBrush="#E0E0E0"
                         BorderThickness="1"
-                        CornerRadius="5"
-                        Padding="20"
-                        Background="#F8F9FA">
+                        CornerRadius="8"
+                        Padding="25"
+                        Margin="0,0,0,25">
+                    <StackPanel>
+                        <TextBlock Text="Personal Information" 
+                                   FontSize="16" 
+                                   FontWeight="Bold"
+                                   Foreground="#2C3E50"
+                                   Margin="0,0,0,20"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Full Name (spans both columns) -->
+                            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,15">
+                                <TextBlock Text="Full Name" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="FullNameText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+
+                            <!-- Email -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,15">
+                                <TextBlock Text="Email" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="EmailText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+
+                            <!-- Phone Number -->
+                            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,15">
+                                <TextBlock Text="Phone Number" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="PhoneText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+
+                            <!-- Job Title -->
+                            <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,15">
+                                <TextBlock Text="Job Title" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="JobTitleText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+
+                            <!-- Department -->
+                            <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,15">
+                                <TextBlock Text="Department" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="DepartmentText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+
+                            <!-- Hire Date -->
+                            <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,15">
+                                <TextBlock Text="Hire Date" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="HireDateText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+
+                            <!-- Salary -->
+                            <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,15">
+                                <TextBlock Text="Salary" 
+                                           FontSize="13" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
+                                           Margin="0,0,0,5"/>
+                                <TextBox x:Name="SalaryText" 
+                                         Style="{StaticResource ProfileTextBox}"
+                                         IsReadOnly="True"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Leave Balance Section -->
+                <Border Grid.Row="2"
+                        Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="25">
                     <StackPanel>
                         <TextBlock Text="Leave Balances" 
                                    FontSize="16" 
                                    FontWeight="Bold"
+                                   Foreground="#2C3E50"
                                    Margin="0,0,0,15"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <!-- Annual leave column -->
                                 <ColumnDefinition Width="20"/>
-                                <!-- Spacing -->
                                 <ColumnDefinition Width="*"/>
-                                <!-- Sick leave column -->
                             </Grid.ColumnDefinitions>
 
-                            <!-- Annual Leave Balance (left) -->
+                            <!-- Annual Leave Balance -->
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Annual Leave Balance" 
                                            FontSize="13" 
-                                           Foreground="#7F8C8D"
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
                                            Margin="0,0,0,5"/>
                                 <TextBox x:Name="AnnualLeaveText" 
                                          Style="{StaticResource ProfileTextBox}"
                                          IsReadOnly="True"/>
                             </StackPanel>
 
-                            <!-- Sick Leave Balance (right) -->
+                            <!-- Sick Leave Balance -->
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Sick Leave Balance" 
                                            FontSize="13" 
-                                           Foreground="#7F8C8D"
+                                           FontWeight="SemiBold"
+                                           Foreground="#34495E"
                                            Margin="0,0,0,5"/>
                                 <TextBox x:Name="SickLeaveText" 
                                          Style="{StaticResource ProfileTextBox}"
@@ -279,41 +429,5 @@
                 </Border>
             </Grid>
         </ScrollViewer>
-
-        <!-- Help Button - Bottom Right Corner -->
-        <Button Content="i"
-                Grid.Row="1"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
-                Margin="0,0,20,20"
-                Width="35"
-                Height="35"
-                Click="HelpButton_Click"
-                ToolTip="Profile Help">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Background" Value="#3498DB"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="FontSize" Value="16"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#2980B9"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
     </Grid>
 </Page>
