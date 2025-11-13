@@ -106,12 +106,49 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
+        <!-- Header with Info Button -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
-            <TextBlock Text="My Training Records" 
-                       FontSize="24" 
-                       FontWeight="Bold" 
-                       Foreground="White"/>
+            <Grid>
+                <TextBlock Text="My Training Records" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+
+                <!-- Info Button in Header -->
+                <Button Content="i"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Width="35"
+                        Height="35"
+                        Click="HelpButton_Click"
+                        ToolTip="My Training Help">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#3498DB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#2980B9"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
         </Border>
 
         <!-- Content -->
@@ -296,14 +333,5 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Help Button - Bottom Right Corner -->
-        <Button Grid.Row="1"
-                Content="i"
-                Style="{StaticResource InfoButton}"
-                Click="HelpButton_Click"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="0,0,20,20"
-                ToolTip="My Training Help"/>
     </Grid>
 </Page>

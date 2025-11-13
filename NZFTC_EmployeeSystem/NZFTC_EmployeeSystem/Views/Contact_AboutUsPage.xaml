@@ -20,10 +20,47 @@
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0" Background="#34495E" Padding="20">
-                <TextBlock Text="Contact / About Us " 
-               FontSize="24" 
-               FontWeight="Black" 
-               Foreground="White"/>
+                <Grid>
+                    <TextBlock Text="Contact / About Us " 
+                               FontSize="24" 
+                               FontWeight="Black" 
+                               Foreground="White"
+                               VerticalAlignment="Center"/>
+
+                    <!-- Help Button in Header -->
+                    <Button Content="i"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="35"
+                            Height="35"
+                            Click="HelpButton_Click"
+                            ToolTip="Contact/About Help">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#3498DB"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontSize" Value="16"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#2980B9"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
             </Border>
 
             <Grid Grid.Row="1" Margin="0,0,0,15">
@@ -118,33 +155,6 @@
             <Button x:Name="EditModeButton" Visibility="Visible" Grid.Row="3" Width="75" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,130,20" Content="Edit" BorderThickness="3" Click="EditMode" Tag="Active" Background="AliceBlue" BorderBrush="LightBlue"/>
             <Button x:Name="SaveModeButton" Visibility="Collapsed" Grid.Row="3" Width="75" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,130,20" Content="Save" BorderThickness="3" Click="SaveMode" Tag="Active" Background="AliceBlue" BorderBrush="LightBlue"/>
 
-            <!-- Help Button - Bottom Right Corner -->
-            <Button Content="i" Grid.Row="3" Width="35" Height="35" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20" Click="HelpButton_Click" ToolTip="Contact/About Help">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="#3498DB"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#2980B9"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Button.Style>
-            </Button>
         </Grid>
     </ScrollViewer >
 </Page>
