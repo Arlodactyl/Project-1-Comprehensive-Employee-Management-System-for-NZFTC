@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="900" d:DesignWidth="1000"
+      d:DesignHeight="900" d:DesignWidth="1200"
       Title="Holidays">
 
     <Page.Resources>
@@ -31,6 +31,28 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Success Button Style -->
+        <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#229954"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -112,233 +134,349 @@
             </Grid>
         </Border>
 
-        <!-- Tab Control -->
-        <TabControl Grid.Row="1" Margin="20">
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#F5F6F7">
+            <Grid Margin="30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <!-- Tab 1: View Holidays -->
-            <TabItem Header="View Holidays">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="250"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                <!-- Top Action Bar -->
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <!-- Apply for Leave Button at Top -->
-                    <Button Grid.Row="0"
-                            Content="Apply for Leave"
-                            Click="ApplyForLeave_Click"
-                            Style="{StaticResource ActionButton}"
-                            Width="180"
-                            HorizontalAlignment="Right"
-                            Margin="20,10,20,10"
-                            ToolTip="Navigate to Leave Management to request time off"/>
+                    <TextBlock Grid.Column="0"
+                               Text="Upcoming Holidays &amp; Observances"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#2C3E50"
+                               VerticalAlignment="Center"/>
 
-                    <!-- Holidays Grid with Countdown Column and Delete Button -->
-                    <Grid Grid.Row="1">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                        <!-- Admin: Add Holiday Button -->
+                        <Button x:Name="AddHolidayButton"
+                                Content="➕ Add Holiday"
+                                Click="ShowAddHolidayForm_Click"
+                                Style="{StaticResource ActionButton}"
+                                Width="150"
+                                Visibility="Collapsed"
+                                ToolTip="Add a new company holiday"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Holiday Timeline Cards -->
+                <Border Grid.Row="1" 
+                        Background="White" 
+                        CornerRadius="8"
+                        Padding="25"
+                        Margin="0,0,0,25"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1">
+                    <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <DataGrid x:Name="HolidaysGrid"
-                                  Grid.Row="0"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  SelectionMode="Single"
-                                  CanUserAddRows="False"
-                                  AlternatingRowBackground="#ECF0F1"
-                                  GridLinesVisibility="Horizontal"
-                                  HeadersVisibility="Column"
-                                  Margin="20">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Holiday Name" Binding="{Binding Name}" Width="*"/>
-                                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd/MM/yyyy}" Width="100"/>
-                                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="80"/>
-                                <DataGridTextColumn Header="Countdown" Binding="{Binding DaysUntil}" Width="100"/>
-                                <DataGridCheckBoxColumn Header="Recurring" Binding="{Binding IsRecurring}" Width="80"/>
-                                <!-- Delete Button Column - Admin only -->
-                                <DataGridTemplateColumn Header="Actions" Width="80" x:Name="AdminActionsColumn">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Delete"
-                                                    Tag="{Binding Id}"
-                                                    Click="DeleteHoliday_Click"
-                                                    Style="{StaticResource DeleteButton}"
-                                                    Padding="8,4"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
+                        <!-- Section Header -->
+                        <Grid Grid.Row="0" Margin="0,0,0,20">
+                            <TextBlock Text="Holiday Calendar Timeline"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Foreground="#2C3E50"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
 
-                    <!-- Visual Holiday Timeline Map -->
-                    <Border Grid.Row="2" 
-                            BorderBrush="#BDC3C7"
-                            BorderThickness="1"
-                            CornerRadius="5"
-                            Margin="20,10,20,20"
-                            Padding="15"
-                            Background="#F8F9FA">
+                        <!-- Holiday Cards in Timeline -->
+                        <ScrollViewer Grid.Row="1" 
+                                      HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Disabled"
+                                      Height="180">
+                            <ItemsControl x:Name="HolidayTimeline">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="200" 
+                                                Height="160" 
+                                                Background="White"
+                                                BorderBrush="#3498DB"
+                                                BorderThickness="2"
+                                                CornerRadius="10"
+                                                Margin="0,0,15,0"
+                                                Padding="15">
+                                            <Border.Effect>
+                                                <DropShadowEffect Color="#CCCCCC" 
+                                                                  BlurRadius="8" 
+                                                                  ShadowDepth="2" 
+                                                                  Opacity="0.3"/>
+                                            </Border.Effect>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" 
+                                                           Text="{Binding Name}" 
+                                                           FontSize="15"
+                                                           FontWeight="Bold"
+                                                           Foreground="#2C3E50"
+                                                           TextWrapping="Wrap"
+                                                           TextAlignment="Center"
+                                                           Margin="0,0,0,10"/>
+
+                                                <TextBlock Grid.Row="1" 
+                                                           Text="{Binding Date, StringFormat=dd MMMM yyyy}" 
+                                                           FontSize="13"
+                                                           Foreground="#7F8C8D"
+                                                           TextAlignment="Center"
+                                                           Margin="0,0,0,12"/>
+
+                                                <Border Grid.Row="2" 
+                                                        Background="#E8F5E9"
+                                                        BorderBrush="#4CAF50"
+                                                        BorderThickness="1"
+                                                        CornerRadius="5"
+                                                        Padding="10,6"
+                                                        Margin="0,0,0,10">
+                                                    <TextBlock Text="{Binding DaysUntil}" 
+                                                               FontSize="14"
+                                                               FontWeight="Bold"
+                                                               Foreground="#2E7D32"
+                                                               TextAlignment="Center"/>
+                                                </Border>
+
+                                                <Border Grid.Row="3" 
+                                                        Background="#BBDEFB"
+                                                        CornerRadius="5"
+                                                        Padding="8,4"
+                                                        HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Top">
+                                                    <TextBlock Text="{Binding Type}" 
+                                                               FontSize="12"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="#1565C0"
+                                                               TextAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+                <!-- Two Column Grid: All Holidays Table + Add Form -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: All Holidays Table -->
+                    <Border Grid.Column="0" 
+                            Background="White" 
+                            CornerRadius="8"
+                            Padding="25"
+                            Margin="0,0,15,0"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Timeline Header -->
+                            <!-- Table Header -->
                             <TextBlock Grid.Row="0"
-                                       Text="Holiday Calendar Timeline"
-                                       FontSize="16"
+                                       Text="All Holidays"
+                                       FontSize="18"
                                        FontWeight="Bold"
                                        Foreground="#2C3E50"
                                        Margin="0,0,0,15"/>
 
-                            <!-- Holiday Cards in Timeline -->
-                            <ScrollViewer Grid.Row="1" 
-                                          HorizontalScrollBarVisibility="Auto"
-                                          VerticalScrollBarVisibility="Disabled">
-                                <ItemsControl x:Name="HolidayTimeline">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Orientation="Horizontal"/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Width="180" 
-                                                    Height="140" 
-                                                    Background="White"
-                                                    BorderBrush="#3498DB"
-                                                    BorderThickness="2"
-                                                    CornerRadius="8"
-                                                    Margin="10"
-                                                    Padding="12">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="*"/>
-                                                    </Grid.RowDefinitions>
-
-                                                    <TextBlock Grid.Row="0" 
-                                                               Text="{Binding Name}" 
-                                                               FontSize="14"
-                                                               FontWeight="Bold"
-                                                               Foreground="#2C3E50"
-                                                               TextWrapping="Wrap"
-                                                               TextAlignment="Center"
-                                                               Margin="0,0,0,8"/>
-
-                                                    <TextBlock Grid.Row="1" 
-                                                               Text="{Binding Date, StringFormat=dd/MM/yyyy}" 
-                                                               FontSize="12"
-                                                               Foreground="#7F8C8D"
-                                                               TextAlignment="Center"
-                                                               Margin="0,0,0,8"/>
-
-                                                    <Border Grid.Row="2" 
-                                                            Background="#E8F5E9"
-                                                            BorderBrush="#4CAF50"
-                                                            BorderThickness="1"
-                                                            CornerRadius="4"
-                                                            Padding="8,4"
-                                                            Margin="0,0,0,8">
-                                                        <TextBlock Text="{Binding DaysUntil}" 
-                                                                   FontSize="13"
-                                                                   FontWeight="SemiBold"
-                                                                   Foreground="#2E7D32"
-                                                                   TextAlignment="Center"/>
-                                                    </Border>
-
-                                                    <Border Grid.Row="3" 
-                                                            Background="#BBDEFB"
-                                                            CornerRadius="4"
-                                                            Padding="6,3"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center">
-                                                        <TextBlock Text="{Binding Type}" 
-                                                                   FontSize="11"
-                                                                   Foreground="#1565C0"
-                                                                   TextAlignment="Center"/>
-                                                    </Border>
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
+                            <!-- DataGrid with cleaner styling -->
+                            <DataGrid Grid.Row="1"
+                                      x:Name="HolidaysGrid"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      SelectionMode="Single"
+                                      CanUserAddRows="False"
+                                      AlternatingRowBackground="#F8F9FA"
+                                      GridLinesVisibility="Horizontal"
+                                      HeadersVisibility="Column"
+                                      BorderThickness="0"
+                                      Background="White"
+                                      RowHeight="40">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Holiday Name" 
+                                                        Binding="{Binding Name}" 
+                                                        Width="2*"
+                                                        FontSize="13"/>
+                                    <DataGridTextColumn Header="Date" 
+                                                        Binding="{Binding Date, StringFormat=dd/MM/yyyy}" 
+                                                        Width="100"
+                                                        FontSize="13"/>
+                                    <DataGridTextColumn Header="Type" 
+                                                        Binding="{Binding Type}" 
+                                                        Width="90"
+                                                        FontSize="13"/>
+                                    <DataGridTextColumn Header="Countdown" 
+                                                        Binding="{Binding DaysUntil}" 
+                                                        Width="110"
+                                                        FontSize="13"/>
+                                    <DataGridCheckBoxColumn Header="Recurring" 
+                                                            Binding="{Binding IsRecurring}" 
+                                                            Width="80"/>
+                                    <!-- Delete Button Column - Admin only -->
+                                    <DataGridTemplateColumn Header="Actions" Width="90" x:Name="AdminActionsColumn">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="Delete"
+                                                        Tag="{Binding Id}"
+                                                        Click="DeleteHoliday_Click"
+                                                        Style="{StaticResource DeleteButton}"
+                                                        Padding="8,4"
+                                                        FontSize="12"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
                     </Border>
-                </Grid>
-            </TabItem>
 
-            <!-- Tab 2: Add Holiday (Admin Only) -->
-            <TabItem Header="Add Holiday" x:Name="AdminHolidayTab">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="20">
+                    <!-- Right Column: Add Holiday Form + Apply for Leave Button -->
+                    <StackPanel Grid.Column="1">
+                        <!-- Add Holiday Form (Admin Only) -->
+                        <Border x:Name="AddHolidayPanel"
+                                Background="White" 
+                                CornerRadius="8"
+                                Padding="25"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Visibility="Collapsed"
+                                Margin="0,0,0,15">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="600">
+                                <StackPanel>
+                                    <!-- Form Header -->
+                                    <TextBlock Text="Add New Holiday"
+                                               FontSize="18"
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               Margin="0,0,0,20"/>
 
-                        <TextBlock Text="Holiday Name:" 
-                                   FontSize="13" 
-                                   FontWeight="SemiBold"
-                                   Margin="0,0,0,5"/>
-                        <TextBox x:Name="HolidayNameTextBox"
-                                 Height="35"
-                                 FontSize="13"
-                                 Padding="8"
-                                 MaxLength="100"
-                                 Margin="0,0,0,15"/>
+                                    <TextBlock Text="Holiday Name:" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#34495E"
+                                               Margin="0,0,0,5"/>
+                                    <TextBox x:Name="HolidayNameTextBox"
+                                             Height="35"
+                                             FontSize="13"
+                                             Padding="10,8"
+                                             MaxLength="100"
+                                             BorderBrush="#BDC3C7"
+                                             Margin="0,0,0,15"/>
 
-                        <TextBlock Text="Date:" 
-                                   FontSize="13" 
-                                   FontWeight="SemiBold"
-                                   Margin="0,0,0,5"/>
-                        <DatePicker x:Name="HolidayDatePicker" 
-                                    Height="35"
-                                    FontSize="13"
-                                    Margin="0,0,0,15"/>
+                                    <TextBlock Text="Date:" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#34495E"
+                                               Margin="0,0,0,5"/>
+                                    <DatePicker x:Name="HolidayDatePicker" 
+                                                Height="35"
+                                                FontSize="13"
+                                                BorderBrush="#BDC3C7"
+                                                Margin="0,0,0,15"/>
 
-                        <TextBlock Text="Type:" 
-                                   FontSize="13" 
-                                   FontWeight="SemiBold"
-                                   Margin="0,0,0,5"/>
-                        <ComboBox x:Name="HolidayTypeComboBox" 
-                                  Height="35"
-                                  FontSize="13"
-                                  Margin="0,0,0,15">
-                            <ComboBoxItem Content="Public"/>
-                            <ComboBoxItem Content="Company"/>
-                        </ComboBox>
+                                    <TextBlock Text="Type:" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#34495E"
+                                               Margin="0,0,0,5"/>
+                                    <ComboBox x:Name="HolidayTypeComboBox" 
+                                              Height="35"
+                                              FontSize="13"
+                                              BorderBrush="#BDC3C7"
+                                              Margin="0,0,0,15">
+                                        <ComboBoxItem Content="Public"/>
+                                        <ComboBoxItem Content="Company"/>
+                                    </ComboBox>
 
-                        <CheckBox x:Name="RecurringCheckBox" 
-                                  Content="This holiday recurs annually"
-                                  FontSize="13"
-                                  Margin="0,0,0,15"/>
+                                    <CheckBox x:Name="RecurringCheckBox" 
+                                              Content="This holiday recurs annually"
+                                              FontSize="13"
+                                              Foreground="#34495E"
+                                              Margin="0,0,0,15"/>
 
-                        <TextBlock Text="Description:" 
-                                   FontSize="13" 
-                                   FontWeight="SemiBold"
-                                   Margin="0,0,0,5"/>
-                        <TextBox x:Name="HolidayDescriptionTextBox" 
-                                 Height="80" 
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Padding="8"
-                                 FontSize="13"
-                                 MaxLength="500"
-                                 Margin="0,0,0,20"/>
+                                    <TextBlock Text="Description:" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#34495E"
+                                               Margin="0,0,0,5"/>
+                                    <TextBox x:Name="HolidayDescriptionTextBox" 
+                                             Height="80" 
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             VerticalScrollBarVisibility="Auto"
+                                             Padding="10,8"
+                                             FontSize="13"
+                                             BorderBrush="#BDC3C7"
+                                             MaxLength="500"
+                                             Margin="0,0,0,20"/>
 
-                        <Button Content="Add Holiday"
-                                Click="AddHoliday_Click"
-                                Style="{StaticResource ActionButton}"
-                                Width="150"
-                                HorizontalAlignment="Left"/>
+                                    <Button Content="Add Holiday"
+                                            Click="AddHoliday_Click"
+                                            Style="{StaticResource SuccessButton}"
+                                            Width="150"
+                                            HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+
+                        <!-- Apply for Leave Button -->
+                        <Border Background="White" 
+                                CornerRadius="8"
+                                Padding="25"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Need Time Off?"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="#2C3E50"
+                                           Margin="0,0,0,10"/>
+                                <TextBlock Text="Request leave for holidays, personal days, or other time away from work."
+                                           FontSize="12"
+                                           Foreground="#7F8C8D"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,15"/>
+                                <Button Content="Apply for Leave"
+                                        Click="ApplyForLeave_Click"
+                                        Style="{StaticResource SuccessButton}"
+                                        HorizontalAlignment="Stretch"
+                                        Height="40"
+                                        ToolTip="Navigate to Leave Management to request time off"/>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
-                </ScrollViewer>
-            </TabItem>
-        </TabControl>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

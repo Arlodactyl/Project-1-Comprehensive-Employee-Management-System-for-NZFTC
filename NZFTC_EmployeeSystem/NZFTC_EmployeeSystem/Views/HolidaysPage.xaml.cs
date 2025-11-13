@@ -8,15 +8,12 @@ using System.Windows.Controls;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
-    /// Interaction logic for HolidaysPage.xaml
+  
     /// This page displays a list of company holidays with countdown timers.
-    /// Administrators can add new holidays through the Add Holiday tab.
-    /// Features a visual timeline map showing upcoming holidays.
-    /// </summary>
+   
     public partial class HolidaysPage : Page
     {
-        // Store the current logged-in user so we know who's viewing the page
+        // Store the current logged-in user so we know who's viewing the page aka admin or employee
         private readonly User _currentUser;
 
         /// <summary>
@@ -24,41 +21,111 @@ namespace NZFTC_EmployeeSystem.Views
         /// </summary>
         public HolidaysPage(User currentUser)
         {
-            InitializeComponent();
-            _currentUser = currentUser;
-
-            // Only show the "Add Holiday" tab if the user is an admin
-            if (_currentUser.Role != "Admin")
+            try
             {
-                AdminHolidayTab.Visibility = Visibility.Collapsed;
-                // Also hide the delete actions column for non-admins
-                if (AdminActionsColumn != null)
+                InitializeComponent();
+                _currentUser = currentUser;
+
+                // Configure role-based access 
+                ConfigureRoleBasedAccess();
+
+                // Set date picker constraints
+                ConfigureDatePicker();
+
+                // Load all holidays from the database and display them to user
+                LoadHolidayData();
+
+                // Set the default selection for holiday type dropdown to "Public"
+                if (HolidayTypeComboBox != null)
                 {
-                    AdminActionsColumn.Visibility = Visibility.Collapsed;
+                    HolidayTypeComboBox.SelectedIndex = 0;
                 }
             }
-
-            // Set date picker to only allow today or future dates
-            if (HolidayDatePicker != null)
+            catch (Exception ex)
             {
-                HolidayDatePicker.DisplayDateStart = DateTime.Today;
-                // Set maximum date to 10 years in future
-                HolidayDatePicker.DisplayDateEnd = DateTime.Today.AddYears(10);
+                MessageBox.Show(
+                    $"Error initializing Holidays page: {ex.Message}\n\nPlease contact your system administrator.",
+                    "Initialization Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
+        }
 
-            // Load all holidays from the database and display them
-            LoadHolidayData();
-
-            // Set the default selection for holiday type dropdown to "Public"
-            if (HolidayTypeComboBox != null)
+        /// <summary>
+        /// Configures role-based access to admin-only features
+        /// </summary>
+        private void ConfigureRoleBasedAccess()
+        {
+            try
             {
-                HolidayTypeComboBox.SelectedIndex = 0;
+                if (_currentUser.Role != "Admin")
+                {
+                    // Hide admin-only controls for non-admin users
+                    if (AdminActionsColumn != null)
+                    {
+                        AdminActionsColumn.Visibility = Visibility.Collapsed;
+                    }
+
+                    if (AddHolidayButton != null)
+                    {
+                        AddHolidayButton.Visibility = Visibility.Collapsed;
+                    }
+
+                    if (AddHolidayPanel != null)
+                    {
+                        AddHolidayPanel.Visibility = Visibility.Collapsed;
+                    }
+                }
+                else
+                {
+                    // Admin can see everything here
+                    if (AdminActionsColumn != null)
+                    {
+                        AdminActionsColumn.Visibility = Visibility.Visible;
+                    }
+
+                    if (AddHolidayButton != null)
+                    {
+                        AddHolidayButton.Visibility = Visibility.Visible;
+                    }
+
+                    // Form starts hidden until user clicks Add Holiday button
+                    if (AddHolidayPanel != null)
+                    {
+                        AddHolidayPanel.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error configuring role-based access: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Configures date picker constraints
+        /// </summary>
+        private void ConfigureDatePicker()
+        {
+            try
+            {
+                // Set date picker to only allow today or future dates
+                if (HolidayDatePicker != null)
+                {
+                    HolidayDatePicker.DisplayDateStart = DateTime.Today;
+                    // Set maximum date to 10 years in future
+                    HolidayDatePicker.DisplayDateEnd = DateTime.Today.AddYears(10);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error configuring date picker: {ex.Message}");
             }
         }
 
         /// <summary>
         /// Loads all holidays from the database and displays them in both the grid and timeline
-        /// This method connects to the database, retrieves holidays, calculates countdowns, and binds to UI
+        /// This method connects to the database, retrieves holidays, calculates countdowns, and binds
         /// </summary>
         private void LoadHolidayData()
         {
@@ -88,24 +155,30 @@ namespace NZFTC_EmployeeSystem.Views
                     }).ToList();
 
                     // Show all holidays in the grid
-                    HolidaysGrid.ItemsSource = holidayViewModels;
+                    if (HolidaysGrid != null)
+                    {
+                        HolidaysGrid.ItemsSource = holidayViewModels;
+                    }
 
                     // Filter to only show upcoming holidays in the timeline (next 12 months)
-                    // This prevents the timeline from becoming cluttered with old holidays
+                  
                     var upcomingHolidays = holidayViewModels
                         .Where(h => h.Date >= DateTime.Today && h.Date <= DateTime.Today.AddMonths(12))
                         .Take(10) // Limit to 10 holidays to prevent overcrowding
                         .ToList();
 
-                    // Bind the upcoming holidays to the timeline control
-                    HolidayTimeline.ItemsSource = upcomingHolidays;
+                    
+                    if (HolidayTimeline != null)
+                    {
+                        HolidayTimeline.ItemsSource = upcomingHolidays;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 // If something goes wrong, show an error message for feedback purposes
                 MessageBox.Show(
-                    $"Error loading holidays: {ex.Message}\n\nPlease ensure the database exists.",
+                    $"Error loading holidays: {ex.Message}\n\nPlease ensure the database exists and is accessible.",
                     "Database Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
@@ -117,72 +190,143 @@ namespace NZFTC_EmployeeSystem.Views
         /// Calculates and formats a user-friendly countdown message for a holiday
         /// </summary>
         /// <param name="holidayDate">The date of the holiday</param>
-        /// <returns>A formatted string like "In 5 days", "Tomorrow", "Today", or "Passed"</returns>
+ 
         private string CalculateCountdown(DateTime holidayDate)
         {
-            // Calculate the difference between today and the holiday date
-            var daysUntil = (holidayDate.Date - DateTime.Today).TotalDays;
+            try
+            {
+                // Calculate the difference between today and the holiday date
+                var daysUntil = (holidayDate.Date - DateTime.Today).TotalDays;
 
-            // Return appropriate message based on how far away the holiday is
-            if (daysUntil < 0)
-                return "Passed";
-            else if (daysUntil == 0)
-                return "Today!";
-            else if (daysUntil == 1)
-                return "Tomorrow";
-            else if (daysUntil <= 7)
-                return $"In {daysUntil} days";
-            else if (daysUntil <= 30)
-                return $"In {Math.Ceiling(daysUntil / 7)} weeks";
-            else
-                return $"In {Math.Ceiling(daysUntil / 30)} months";
+                // Return appropriate message based on how far away the holiday is
+                if (daysUntil < 0)
+                    return "Passed";
+                else if (daysUntil == 0)
+                    return "Today";
+                else if (daysUntil == 1)
+                    return "Tomorrow";
+                else if (daysUntil <= 7)
+                    return $"In {daysUntil} days";
+                else if (daysUntil <= 30)
+                    return $"In {Math.Ceiling(daysUntil / 7)} weeks";
+                else
+                    return $"In {Math.Ceiling(daysUntil / 30)} months";
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error calculating countdown: {ex.Message}");
+                return "Unknown";
+            }
         }
 
         /// <summary>
-        /// Handles the Add Holiday button click
-        /// This validates the input, creates a new Holiday record, and saves it to the database
-        /// </summary>
-        private void AddHoliday_Click(object sender, RoutedEventArgs e)
+        /// Shows or hides the Add Holiday form panel (Admin only)
+   
+        private void ShowAddHolidayForm_Click(object sender, RoutedEventArgs e)
         {
-            // Step 1: Validate holiday name
-            var holidayName = HolidayNameTextBox?.Text?.Trim();
-            if (string.IsNullOrWhiteSpace(holidayName))
-            {
-                MessageBox.Show(
-                    "Please enter a holiday name.",
-                    "Validation Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning
-                );
-                return;
-            }
-
-            // Step 2: Validate date is selected
-            if (!HolidayDatePicker.SelectedDate.HasValue)
-            {
-                MessageBox.Show(
-                    "Please select a date for the holiday.",
-                    "Validation Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning
-                );
-                return;
-            }
-
-            // Step 3: Validate type is selected
-            if (HolidayTypeComboBox.SelectedIndex < 0)
-            {
-                MessageBox.Show(
-                    "Please select a holiday type (Public or Company).",
-                    "Validation Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning
-                );
-                return;
-            }
-
             try
             {
+                // Verify user is admin
+                if (_currentUser.Role != "Admin")
+                {
+                    MessageBox.Show(
+                        "Only administrators can add holidays.",
+                        "Access Denied",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Toggle the add form visibility
+                if (AddHolidayPanel != null)
+                {
+                    if (AddHolidayPanel.Visibility == Visibility.Collapsed)
+                    {
+                        AddHolidayPanel.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        AddHolidayPanel.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error toggling form: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        
+        /// Handles the Add Holiday button click
+     
+        private void AddHoliday_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Verify user is admin
+                if (_currentUser.Role != "Admin")
+                {
+                    MessageBox.Show(
+                        "Only administrators can add holidays.",
+                        "Access Denied",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Step 1: Validate holiday name
+                var holidayName = HolidayNameTextBox?.Text?.Trim();
+                if (string.IsNullOrWhiteSpace(holidayName))
+                {
+                    MessageBox.Show(
+                        "Please enter a holiday name.",
+                        "Validation Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    if (HolidayNameTextBox != null)
+                    {
+                        HolidayNameTextBox.Focus();
+                    }
+                    return;
+                }
+
+                // Step 2: Validate date is selected
+                if (HolidayDatePicker == null || !HolidayDatePicker.SelectedDate.HasValue)
+                {
+                    MessageBox.Show(
+                        "Please select a date for the holiday.",
+                        "Validation Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    if (HolidayDatePicker != null)
+                    {
+                        HolidayDatePicker.Focus();
+                    }
+                    return;
+                }
+
+                // Step 3: Validate type is selected
+                if (HolidayTypeComboBox == null || HolidayTypeComboBox.SelectedIndex < 0)
+                {
+                    MessageBox.Show(
+                        "Please select a holiday type (Public or Company).",
+                        "Validation Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    if (HolidayTypeComboBox != null)
+                    {
+                        HolidayTypeComboBox.Focus();
+                    }
+                    return;
+                }
+
                 using (var db = new AppDbContext())
                 {
                     // Step 4: Check for duplicate holidays on the same date
@@ -220,29 +364,31 @@ namespace NZFTC_EmployeeSystem.Views
                     // Step 6: Add to database
                     db.Holidays.Add(holiday);
                     db.SaveChanges();
+
+                    MessageBox.Show(
+                        $"Holiday '{holidayName}' added successfully!",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+
+                    // Step 7: Clear the form
+                    ClearAddHolidayForm();
+
+                    // Step 8: Reload the holidays to show the new one
+                    LoadHolidayData();
+
+                    // Step 9: Hide the form panel
+                    if (AddHolidayPanel != null)
+                    {
+                        AddHolidayPanel.Visibility = Visibility.Collapsed;
+                    }
                 }
-
-                MessageBox.Show(
-                    $"Holiday '{holidayName}' added successfully!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-
-                // Step 7: Clear the form
-                HolidayNameTextBox.Clear();
-                HolidayDatePicker.SelectedDate = null;
-                HolidayDescriptionTextBox.Clear();
-                RecurringCheckBox.IsChecked = false;
-                HolidayTypeComboBox.SelectedIndex = 0;
-
-                // Step 8: Reload the holidays to show the new one
-                LoadHolidayData();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Error adding holiday: {ex.Message}",
+                    $"Error adding holiday: {ex.Message}\n\nPlease try again or contact your system administrator.",
                     "Database Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
@@ -250,15 +396,64 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
+       
+        /// Clears all fields in the Add Holiday form
+        
+        private void ClearAddHolidayForm()
+        {
+            try
+            {
+                if (HolidayNameTextBox != null)
+                {
+                    HolidayNameTextBox.Clear();
+                }
+
+                if (HolidayDatePicker != null)
+                {
+                    HolidayDatePicker.SelectedDate = null;
+                }
+
+                if (HolidayDescriptionTextBox != null)
+                {
+                    HolidayDescriptionTextBox.Clear();
+                }
+
+                if (RecurringCheckBox != null)
+                {
+                    RecurringCheckBox.IsChecked = false;
+                }
+
+                if (HolidayTypeComboBox != null)
+                {
+                    HolidayTypeComboBox.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error clearing form: {ex.Message}");
+            }
+        }
+
+       
         /// Handles the Delete button click on a holiday row
-        /// </summary>
+       
         private void DeleteHoliday_Click(object sender, RoutedEventArgs e)
         {
-            // Step 1: Get the holiday ID from the button's Tag property
-            if (sender is Button button && button.Tag is int holidayId)
+            try
             {
-                try
+                // Verify user is admin
+                if (_currentUser.Role != "Admin")
+                {
+                    MessageBox.Show(
+                        "Only administrators can delete holidays.",
+                        "Access Denied",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Step 1: Get the holiday ID from the button's Tag property
+                if (sender is Button button && button.Tag is int holidayId)
                 {
                     using (var db = new AppDbContext())
                     {
@@ -268,11 +463,12 @@ namespace NZFTC_EmployeeSystem.Views
                         if (holiday == null)
                         {
                             MessageBox.Show(
-                                "Holiday not found in the database.",
-                                "Error",
+                                "Holiday not found in the database. It may have already been deleted.",
+                                "Not Found",
                                 MessageBoxButton.OK,
-                                MessageBoxImage.Error
+                                MessageBoxImage.Warning
                             );
+                            LoadHolidayData(); // Refresh to show current state
                             return;
                         }
 
@@ -293,102 +489,124 @@ namespace NZFTC_EmployeeSystem.Views
                         // Step 4: Delete the holiday
                         db.Holidays.Remove(holiday);
                         db.SaveChanges();
+
+                        MessageBox.Show(
+                            "Holiday deleted successfully.",
+                            "Success",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information
+                        );
+
+                        // Step 5: Reload the holidays list
+                        LoadHolidayData();
                     }
-
-                    MessageBox.Show(
-                        "Holiday deleted successfully.",
-                        "Success",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information
-                    );
-
-                    // Step 5: Reload the holidays list
-                    LoadHolidayData();
                 }
-                catch (Exception ex)
+                else
                 {
                     MessageBox.Show(
-                        $"Error deleting holiday: {ex.Message}",
-                        "Database Error",
+                        "Error: Unable to identify which holiday to delete.",
+                        "Error",
                         MessageBoxButton.OK,
-                        MessageBoxImage.Error
-                    );
+                        MessageBoxImage.Error);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Navigate to Leave Management page
-        /// </summary>
-        private void ApplyForLeave_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                // Create the Leave page and navigate to it
-                var leavePage = new LeavePage(_currentUser);
-                this.NavigationService?.Navigate(leavePage);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Error navigating to Leave Management: {ex.Message}",
+                    $"Error deleting holiday: {ex.Message}\n\nThe holiday may be referenced by other records.",
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+      
+        private void ApplyForLeave_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Try to get the dashboard window
+                var dashboardWindow = Window.GetWindow(this) as DashboardWindow;
+
+                if (dashboardWindow != null)
+                {
+                    // Use the dashboard's navigation method
+                    dashboardWindow.NavigateToLeaveManagement();
+                }
+                else
+                {
+                    // Fallback: Try direct navigation
+                    var leavePage = new LeavePage(_currentUser);
+                    this.NavigationService?.Navigate(leavePage);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error navigating to Leave Management: {ex.Message}\n\nPlease use the sidebar menu to navigate.",
                     "Navigation Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
 
-        /// <summary>
-        /// Shows help information for using the holidays page
-        /// </summary>
+       
         private void HelpButton_Click(object sender, RoutedEventArgs e)
         {
-            string helpMessage = "Holidays Page Help\n\n" +
-                "View Holidays Tab:\n" +
-                "- See all company holidays with countdown timers\n" +
-                "- Click 'Apply for Leave' to request time off\n" +
-                "- Timeline shows upcoming holidays visually\n";
-
-            if (_currentUser.Role == "Admin")
+            try
             {
-                helpMessage += "\nAdd Holiday Tab (Admin Only):\n" +
-                    "- Add new company or public holidays\n" +
-                    "- Fill in holiday name, date, type, and description\n" +
-                    "- Check 'Recurring' for annual holidays\n" +
-                    "- Click 'Add Holiday' to save\n\n" +
-                    "Delete Holidays:\n" +
-                    "- Click the 'Delete' button next to any holiday to remove it\n" +
-                    "- You will be asked to confirm before deletion";
-            }
+                string helpMessage = "Holidays Page Help\n\n" +
+                    "Holiday Calendar Timeline:\n" +
+                    "- View upcoming holidays in a visual timeline\n" +
+                    "- See countdown to each holiday\n" +
+                    "- Cards show holiday name, date, type, and days remaining\n\n" +
+                    "All Holidays Table:\n" +
+                    "- Complete list of all company holidays\n" +
+                    "- Shows holiday name, date, type, countdown, and recurring status\n" +
+                    "- Apply for Leave button navigates to leave request page\n";
 
-            MessageBox.Show(
-                helpMessage,
-                "Holidays Help",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
+                if (_currentUser.Role == "Admin")
+                {
+                    helpMessage += "\nAdmin Features:\n" +
+                        "- Click 'Add Holiday' button to show the form\n" +
+                        "- Fill in holiday details (name, date, type required)\n" +
+                        "- Check 'Recurring' for annual holidays like birthdays\n" +
+                        "- Click 'Add Holiday' in form to save\n" +
+                        "- Click 'Delete' button in table to remove holidays\n" +
+                        "- System will confirm before deleting\n" +
+                        "- Duplicate date warnings help prevent errors";
+                }
+
+                MessageBox.Show(
+                    helpMessage,
+                    "Holidays Help",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error showing help: {ex.Message}");
+            }
         }
     }
 
-    /// <summary>
-    /// View Model class for displaying holidays with calculated countdown
-    /// This class extends the Holiday model with a DaysUntil property for display purposes
-    /// We use a separate view model so we don't modify the database model
-    /// </summary>
+   
     public class HolidayViewModel
     {
         // All the standard Holiday properties
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public DateTime Date { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public bool IsRecurring { get; set; }
         public DateTime CreatedDate { get; set; }
         public int CreatedByUserId { get; set; }
 
         // Additional property for countdown display
         // This is calculated in the code-behind and not stored in the database
-        public string DaysUntil { get; set; }
+        public string DaysUntil { get; set; } = string.Empty;
     }
 }
