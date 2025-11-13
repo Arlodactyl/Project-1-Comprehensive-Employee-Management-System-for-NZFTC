@@ -237,7 +237,7 @@
                     <StackPanel x:Name="MenuPanel" 
                                 Margin="10,0,10,20">
 
-                        <!-- Dashboard Button - Visible to ALL users -->
+                        <!-- All Users -->
                         <Grid>
                             <Button x:Name="DashboardButtonExpanded"
                                     Content="Dashboard" 
@@ -252,7 +252,6 @@
                                     ToolTip="Dashboard"/>
                         </Grid>
 
-                        <!-- Account Button - Visible to ALL users -->
                         <Grid>
                             <Button x:Name="AccountButtonExpanded"
                                     Content="Account" 
@@ -267,52 +266,7 @@
                                     ToolTip="Account"/>
                         </Grid>
 
-                        <!-- My Training Button - Visible to Employee and Workplace Trainer only -->
-                        <Grid x:Name="MyTrainingButtonGrid">
-                            <Button x:Name="MyTrainingButtonExpanded"
-                                    Content="My Training" 
-                                    Style="{StaticResource SidebarButtonStyle}"
-                                    Click="MyTraining_Click"
-                                    Visibility="Visible"/>
-                            <Button x:Name="MyTrainingButtonCollapsed"
-                                    Content="MT" 
-                                    Style="{StaticResource CollapsedButtonStyle}"
-                                    Click="MyTraining_Click"
-                                    Visibility="Collapsed"
-                                    ToolTip="My Training"/>
-                        </Grid>
-
-                        <!-- My Pay Button - Visible to Employee only -->
-                        <Grid x:Name="MyPayButtonGrid">
-                            <Button x:Name="MyPayButtonExpanded"
-                                    Content="My Pay" 
-                                    Style="{StaticResource SidebarButtonStyle}"
-                                    Click="MyPay_Click"
-                                    Visibility="Visible"/>
-                            <Button x:Name="MyPayButtonCollapsed"
-                                    Content="MP" 
-                                    Style="{StaticResource CollapsedButtonStyle}"
-                                    Click="MyPay_Click"
-                                    Visibility="Collapsed"
-                                    ToolTip="My Pay"/>
-                        </Grid>
-
-                        <!-- Holidays Button - Visible to Employee only -->
-                        <Grid x:Name="HolidaysButtonGrid">
-                            <Button x:Name="HolidaysButtonExpanded"
-                                    Content="Holidays"
-                                    Style="{StaticResource SidebarButtonStyle}"
-                                    Click="Holidays_Click"
-                                    Visibility="Visible"/>
-                            <Button x:Name="HolidaysButtonCollapsed"
-                                    Content="HD"
-                                    Style="{StaticResource CollapsedButtonStyle}"
-                                    Click="Holidays_Click"
-                                    Visibility="Collapsed"
-                                    ToolTip="Holidays"/>
-                        </Grid>
-
-                        <!-- Leave Button - Visible to Employee only -->
+                        <!-- Employee Only -->
                         <Grid x:Name="LeaveButtonGrid">
                             <Button x:Name="LeaveButtonExpanded"
                                     Content="Leave"
@@ -327,7 +281,48 @@
                                     ToolTip="Leave"/>
                         </Grid>
 
-                        <!-- Grievance Button - Visible to Employee only -->
+                        <Grid x:Name="HolidaysButtonGrid">
+                            <Button x:Name="HolidaysButtonExpanded"
+                                    Content="Holidays"
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="Holidays_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="HolidaysButtonCollapsed"
+                                    Content="HD"
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="Holidays_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="Holidays"/>
+                        </Grid>
+
+                        <Grid x:Name="MyPayButtonGrid">
+                            <Button x:Name="MyPayButtonExpanded"
+                                    Content="My Pay" 
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="MyPay_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="MyPayButtonCollapsed"
+                                    Content="MP" 
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="MyPay_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="My Pay"/>
+                        </Grid>
+
+                        <Grid x:Name="MyTrainingButtonGrid">
+                            <Button x:Name="MyTrainingButtonExpanded"
+                                    Content="My Training" 
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="MyTraining_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="MyTrainingButtonCollapsed"
+                                    Content="MT" 
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="MyTraining_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="My Training"/>
+                        </Grid>
+
                         <Grid x:Name="GrievanceButtonGrid">
                             <Button x:Name="GrievanceButtonExpanded"
                                     Content="Grievance"
@@ -342,28 +337,11 @@
                                     ToolTip="Grievance"/>
                         </Grid>
 
-                        <!-- About/Contact Button - Visible to ALL users -->
-                        <Grid>
-                            <Button x:Name="AboutContactButtonExpanded"
-                                    Content="About/Contact"
-                                    Style="{StaticResource SidebarButtonStyle}"
-                                    Click="AboutContact_Click"
-                                    Visibility="Visible"/>
-                            <Button x:Name="AboutContactButtonCollapsed"
-                                    Content="AB"
-                                    Style="{StaticResource CollapsedButtonStyle}"
-                                    Click="AboutContact_Click"
-                                    Visibility="Collapsed"
-                                    ToolTip="About/Contact"/>
-                        </Grid>
-
-                        <!-- Admin & Workplace Trainer Section -->
-                        <!-- Shows Employee Management, Departments, and more -->
+                        <!-- Admin and Trainer -->
                         <StackPanel x:Name="AdminTrainerMenuPanel" 
                                     Visibility="Collapsed"
                                     Margin="0,15,0,0">
 
-                            <!-- Employee Management Button - Admin and Workplace Trainer -->
                             <Grid>
                                 <Button x:Name="EmployeeManagementButtonExpanded"
                                         Content="Employee Management" 
@@ -378,7 +356,6 @@
                                         ToolTip="Employee Management"/>
                             </Grid>
 
-                            <!-- Departments Button - Admin and Workplace Trainer -->
                             <Grid>
                                 <Button x:Name="DepartmentsButtonExpanded"
                                         Content="Departments" 
@@ -394,27 +371,11 @@
                             </Grid>
                         </StackPanel>
 
-                        <!-- Admin Only Section -->
+                        <!-- Admin Only -->
                         <StackPanel x:Name="AdminOnlyMenuPanel" 
                                     Visibility="Collapsed"
                                     Margin="0,15,0,0">
 
-                            <!-- Payroll Button - Admin only -->
-                            <Grid>
-                                <Button x:Name="PayrollButtonExpanded"
-                                        Content="Payroll" 
-                                        Style="{StaticResource SidebarButtonStyle}"
-                                        Click="Payroll_Click"
-                                        Visibility="Visible"/>
-                                <Button x:Name="PayrollButtonCollapsed"
-                                        Content="PR" 
-                                        Style="{StaticResource CollapsedButtonStyle}"
-                                        Click="Payroll_Click"
-                                        Visibility="Collapsed"
-                                        ToolTip="Payroll"/>
-                            </Grid>
-
-                            <!-- Leave Management Button - Admin only -->
                             <Grid>
                                 <Button x:Name="LeaveManagementButtonExpanded"
                                         Content="Leave Management" 
@@ -429,7 +390,20 @@
                                         ToolTip="Leave Management"/>
                             </Grid>
 
-                            <!-- Grievances Button - Admin only -->
+                            <Grid>
+                                <Button x:Name="PayrollButtonExpanded"
+                                        Content="Payroll" 
+                                        Style="{StaticResource SidebarButtonStyle}"
+                                        Click="Payroll_Click"
+                                        Visibility="Visible"/>
+                                <Button x:Name="PayrollButtonCollapsed"
+                                        Content="PR" 
+                                        Style="{StaticResource CollapsedButtonStyle}"
+                                        Click="Payroll_Click"
+                                        Visibility="Collapsed"
+                                        ToolTip="Payroll"/>
+                            </Grid>
+
                             <Grid>
                                 <Button x:Name="GrievancesButtonExpanded"
                                         Content="Grievances" 
@@ -444,6 +418,21 @@
                                         ToolTip="Grievances"/>
                             </Grid>
                         </StackPanel>
+
+                        <!-- All Users -->
+                        <Grid Margin="0,15,0,0">
+                            <Button x:Name="AboutContactButtonExpanded"
+                                    Content="About/Contact"
+                                    Style="{StaticResource SidebarButtonStyle}"
+                                    Click="AboutContact_Click"
+                                    Visibility="Visible"/>
+                            <Button x:Name="AboutContactButtonCollapsed"
+                                    Content="AB"
+                                    Style="{StaticResource CollapsedButtonStyle}"
+                                    Click="AboutContact_Click"
+                                    Visibility="Collapsed"
+                                    ToolTip="About/Contact"/>
+                        </Grid>
                     </StackPanel>
                 </ScrollViewer>
 
