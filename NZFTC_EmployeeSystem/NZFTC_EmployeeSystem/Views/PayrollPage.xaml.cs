@@ -792,5 +792,153 @@ This system calculates weekly payslips using:
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+
+        /// <summary>
+        /// Exports the currently selected payslip from All Payslips grid
+        /// </summary>
+        private void ExportSelectedPayslip_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedPayslip = AllPayslipsGrid.SelectedItem as Payslip;
+
+            if (selectedPayslip == null)
+            {
+                MessageBox.Show("Please select a payslip to export.", "No Selection",
+                              MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            ExportSinglePayslip(selectedPayslip);
+        }
+
+        /// <summary>
+        /// Exports the currently selected payslip from My Payslips grid
+        /// </summary>
+        private void ExportSelectedMyPayslip_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedPayslip = MyPayslipsGrid.SelectedItem as Payslip;
+
+            if (selectedPayslip == null)
+            {
+                MessageBox.Show("Please select a payslip to export.", "No Selection",
+                              MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            ExportSinglePayslip(selectedPayslip);
+        }
+
+        /// <summary>
+        /// Shows details for selected payslip from All Payslips grid (context menu)
+        /// </summary>
+        private void ViewPayslipDetails_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedPayslip = AllPayslipsGrid.SelectedItem as Payslip;
+            if (selectedPayslip != null)
+            {
+                ShowPayslipDetails(selectedPayslip);
+            }
+        }
+
+        /// <summary>
+        /// Shows details for selected payslip from My Payslips grid (context menu)
+        /// </summary>
+        private void ViewMyPayslipDetails_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedPayslip = MyPayslipsGrid.SelectedItem as Payslip;
+            if (selectedPayslip != null)
+            {
+                ShowPayslipDetails(selectedPayslip);
+            }
+        }
+
+        /// <summary>
+        /// Exports a single payslip to CSV file
+        /// </summary>
+        private void ExportSinglePayslip(Payslip payslip)
+        {
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    // Get fresh employee data for department info
+                    var employee = db.Employees.Include(e => e.Department).FirstOrDefault(e => e.Id == payslip.EmployeeId);
+                    var generatedBy = db.Users.Find(payslip.GeneratedByUserId);
+
+                    // Create save file dialog
+                    SaveFileDialog saveDialog = new SaveFileDialog
+                    {
+                        Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                        FilterIndex = 1,
+                        FileName = $"Payslip_{employee?.FullName?.Replace(" ", "_") ?? "Employee"}_{payslip.PayPeriodEnd:yyyyMMdd}.csv",
+                        DefaultExt = "csv",
+                        AddExtension = true,
+                        Title = "Export Payslip"
+                    };
+
+                    if (saveDialog.ShowDialog() == true)
+                    {
+                        using (StreamWriter writer = new StreamWriter(saveDialog.FileName, false, Encoding.UTF8))
+                        {
+                            // Write CSV header
+                            writer.WriteLine("NZFTC Employee System - Payslip Export");
+                            writer.WriteLine($"Generated: {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                            writer.WriteLine($"Exported By: {_currentUser.Username}");
+                            writer.WriteLine("");
+
+                            // Write payslip details
+                            writer.WriteLine("=== PAYSLIP DETAILS ===");
+                            writer.WriteLine($"Payslip ID:,{payslip.Id}");
+                            writer.WriteLine($"Employee ID:,{payslip.EmployeeId}");
+                            writer.WriteLine($"Employee Name:,{employee?.FullName ?? "Unknown"}");
+                            writer.WriteLine($"Department:,{employee?.Department?.Name ?? "N/A"}");
+                            writer.WriteLine("");
+
+                            writer.WriteLine("=== PAY PERIOD ===");
+                            writer.WriteLine($"Period Start:,{payslip.PayPeriodStart:dd/MM/yyyy}");
+                            writer.WriteLine($"Period End:,{payslip.PayPeriodEnd:dd/MM/yyyy}");
+                            writer.WriteLine("");
+
+                            writer.WriteLine("=== EARNINGS ===");
+                            decimal hours = 40m;
+                            decimal hourlyRate = employee != null ? employee.Salary / 52m / 40m : 0m;
+                            writer.WriteLine($"Hours Worked:,{hours}");
+                            writer.WriteLine($"Hourly Rate:,${hourlyRate:F2}");
+                            writer.WriteLine($"Gross Pay:,${payslip.GrossSalary:F2}");
+                            writer.WriteLine("");
+
+                            writer.WriteLine("=== DEDUCTIONS ===");
+                            writer.WriteLine($"Tax Rate:,{employee?.TaxRate ?? 0}%");
+                            writer.WriteLine($"Tax Deducted:,${payslip.TaxDeduction:F2}");
+                            writer.WriteLine("");
+
+                            writer.WriteLine("=== NET PAY ===");
+                            writer.WriteLine($"Net Pay:,${payslip.NetSalary:F2}");
+                            writer.WriteLine("");
+
+                            writer.WriteLine("=== GENERATION INFO ===");
+                            writer.WriteLine($"Generated Date:,{payslip.GeneratedDate:dd/MM/yyyy HH:mm:ss}");
+                            writer.WriteLine($"Generated By:,{generatedBy?.Username ?? "System"}");
+                        }
+
+                        MessageBox.Show(
+                            $"Payslip exported successfully!\n\n" +
+                            $"Employee: {employee?.FullName ?? "Unknown"}\n" +
+                            $"Period: {payslip.PayPeriodStart:dd/MM/yyyy} - {payslip.PayPeriodEnd:dd/MM/yyyy}\n\n" +
+                            $"File saved to:\n{saveDialog.FileName}",
+                            "Export Successful",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+
+                        // Open the file location in explorer
+                        System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{saveDialog.FileName}\"");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error exporting payslip:\n{ex.Message}", "Export Error",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

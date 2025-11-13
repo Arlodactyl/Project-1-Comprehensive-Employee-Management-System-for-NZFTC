@@ -139,7 +139,7 @@
 
                     <!-- Instructions -->
                     <TextBlock Grid.Row="1"
-                               Text="View and manage payslips for all employees. Search by employee name to filter results."
+                               Text="View and manage payslips for all employees. Search by employee name to filter results. Right-click or select a payslip to export individually."
                                FontSize="13"
                                Foreground="#7F8C8D"
                                TextWrapping="Wrap"
@@ -182,7 +182,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- DataGrid -->
+                    <!-- DataGrid with Context Menu -->
                     <DataGrid Grid.Row="3"
                               x:Name="AllPayslipsGrid"
                               AutoGenerateColumns="False"
@@ -193,6 +193,23 @@
                               GridLinesVisibility="Horizontal"
                               HeadersVisibility="Column"
                               MouseDoubleClick="AllPayslipsGrid_MouseDoubleClick">
+
+                        <!-- Context Menu for Right-Click -->
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Export This Payslip" Click="ExportSelectedPayslip_Click">
+                                    <MenuItem.Icon>
+                                        <TextBlock Text="📄" FontSize="14"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="View Details" Click="ViewPayslipDetails_Click">
+                                    <MenuItem.Icon>
+                                        <TextBlock Text="👁" FontSize="14"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                             <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="200"/>
@@ -205,14 +222,19 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <!-- Export Button -->
-                    <Button Grid.Row="4"
-                            Content="Export Visible Payslips"
-                            Style="{StaticResource ActionButton}"
-                            Click="ExportPayslips_Click"
-                            HorizontalAlignment="Left"
-                            Margin="0,15,0,0"
-                            Width="200"/>
+                    <!-- Export Buttons -->
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,15,0,0">
+                        <Button Content="Export Selected Payslip"
+                                Style="{StaticResource SuccessButton}"
+                                Click="ExportSelectedPayslip_Click"
+                                HorizontalAlignment="Left"
+                                Width="200"/>
+                        <Button Content="Export Visible Payslips"
+                                Style="{StaticResource ActionButton}"
+                                Click="ExportPayslips_Click"
+                                HorizontalAlignment="Left"
+                                Width="200"/>
+                    </StackPanel>
 
                     <!-- Generate Payslip Section -->
                     <Border Grid.Row="5"
@@ -284,13 +306,13 @@
 
                     <!-- Instructions -->
                     <TextBlock Grid.Row="1"
-                               Text="View your payslip history. Double-click any row to see full details."
+                               Text="View your payslip history. Double-click any row to see full details. Right-click or select a payslip to export individually."
                                FontSize="13"
                                Foreground="#7F8C8D"
                                TextWrapping="Wrap"
                                Margin="0,0,0,15"/>
 
-                    <!-- DataGrid -->
+                    <!-- DataGrid with Context Menu -->
                     <DataGrid Grid.Row="2"
                               x:Name="MyPayslipsGrid"
                               AutoGenerateColumns="False"
@@ -301,6 +323,23 @@
                               GridLinesVisibility="Horizontal"
                               HeadersVisibility="Column"
                               MouseDoubleClick="MyPayslipsGrid_MouseDoubleClick">
+
+                        <!-- Context Menu for Right-Click -->
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Export This Payslip" Click="ExportSelectedMyPayslip_Click">
+                                    <MenuItem.Icon>
+                                        <TextBlock Text="📄" FontSize="14"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="View Details" Click="ViewMyPayslipDetails_Click">
+                                    <MenuItem.Icon>
+                                        <TextBlock Text="👁" FontSize="14"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                             <DataGridTextColumn Header="Period Start" Binding="{Binding PayPeriodStart, StringFormat=dd/MM/yyyy}" Width="150"/>
@@ -312,14 +351,19 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <!-- Export Button -->
-                    <Button Grid.Row="3"
-                            Content="Export My Payslips"
-                            Style="{StaticResource ActionButton}"
-                            Click="ExportMyPayslips_Click"
-                            HorizontalAlignment="Left"
-                            Margin="0,15,0,0"
-                            Width="200"/>
+                    <!-- Export Buttons -->
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,15,0,0">
+                        <Button Content="Export Selected Payslip"
+                                Style="{StaticResource SuccessButton}"
+                                Click="ExportSelectedMyPayslip_Click"
+                                HorizontalAlignment="Left"
+                                Width="200"/>
+                        <Button Content="Export My Payslips"
+                                Style="{StaticResource ActionButton}"
+                                Click="ExportMyPayslips_Click"
+                                HorizontalAlignment="Left"
+                                Width="200"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
