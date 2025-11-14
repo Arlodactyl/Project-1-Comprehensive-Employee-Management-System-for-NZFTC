@@ -9,7 +9,6 @@
       Title="Department Management">
 
     <Page.Resources>
-        <!-- Button Style -->
         <Style x:Key="ActionButton" TargetType="Button">
             <Setter Property="Background" Value="#3498DB"/>
             <Setter Property="Foreground" Value="White"/>
@@ -22,7 +21,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}" 
                                 CornerRadius="5"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center"
@@ -30,7 +30,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#2980B9"/>
+                                <Setter TargetName="border" Property="Background" Value="#2980B9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#21618C"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -38,35 +41,19 @@
             </Setter>
         </Style>
 
-        <!-- Delete Button Style - matching ActionButton -->
-        <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
-            <Setter Property="Background" Value="#E74C3C"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="5"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#C0392B"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- View Button Style - matching ActionButton -->
-        <Style x:Key="ViewButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+        <Style x:Key="ViewButton" TargetType="Button">
             <Setter Property="Background" Value="#27AE60"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}" 
                                 CornerRadius="5"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center"
@@ -74,7 +61,41 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#229954"/>
+                                <Setter TargetName="border" Property="Background" Value="#229954"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1E8449"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DeleteButton" TargetType="Button">
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#A93226"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -89,7 +110,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header with Info Button -->
         <Border Grid.Row="0" Background="#34495E" Padding="20">
             <Grid>
                 <TextBlock Text="Department Management" 
@@ -98,43 +118,40 @@
                            Foreground="White"
                            VerticalAlignment="Center"/>
 
-                <!-- Info Button in Header -->
                 <Button Content="i"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Width="35"
                         Height="35"
                         Click="HelpButton_Click"
-                        ToolTip="Departments Help">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#3498DB"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#2980B9"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
+                        ToolTip="Departments Help"
+                        Background="#3498DB"
+                        Foreground="White"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" 
+                                    Background="{TemplateBinding Background}" 
+                                    CornerRadius="17.5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#2980B9"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#21618C"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
             </Grid>
         </Border>
 
-        <!-- Main Content with Two Columns -->
         <Grid Grid.Row="1" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -147,16 +164,13 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- LEFT SIDE: Departments List -->
             <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
-                <!-- Instructions -->
                 <TextBlock Text="Manage company departments. Click 'View' to see who's assigned to each department."
                            FontSize="13"
                            Foreground="#7F8C8D"
                            TextWrapping="Wrap"
                            Margin="0,0,0,15"/>
 
-                <!-- Departments DataGrid -->
                 <DataGrid x:Name="DepartmentGrid"
                           Height="300"
                           AutoGenerateColumns="False"
@@ -170,7 +184,6 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
                         <DataGridTextColumn Header="Department Name" Binding="{Binding Name}" Width="*"/>
-                        <!-- Actions column with View and Delete buttons - matching styles -->
                         <DataGridTemplateColumn Header="Actions" Width="180">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -180,14 +193,12 @@
                                                 Click="ViewEmployees_Click"
                                                 Style="{StaticResource ViewButton}"
                                                 Width="70"
-                                                Padding="8,4"
                                                 Margin="0,0,5,0"/>
                                         <Button Content="Delete"
                                                 Tag="{Binding Id}"
                                                 Click="DeleteDepartment_Click"
                                                 Style="{StaticResource DeleteButton}"
-                                                Width="70"
-                                                Padding="8,4"/>
+                                                Width="70"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -195,7 +206,6 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- Add Department Form - Improved alignment -->
                 <Border Background="#F8F9FA" 
                         Padding="20"
                         CornerRadius="5"
@@ -207,7 +217,6 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Title -->
                         <TextBlock Grid.Row="0"
                                    Text="Add New Department" 
                                    FontSize="16" 
@@ -215,7 +224,6 @@
                                    Foreground="#2C3E50"
                                    Margin="0,0,0,15"/>
 
-                        <!-- Input and Button Grid -->
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -223,7 +231,6 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Left: Input -->
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Department Name:" 
                                            FontSize="13" 
@@ -233,10 +240,12 @@
                                          Height="35"
                                          FontSize="13"
                                          Padding="8"
-                                         VerticalContentAlignment="Center"/>
+                                         VerticalContentAlignment="Center"
+                                         BorderBrush="#BDC3C7"
+                                         BorderThickness="2"
+                                         TextChanged="DepartmentNameTextBox_TextChanged"/>
                             </StackPanel>
 
-                            <!-- Right: Button - Aligned to bottom -->
                             <Button Grid.Column="2"
                                     Content="Add Department"
                                     Click="AddDepartment_Click"
@@ -249,9 +258,7 @@
                 </Border>
             </StackPanel>
 
-            <!-- RIGHT SIDE: Employees in Selected Department -->
             <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3">
-                <!-- Department Employees Section Header -->
                 <TextBlock x:Name="DepartmentEmployeesTitle"
                            Text="Select a department to view employees"
                            FontSize="16"
@@ -259,14 +266,12 @@
                            Foreground="#2C3E50"
                            Margin="0,0,0,10"/>
 
-                <!-- Employee Count -->
                 <TextBlock x:Name="EmployeeCountText"
                            Text=""
                            FontSize="13"
                            Foreground="#7F8C8D"
                            Margin="0,0,0,15"/>
 
-                <!-- Employees DataGrid -->
                 <DataGrid x:Name="EmployeesGrid"
                           Height="400"
                           AutoGenerateColumns="False"
