@@ -430,29 +430,54 @@
                                     Padding="20"
                                     Margin="0,0,0,20">
                                 <StackPanel>
-                                    <TextBlock Text="Christchurch" 
+                                    <TextBlock x:Name="WeatherLocationText"
+                                               Text="Christchurch" 
                                                FontSize="18" 
                                                FontWeight="Bold"
                                                Foreground="#2C3E50"
                                                Margin="0,0,0,10"/>
 
-                                    <!-- Temperature Display -->
-                                    <StackPanel Orientation="Horizontal" 
-                                                Margin="0,0,0,10">
-                                        <TextBlock Text="18" 
-                                                   FontSize="48" 
-                                                   FontWeight="Bold"
-                                                   Foreground="#F39C12"
-                                                   VerticalAlignment="Top"/>
-                                        <TextBlock Text="C"
-                                                   FontSize="24" 
-                                                   FontWeight="Bold"
-                                                   Foreground="#F39C12"
-                                                   VerticalAlignment="Top"
-                                                   Margin="2,8,0,0"/>
-                                    </StackPanel>
+                                    <!-- Weather Icon and Temperature Side by Side -->
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="Clear skies - Light NE Breeze"
+                                        <!-- Animated Weather Icon -->
+                                        <Viewbox Grid.Column="0" 
+                                                 Width="80" 
+                                                 Height="80"
+                                                 Margin="0,0,15,0"
+                                                 VerticalAlignment="Center">
+                                            <Canvas x:Name="WeatherIconCanvas" 
+                                                    Width="100" 
+                                                    Height="100">
+                                                <!-- Weather icons will be dynamically added here -->
+                                            </Canvas>
+                                        </Viewbox>
+
+                                        <!-- Temperature Display -->
+                                        <StackPanel Grid.Column="1" 
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock x:Name="WeatherTemperatureText"
+                                                       Text="--" 
+                                                       FontSize="48" 
+                                                       FontWeight="Bold"
+                                                       Foreground="#F39C12"
+                                                       VerticalAlignment="Top"/>
+                                            <TextBlock Text="oC"
+                                                       FontSize="24" 
+                                                       FontWeight="Bold"
+                                                       Foreground="#F39C12"
+                                                       VerticalAlignment="Top"
+                                                       Margin="2,8,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <TextBlock x:Name="WeatherDescriptionText"
+                                               Text="Loading weather..."
                                                FontSize="13"
                                                Foreground="#7F8C8D"
                                                TextWrapping="Wrap"/>
