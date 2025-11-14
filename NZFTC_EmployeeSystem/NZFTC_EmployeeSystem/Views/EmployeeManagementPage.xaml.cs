@@ -882,8 +882,8 @@ namespace NZFTC_EmployeeSystem.Views
                     }
 
                     int completed = allTraining.Count(t => t.Status == "Completed");
-                    int pending = allTraining.Count(t => t.Status == "Pending");
-                    int notCompleted = allTraining.Count(t => t.Status == "Not Completed");
+                    int inProgress = allTraining.Count(t => t.Status == "In Progress");
+                    int notStarted = allTraining.Count(t => t.Status == "Not Started");
                     int total = allTraining.Count;
 
                     if (total == 0)
@@ -892,8 +892,8 @@ namespace NZFTC_EmployeeSystem.Views
 
                         var emptyCircle = new Ellipse
                         {
-                            Width = 180,
-                            Height = 180,
+                            Width = 260,
+                            Height = 260,
                             Fill = new SolidColorBrush(Color.FromRgb(189, 195, 199)),
                             Stroke = new SolidColorBrush(Color.FromRgb(149, 165, 166)),
                             StrokeThickness = 1
@@ -905,33 +905,33 @@ namespace NZFTC_EmployeeSystem.Views
                         var emptyText = new TextBlock
                         {
                             Text = "No Data",
-                            FontSize = 14,
+                            FontSize = 18,
                             FontWeight = FontWeights.Bold,
                             Foreground = new SolidColorBrush(Color.FromRgb(127, 140, 141))
                         };
-                        Canvas.SetLeft(emptyText, 90 - (emptyText.Text.Length * 3.5));
-                        Canvas.SetTop(emptyText, 85);
+                        Canvas.SetLeft(emptyText, 130 - (emptyText.Text.Length * 4.5));
+                        Canvas.SetTop(emptyText, 125);
                         PieChartCanvas.Children.Add(emptyText);
 
                         CompletedLegend.Text = "Completed: 0 (0%)";
-                        PendingLegend.Text = "Pending: 0 (0%)";
-                        NotCompletedLegend.Text = "Not Completed: 0 (0%)";
+                        PendingLegend.Text = "In Progress: 0 (0%)";
+                        NotCompletedLegend.Text = "Not Started: 0 (0%)";
                         return;
                     }
 
                     double completedPercent = (double)completed / total * 100;
-                    double pendingPercent = (double)pending / total * 100;
-                    double notCompletedPercent = (double)notCompleted / total * 100;
+                    double inProgressPercent = (double)inProgress / total * 100;
+                    double notStartedPercent = (double)notStarted / total * 100;
 
                     CompletedLegend.Text = $"Completed: {completed} ({completedPercent:F1}%)";
-                    PendingLegend.Text = $"Pending: {pending} ({pendingPercent:F1}%)";
-                    NotCompletedLegend.Text = $"Not Completed: {notCompleted} ({notCompletedPercent:F1}%)";
+                    PendingLegend.Text = $"In Progress: {inProgress} ({inProgressPercent:F1}%)";
+                    NotCompletedLegend.Text = $"Not Started: {notStarted} ({notStartedPercent:F1}%)";
 
                     PieChartCanvas.Children.Clear();
 
-                    double centerX = 90;
-                    double centerY = 90;
-                    double radius = 85;
+                    double centerX = 130;
+                    double centerY = 130;
+                    double radius = 120;
                     double startAngle = -90;
 
                     if (completed > 0)
@@ -941,50 +941,51 @@ namespace NZFTC_EmployeeSystem.Views
                         startAngle += sweepAngle;
                     }
 
-                    if (pending > 0)
+                    if (inProgress > 0)
                     {
-                        double sweepAngle = (double)pending / total * 360;
+                        double sweepAngle = (double)inProgress / total * 360;
                         AddPieSlice(centerX, centerY, radius, startAngle, sweepAngle, Color.FromRgb(243, 156, 18));
                         startAngle += sweepAngle;
                     }
 
-                    if (notCompleted > 0)
+                    if (notStarted > 0)
                     {
-                        double sweepAngle = (double)notCompleted / total * 360;
+                        double sweepAngle = (double)notStarted / total * 360;
                         AddPieSlice(centerX, centerY, radius, startAngle, sweepAngle, Color.FromRgb(231, 76, 60));
                     }
 
                     var centerCircle = new Ellipse
                     {
-                        Width = 50,
-                        Height = 50,
+                        Width = 90,
+                        Height = 90,
                         Fill = Brushes.White
                     };
-                    Canvas.SetLeft(centerCircle, centerX - 25);
-                    Canvas.SetTop(centerCircle, centerY - 25);
+                    Canvas.SetLeft(centerCircle, centerX - 45);
+                    Canvas.SetTop(centerCircle, centerY - 45);
                     PieChartCanvas.Children.Add(centerCircle);
 
                     var totalText = new TextBlock
                     {
                         Text = total.ToString(),
-                        FontSize = 20,
+                        FontSize = 32,
                         FontWeight = FontWeights.Bold,
                         Foreground = new SolidColorBrush(Color.FromRgb(44, 62, 80))
                     };
                     totalText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                     Canvas.SetLeft(totalText, centerX - (totalText.DesiredSize.Width / 2));
-                    Canvas.SetTop(totalText, centerY - 10);
+                    Canvas.SetTop(totalText, centerY - 22);
                     PieChartCanvas.Children.Add(totalText);
 
                     var totalLabel = new TextBlock
                     {
                         Text = "Total",
-                        FontSize = 10,
+                        FontSize = 13,
+                        FontWeight = FontWeights.SemiBold,
                         Foreground = new SolidColorBrush(Color.FromRgb(127, 140, 141))
                     };
                     totalLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                     Canvas.SetLeft(totalLabel, centerX - (totalLabel.DesiredSize.Width / 2));
-                    Canvas.SetTop(totalLabel, centerY + 5);
+                    Canvas.SetTop(totalLabel, centerY + 10);
                     PieChartCanvas.Children.Add(totalLabel);
                 }
             }

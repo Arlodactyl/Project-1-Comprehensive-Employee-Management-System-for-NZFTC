@@ -648,9 +648,9 @@
                             BorderBrush="#BDC3C7"
                             BorderThickness="1"
                             CornerRadius="5"
-                            Padding="15"
-                            Width="280"
-                            Height="280">
+                            Padding="20"
+                            Width="380"
+                            Height="380">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -661,35 +661,35 @@
                             <!-- Title -->
                             <TextBlock Grid.Row="0"
                                       Text="Training Status Overview"
-                                      FontSize="14"
+                                      FontSize="16"
                                       FontWeight="Bold"
                                       Foreground="#2C3E50"
                                       HorizontalAlignment="Center"
-                                      Margin="0,0,0,10"/>
+                                      Margin="0,0,0,15"/>
 
                             <!-- Pie Chart Canvas -->
                             <Canvas x:Name="PieChartCanvas"
                                    Grid.Row="1"
-                                   Width="180"
-                                   Height="180"
+                                   Width="260"
+                                   Height="260"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
 
                             <!-- Legend -->
                             <StackPanel Grid.Row="2" 
-                                       Margin="0,10,0,0"
+                                       Margin="0,15,0,0"
                                        HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" Margin="0,2">
-                                    <Border Background="#27AE60" Width="12" Height="12" CornerRadius="2" Margin="0,0,5,0"/>
-                                    <TextBlock x:Name="CompletedLegend" Text="Completed: 0 (0%)" FontSize="11" Foreground="#2C3E50"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,3">
+                                    <Border Background="#27AE60" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="CompletedLegend" Text="Completed: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,2">
-                                    <Border Background="#F39C12" Width="12" Height="12" CornerRadius="2" Margin="0,0,5,0"/>
-                                    <TextBlock x:Name="PendingLegend" Text="Pending: 0 (0%)" FontSize="11" Foreground="#2C3E50"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,3">
+                                    <Border Background="#F39C12" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="PendingLegend" Text="In Progress: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,2">
-                                    <Border Background="#E74C3C" Width="12" Height="12" CornerRadius="2" Margin="0,0,5,0"/>
-                                    <TextBlock x:Name="NotCompletedLegend" Text="Not Completed: 0 (0%)" FontSize="11" Foreground="#2C3E50"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,3">
+                                    <Border Background="#E74C3C" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="NotCompletedLegend" Text="Not Started: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
