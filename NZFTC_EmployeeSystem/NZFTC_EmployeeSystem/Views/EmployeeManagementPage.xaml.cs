@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using Path = System.Windows.Shapes.Path;
 
 namespace NZFTC_EmployeeSystem.Views
 {
@@ -799,11 +802,11 @@ namespace NZFTC_EmployeeSystem.Views
                                       $"{emp.IsActive}");
                     }
 
-                    string downloadsPath = Path.Combine(
+                    string downloadsPath = System.IO.Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                         "Downloads");
                     string fileName = $"Employees_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-                    string fullPath = Path.Combine(downloadsPath, fileName);
+                    string fullPath = System.IO.Path.Combine(downloadsPath, fileName);
 
                     File.WriteAllText(fullPath, csv.ToString());
 
@@ -851,6 +854,8 @@ namespace NZFTC_EmployeeSystem.Views
                         EmptyTrainingMessage.Visibility = Visibility.Collapsed;
                     }
                 }
+
+                UpdateTrainingPieChart();
             }
             catch (Exception ex)
             {
@@ -861,6 +866,187 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Error
                 );
             }
+        }
+
+        private void UpdateTrainingPieChart()
+        {
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var allTraining = db.Trainings.ToList();
+
+                    if (_currentUser.Role == "Employee" && _currentUser.EmployeeId > 0)
+                    {
+                        allTraining = allTraining.Where(t => t.EmployeeId == _currentUser.EmployeeId).ToList();
+                    }
+
+                    int completed = allTraining.Count(t => t.Status == "Completed");
+                    int pending = allTraining.Count(t => t.Status == "Pending");
+                    int notCompleted = allTraining.Count(t => t.Status == "Not Completed");
+                    int total = allTraining.Count;
+
+                    if (total == 0)
+                    {
+                        PieChartCanvas.Children.Clear();
+
+                        var emptyCircle = new Ellipse
+                        {
+                            Width = 180,
+                            Height = 180,
+                            Fill = new SolidColorBrush(Color.FromRgb(189, 195, 199)),
+                            Stroke = new SolidColorBrush(Color.FromRgb(149, 165, 166)),
+                            StrokeThickness = 1
+                        };
+                        Canvas.SetLeft(emptyCircle, 0);
+                        Canvas.SetTop(emptyCircle, 0);
+                        PieChartCanvas.Children.Add(emptyCircle);
+
+                        var emptyText = new TextBlock
+                        {
+                            Text = "No Data",
+                            FontSize = 14,
+                            FontWeight = FontWeights.Bold,
+                            Foreground = new SolidColorBrush(Color.FromRgb(127, 140, 141))
+                        };
+                        Canvas.SetLeft(emptyText, 90 - (emptyText.Text.Length * 3.5));
+                        Canvas.SetTop(emptyText, 85);
+                        PieChartCanvas.Children.Add(emptyText);
+
+                        CompletedLegend.Text = "Completed: 0 (0%)";
+                        PendingLegend.Text = "Pending: 0 (0%)";
+                        NotCompletedLegend.Text = "Not Completed: 0 (0%)";
+                        return;
+                    }
+
+                    double completedPercent = (double)completed / total * 100;
+                    double pendingPercent = (double)pending / total * 100;
+                    double notCompletedPercent = (double)notCompleted / total * 100;
+
+                    CompletedLegend.Text = $"Completed: {completed} ({completedPercent:F1}%)";
+                    PendingLegend.Text = $"Pending: {pending} ({pendingPercent:F1}%)";
+                    NotCompletedLegend.Text = $"Not Completed: {notCompleted} ({notCompletedPercent:F1}%)";
+
+                    PieChartCanvas.Children.Clear();
+
+                    double centerX = 90;
+                    double centerY = 90;
+                    double radius = 85;
+                    double startAngle = -90;
+
+                    if (completed > 0)
+                    {
+                        double sweepAngle = (double)completed / total * 360;
+                        AddPieSlice(centerX, centerY, radius, startAngle, sweepAngle, Color.FromRgb(39, 174, 96));
+                        startAngle += sweepAngle;
+                    }
+
+                    if (pending > 0)
+                    {
+                        double sweepAngle = (double)pending / total * 360;
+                        AddPieSlice(centerX, centerY, radius, startAngle, sweepAngle, Color.FromRgb(243, 156, 18));
+                        startAngle += sweepAngle;
+                    }
+
+                    if (notCompleted > 0)
+                    {
+                        double sweepAngle = (double)notCompleted / total * 360;
+                        AddPieSlice(centerX, centerY, radius, startAngle, sweepAngle, Color.FromRgb(231, 76, 60));
+                    }
+
+                    var centerCircle = new Ellipse
+                    {
+                        Width = 50,
+                        Height = 50,
+                        Fill = Brushes.White
+                    };
+                    Canvas.SetLeft(centerCircle, centerX - 25);
+                    Canvas.SetTop(centerCircle, centerY - 25);
+                    PieChartCanvas.Children.Add(centerCircle);
+
+                    var totalText = new TextBlock
+                    {
+                        Text = total.ToString(),
+                        FontSize = 20,
+                        FontWeight = FontWeights.Bold,
+                        Foreground = new SolidColorBrush(Color.FromRgb(44, 62, 80))
+                    };
+                    totalText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                    Canvas.SetLeft(totalText, centerX - (totalText.DesiredSize.Width / 2));
+                    Canvas.SetTop(totalText, centerY - 10);
+                    PieChartCanvas.Children.Add(totalText);
+
+                    var totalLabel = new TextBlock
+                    {
+                        Text = "Total",
+                        FontSize = 10,
+                        Foreground = new SolidColorBrush(Color.FromRgb(127, 140, 141))
+                    };
+                    totalLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                    Canvas.SetLeft(totalLabel, centerX - (totalLabel.DesiredSize.Width / 2));
+                    Canvas.SetTop(totalLabel, centerY + 5);
+                    PieChartCanvas.Children.Add(totalLabel);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error updating pie chart: {ex.Message}",
+                    "Chart Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        private void AddPieSlice(double centerX, double centerY, double radius, double startAngle, double sweepAngle, Color color)
+        {
+            if (sweepAngle <= 0) return;
+
+            var path = new Path
+            {
+                Fill = new SolidColorBrush(color),
+                Stroke = Brushes.White,
+                StrokeThickness = 2
+            };
+
+            var geometry = new PathGeometry();
+            var figure = new PathFigure
+            {
+                StartPoint = new Point(centerX, centerY),
+                IsClosed = true
+            };
+
+            double startAngleRad = startAngle * Math.PI / 180.0;
+            double endAngleRad = (startAngle + sweepAngle) * Math.PI / 180.0;
+
+            var startPoint = new Point(
+                centerX + radius * Math.Cos(startAngleRad),
+                centerY + radius * Math.Sin(startAngleRad)
+            );
+
+            figure.Segments.Add(new LineSegment(startPoint, true));
+
+            var endPoint = new Point(
+                centerX + radius * Math.Cos(endAngleRad),
+                centerY + radius * Math.Sin(endAngleRad)
+            );
+
+            var arcSegment = new ArcSegment
+            {
+                Point = endPoint,
+                Size = new Size(radius, radius),
+                IsLargeArc = sweepAngle > 180,
+                SweepDirection = SweepDirection.Clockwise
+            };
+
+            figure.Segments.Add(arcSegment);
+            figure.Segments.Add(new LineSegment(new Point(centerX, centerY), true));
+
+            geometry.Figures.Add(figure);
+            path.Data = geometry;
+
+            PieChartCanvas.Children.Add(path);
         }
 
         private void LoadTrainingRecords(int employeeId)
@@ -1114,11 +1300,11 @@ namespace NZFTC_EmployeeSystem.Views
                                       $"\"{t.Notes ?? ""}\"");
                     }
 
-                    string downloadsPath = Path.Combine(
+                    string downloadsPath = System.IO.Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                         "Downloads");
                     string fileName = $"All_Training_Records_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-                    string fullPath = Path.Combine(downloadsPath, fileName);
+                    string fullPath = System.IO.Path.Combine(downloadsPath, fileName);
 
                     File.WriteAllText(fullPath, csv.ToString());
 
