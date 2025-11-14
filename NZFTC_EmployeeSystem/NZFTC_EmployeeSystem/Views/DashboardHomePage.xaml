@@ -9,11 +9,66 @@
       Title="Dashboard">
 
     <Page.Resources>
-        <!-- Stat Card Style -->
+        <!-- Stat Card Style with Hover Effects -->
         <Style x:Key="StatCard" TargetType="Border">
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="Padding" Value="25,20"/>
             <Setter Property="Margin" Value="0,0,15,0"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8"
+                                      ShadowDepth="3"
+                                      Opacity="0.3"
+                                      Color="#000000"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                 To="1.03"
+                                                 Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                 To="1.03"
+                                                 Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
+                                                 To="15"
+                                                 Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.ShadowDepth"
+                                                 To="6"
+                                                 Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                 To="1"
+                                                 Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                 To="1"
+                                                 Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
+                                                 To="8"
+                                                 Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.ShadowDepth"
+                                                 To="3"
+                                                 Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Stat Number Style -->
@@ -110,12 +165,69 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="17.5">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Border x:Name="border"
+                                                Background="{TemplateBinding Background}" 
+                                                CornerRadius="17.5"
+                                                RenderTransformOrigin="0.5,0.5">
+                                            <Border.Effect>
+                                                <DropShadowEffect x:Name="shadow"
+                                                                  BlurRadius="6"
+                                                                  ShadowDepth="2"
+                                                                  Opacity="0.4"
+                                                                  Color="#000000"/>
+                                            </Border.Effect>
+                                            <Border.RenderTransform>
+                                                <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                            </Border.RenderTransform>
+                                            <ContentPresenter HorizontalAlignment="Center" 
+                                                            VerticalAlignment="Center"/>
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#2980B9"/>
+                                                <Trigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="border"
+                                                                            Storyboard.TargetProperty="Background.Color"
+                                                                            To="#2980B9"
+                                                                            Duration="0:0:0.15"/>
+                                                            <DoubleAnimation Storyboard.TargetName="scale"
+                                                                             Storyboard.TargetProperty="ScaleX"
+                                                                             To="1.1"
+                                                                             Duration="0:0:0.15"/>
+                                                            <DoubleAnimation Storyboard.TargetName="scale"
+                                                                             Storyboard.TargetProperty="ScaleY"
+                                                                             To="1.1"
+                                                                             Duration="0:0:0.15"/>
+                                                            <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                             Storyboard.TargetProperty="BlurRadius"
+                                                                             To="10"
+                                                                             Duration="0:0:0.15"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </Trigger.EnterActions>
+                                                <Trigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="border"
+                                                                            Storyboard.TargetProperty="Background.Color"
+                                                                            To="#3498DB"
+                                                                            Duration="0:0:0.15"/>
+                                                            <DoubleAnimation Storyboard.TargetName="scale"
+                                                                             Storyboard.TargetProperty="ScaleX"
+                                                                             To="1"
+                                                                             Duration="0:0:0.15"/>
+                                                            <DoubleAnimation Storyboard.TargetName="scale"
+                                                                             Storyboard.TargetProperty="ScaleY"
+                                                                             To="1"
+                                                                             Duration="0:0:0.15"/>
+                                                            <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                             Storyboard.TargetProperty="BlurRadius"
+                                                                             To="6"
+                                                                             Duration="0:0:0.15"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </Trigger.ExitActions>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
@@ -205,7 +317,16 @@
 
                         <!-- Dark Overlay for Better Text Visibility -->
                         <Border Background="#000000" 
-                                Opacity="0.4"/>
+                                Opacity="0.4" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="0.211"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                        </Border>
 
                         <!-- Centered Text Overlay -->
                         <StackPanel VerticalAlignment="Center" 
@@ -353,14 +474,77 @@
                                         Cursor="Hand">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" 
-                                                    CornerRadius="6">
+                                            <Border x:Name="border"
+                                                    Background="{TemplateBinding Background}" 
+                                                    CornerRadius="6"
+                                                    RenderTransformOrigin="0.5,0.5">
+                                                <Border.Effect>
+                                                    <DropShadowEffect x:Name="shadow"
+                                                                      BlurRadius="8"
+                                                                      ShadowDepth="2"
+                                                                      Opacity="0.3"
+                                                                      Color="#000000"/>
+                                                </Border.Effect>
+                                                <Border.RenderTransform>
+                                                    <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                                </Border.RenderTransform>
                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#2980B9"/>
+                                                    <Trigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="border"
+                                                                                Storyboard.TargetProperty="Background.Color"
+                                                                                To="#2980B9"
+                                                                                Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleX"
+                                                                                 To="1.03"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleY"
+                                                                                 To="1.03"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="BlurRadius"
+                                                                                 To="12"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="ShadowDepth"
+                                                                                 To="4"
+                                                                                 Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.EnterActions>
+                                                    <Trigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="border"
+                                                                                Storyboard.TargetProperty="Background.Color"
+                                                                                To="#3498DB"
+                                                                                Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleX"
+                                                                                 To="1"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleY"
+                                                                                 To="1"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="BlurRadius"
+                                                                                 To="8"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="ShadowDepth"
+                                                                                 To="2"
+                                                                                 Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.ExitActions>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -380,14 +564,77 @@
                                         Cursor="Hand">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" 
-                                                    CornerRadius="6">
+                                            <Border x:Name="border"
+                                                    Background="{TemplateBinding Background}" 
+                                                    CornerRadius="6"
+                                                    RenderTransformOrigin="0.5,0.5">
+                                                <Border.Effect>
+                                                    <DropShadowEffect x:Name="shadow"
+                                                                      BlurRadius="8"
+                                                                      ShadowDepth="2"
+                                                                      Opacity="0.3"
+                                                                      Color="#000000"/>
+                                                </Border.Effect>
+                                                <Border.RenderTransform>
+                                                    <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                                </Border.RenderTransform>
                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#229954"/>
+                                                    <Trigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="border"
+                                                                                Storyboard.TargetProperty="Background.Color"
+                                                                                To="#229954"
+                                                                                Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleX"
+                                                                                 To="1.03"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleY"
+                                                                                 To="1.03"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="BlurRadius"
+                                                                                 To="12"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="ShadowDepth"
+                                                                                 To="4"
+                                                                                 Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.EnterActions>
+                                                    <Trigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="border"
+                                                                                Storyboard.TargetProperty="Background.Color"
+                                                                                To="#27AE60"
+                                                                                Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleX"
+                                                                                 To="1"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleY"
+                                                                                 To="1"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="BlurRadius"
+                                                                                 To="8"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="ShadowDepth"
+                                                                                 To="2"
+                                                                                 Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.ExitActions>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -406,14 +653,77 @@
                                         Cursor="Hand">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" 
-                                                    CornerRadius="6">
+                                            <Border x:Name="border"
+                                                    Background="{TemplateBinding Background}" 
+                                                    CornerRadius="6"
+                                                    RenderTransformOrigin="0.5,0.5">
+                                                <Border.Effect>
+                                                    <DropShadowEffect x:Name="shadow"
+                                                                      BlurRadius="8"
+                                                                      ShadowDepth="2"
+                                                                      Opacity="0.3"
+                                                                      Color="#000000"/>
+                                                </Border.Effect>
+                                                <Border.RenderTransform>
+                                                    <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                                </Border.RenderTransform>
                                                 <ContentPresenter HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#D68910"/>
+                                                    <Trigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="border"
+                                                                                Storyboard.TargetProperty="Background.Color"
+                                                                                To="#D68910"
+                                                                                Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleX"
+                                                                                 To="1.03"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleY"
+                                                                                 To="1.03"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="BlurRadius"
+                                                                                 To="12"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="ShadowDepth"
+                                                                                 To="4"
+                                                                                 Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.EnterActions>
+                                                    <Trigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="border"
+                                                                                Storyboard.TargetProperty="Background.Color"
+                                                                                To="#F39C12"
+                                                                                Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleX"
+                                                                                 To="1"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="scale"
+                                                                                 Storyboard.TargetProperty="ScaleY"
+                                                                                 To="1"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="BlurRadius"
+                                                                                 To="8"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="shadow"
+                                                                                 Storyboard.TargetProperty="ShadowDepth"
+                                                                                 To="2"
+                                                                                 Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.ExitActions>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
