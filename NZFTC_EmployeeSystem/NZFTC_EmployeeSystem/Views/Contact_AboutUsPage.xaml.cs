@@ -21,11 +21,9 @@ using System.IO;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
-    /// Interaction logic for Contact_AboutUsPage.xaml
+   
     /// Allows admins to edit company contact information
-    /// Includes validation for phone numbers
-    /// </summary>
+  
     public partial class Contact_AboutUsPage : Page
     {
         private readonly User _currentUser;
@@ -43,9 +41,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
+    
         /// Enables edit mode for admin users
-        /// </summary>
+        
         private void EditMode(object sender, RoutedEventArgs e)
         {
             // Hiding Edit Button and Showing Save Button
@@ -56,9 +54,9 @@ namespace NZFTC_EmployeeSystem.Views
             ToggleEditMode(true);
         }
 
-        /// <summary>
+        
         /// Validates phone numbers to ensure they contain only numbers, hyphens, and spaces
-        /// </summary>
+       
         private bool ValidatePhoneNumber(string phoneNumber)
         {
             // Allow empty phone numbers
@@ -70,9 +68,7 @@ namespace NZFTC_EmployeeSystem.Views
             return Regex.IsMatch(phoneNumber, @"^[\d\s\-\(\)]+$");
         }
 
-        /// <summary>
-        /// Saves changes and validates input
-        /// </summary>
+       
         private void SaveMode(object sender, RoutedEventArgs e)
         {
             // Validate phone numbers before saving
@@ -126,9 +122,7 @@ namespace NZFTC_EmployeeSystem.Views
             );
         }
 
-        /// <summary>
-        /// Toggles between view mode and edit mode
-        /// </summary>
+     
         private void ToggleEditMode(bool isEditing)
         {
             // For each section its toggle between visible textblock and collapsed textbox
@@ -173,9 +167,7 @@ namespace NZFTC_EmployeeSystem.Views
             ContactEdit.Text = ContactDisplay.Text;
         }
 
-        /// <summary>
-        /// Shows help information for the Contact/About page
-        /// </summary>
+      
         private void HelpButton_Click(object sender, RoutedEventArgs e)
         {
             string helpMessage = "Contact / About Us Help\n\n" +

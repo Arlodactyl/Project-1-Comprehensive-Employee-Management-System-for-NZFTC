@@ -13,10 +13,7 @@ using System.Windows.Controls;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
-    /// PayrollPage handles payslip management for employees and administrators
-    /// ENHANCED: Now auto-generates missing weekly payslips for employees from hire date to current week
-    /// </summary>
+   
     public partial class PayrollPage : Page
     {
         private readonly User _currentUser;
@@ -72,10 +69,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Auto-generates missing weekly payslips for the current employee
-        /// from their hire date up to the current week
-        /// </summary>
+       
         private void AutoGenerateMissingPayslips()
         {
             try
@@ -171,9 +165,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
+        
         /// Gets the next Monday on or after the given date
-        /// </summary>
+        
         private DateTime GetNextMonday(DateTime date)
         {
             if (date.DayOfWeek == DayOfWeek.Monday)
@@ -185,9 +179,9 @@ namespace NZFTC_EmployeeSystem.Views
             return date.AddDays(daysUntilMonday);
         }
 
-        /// <summary>
+     
         /// Gets the next Sunday on or after the given date
-        /// </summary>
+     
         private DateTime GetNextSunday(DateTime date)
         {
             if (date.DayOfWeek == DayOfWeek.Sunday)
@@ -199,9 +193,7 @@ namespace NZFTC_EmployeeSystem.Views
             return date.AddDays(daysUntilSunday);
         }
 
-        /// <summary>
-        /// Load all payslip data from database
-        /// </summary>
+       
         private void LoadPayslipData()
         {
             try
@@ -241,9 +233,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Load employee list for payslip generation dropdown
-        /// </summary>
+       
         private void LoadEmployeeList()
         {
             try
@@ -276,9 +266,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Refresh payslips button click - reloads all data from database
-        /// </summary>
+       
         private void RefreshPayslips_Click(object sender, RoutedEventArgs e)
         {
             LoadPayslipData();
@@ -286,9 +274,7 @@ namespace NZFTC_EmployeeSystem.Views
             MessageBox.Show("Payslips refreshed!", "Success");
         }
 
-        /// <summary>
-        /// Search functionality - filters payslips as user types
-        /// </summary>
+       
         private void PayslipSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchText = PayslipSearchTextBox.Text.ToLower().Trim();
@@ -392,18 +378,14 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Clear form button - resets all form fields
-        /// </summary>
+       
         private void ClearForm_Click(object sender, RoutedEventArgs e)
         {
             EmployeeComboBox.SelectedIndex = -1;
             WeekEndingDatePicker.SelectedDate = null;
         }
 
-        /// <summary>
-        /// Double-click handler for All Payslips grid - shows detailed payslip
-        /// </summary>
+        
         private void AllPayslipsGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var selectedPayslip = AllPayslipsGrid.SelectedItem as Payslip;
@@ -413,9 +395,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Double-click handler for My Payslips grid - shows detailed payslip
-        /// </summary>
+        
         private void MyPayslipsGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var selectedPayslip = MyPayslipsGrid.SelectedItem as Payslip;
@@ -425,9 +405,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Shows detailed payslip information in a popup
-        /// </summary>
+    
         private void ShowPayslipDetails(Payslip payslip)
         {
             try
@@ -472,9 +450,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Export visible payslips to CSV file
-        /// </summary>
+        
         private void ExportPayslips_Click(object sender, RoutedEventArgs e)
         {
             // Get currently displayed payslips (respects search filter)
@@ -559,9 +535,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Export user's own payslips to CSV file
-        /// </summary>
+        
         private void ExportMyPayslips_Click(object sender, RoutedEventArgs e)
         {
             // Check if there's data to export
@@ -618,9 +592,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
+      
         /// Show information dialog about payroll in NZ context (role-aware)
-        /// </summary>
+    
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
             string helpMessage;
@@ -810,9 +784,7 @@ This system calculates weekly payslips using:
             ExportSinglePayslip(selectedPayslip);
         }
 
-        /// <summary>
-        /// Exports the currently selected payslip from My Payslips grid
-        /// </summary>
+        
         private void ExportSelectedMyPayslip_Click(object sender, RoutedEventArgs e)
         {
             var selectedPayslip = MyPayslipsGrid.SelectedItem as Payslip;
@@ -827,9 +799,7 @@ This system calculates weekly payslips using:
             ExportSinglePayslip(selectedPayslip);
         }
 
-        /// <summary>
-        /// Shows details for selected payslip from All Payslips grid (context menu)
-        /// </summary>
+      
         private void ViewPayslipDetails_Click(object sender, RoutedEventArgs e)
         {
             var selectedPayslip = AllPayslipsGrid.SelectedItem as Payslip;
@@ -839,9 +809,7 @@ This system calculates weekly payslips using:
             }
         }
 
-        /// <summary>
-        /// Shows details for selected payslip from My Payslips grid (context menu)
-        /// </summary>
+       
         private void ViewMyPayslipDetails_Click(object sender, RoutedEventArgs e)
         {
             var selectedPayslip = MyPayslipsGrid.SelectedItem as Payslip;
@@ -851,9 +819,6 @@ This system calculates weekly payslips using:
             }
         }
 
-        /// <summary>
-        /// Exports a single payslip to CSV file
-        /// </summary>
         private void ExportSinglePayslip(Payslip payslip)
         {
             try

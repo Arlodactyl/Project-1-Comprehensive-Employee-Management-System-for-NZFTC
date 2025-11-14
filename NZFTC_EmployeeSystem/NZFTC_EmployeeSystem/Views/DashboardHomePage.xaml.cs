@@ -213,13 +213,12 @@ namespace NZFTC_EmployeeSystem.Views
             OpenGrievanceText.Text = _dbContext.Grievances.Count(g => g.Status == "Open").ToString();
         }
 
-        // Below loads live weather data from Open-Meteo API (free, no API key required!)
+        // Below loads live weather data from Open-Meteo API free
         private async void LoadWeatherData()
         {
             try
             {
-                // Open-Meteo API - Completely free, open-source, no API key needed!
-                // Christchurch, NZ coordinates
+                // Open-Meteo API - free no key
                 double latitude = -43.5321;
                 double longitude = 172.6362;
                 string apiUrl = $"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m&timezone=Pacific/Auckland";

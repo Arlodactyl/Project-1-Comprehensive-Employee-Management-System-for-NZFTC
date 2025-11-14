@@ -17,9 +17,7 @@ namespace NZFTC_EmployeeSystem.Views
         private readonly User _currentUser;
         private List<HolidayViewModel> _allHolidays = new List<HolidayViewModel>();
 
-        /// <summary>
-        /// Constructor - runs when the page is first created
-        /// </summary>
+      
         public HolidaysPage(User currentUser)
         {
             try
@@ -52,9 +50,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Configures role-based access to admin-only features
-        /// </summary>
+       
         private void ConfigureRoleBasedAccess()
         {
             try
@@ -103,9 +99,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Configures date picker constraints
-        /// </summary>
+  
         private void ConfigureDatePicker()
         {
             try
@@ -124,10 +118,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Loads all holidays from the database and displays them in both the grid and timeline
-        /// This method connects to the database, retrieves holidays, calculates countdowns, and binds
-        /// </summary>
+        
         private void LoadHolidayData()
         {
             try
@@ -198,9 +189,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Calculates and formats a user-friendly countdown message for a holiday
-        /// </summary>
+        
         /// <param name="holidayDate">The date of the holiday</param>
 
         private string CalculateCountdown(DateTime holidayDate)
@@ -603,10 +592,10 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
+       
         /// Handles the search box text changed event
         /// Filters the holidays grid based on the search text
-        /// </summary>
+       
         private void HolidaySearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             try

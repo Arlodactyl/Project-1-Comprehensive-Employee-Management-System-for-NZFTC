@@ -9,20 +9,18 @@ using System.Windows.Controls;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
+    
     /// Interaction logic for DepartmentsPage.xaml
     /// This page allows administrators and trainers to manage departments within the organization.
     /// Admins/Trainers can view all departments, add new ones, delete departments that
     /// have no employees assigned to them, and view which employees are in each department.
-    /// </summary>
+    
     public partial class DepartmentsPage : Page
     {
         // Store the current logged-in user
         private readonly User _currentUser;
 
-        /// <summary>
-        /// Constructor - runs when the page is first created
-        /// </summary>
+   
         /// <param name="currentUser">The logged-in user accessing this page</param>
         public DepartmentsPage(User currentUser)
         {
@@ -47,11 +45,7 @@ namespace NZFTC_EmployeeSystem.Views
             LoadDepartmentData();
         }
 
-        /// <summary>
-        /// Loads all departments from the database and displays them in the grid.
-        /// This method connects to the database, retrieves all departments,
-        /// sorts them alphabetically by name, and binds them to the DataGrid.
-        /// </summary>
+       
         private void LoadDepartmentData()
         {
             try
@@ -80,10 +74,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Handles the View Employees button click for a department.
-        /// This loads and displays all employees assigned to the selected department.
-        /// </summary>
+       
         private void ViewEmployees_Click(object sender, RoutedEventArgs e)
         {
             // Step 1: Get the department ID from the button's Tag property
@@ -132,11 +123,11 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
+     
         /// Handles the Add Department button click.
         /// This method validates the department name, checks for duplicates,
         /// and saves the new department to the database.
-        /// </summary>
+     
         private void AddDepartment_Click(object sender, RoutedEventArgs e)
         {
             // Step 1: Get the department name from the text box and remove extra spaces
@@ -237,11 +228,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Handles the Delete button click on a department row.
-        /// This method confirms deletion with the user and ensures there are no
-        /// employees assigned to the department before allowing deletion.
-        /// </summary>
+     
         private void DeleteDepartment_Click(object sender, RoutedEventArgs e)
         {
             // Step 1: Get the department ID from the button's Tag property
@@ -349,9 +336,9 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
+      
         /// Shows help information for using the departments page
-        /// </summary>
+     
         private void HelpButton_Click(object sender, RoutedEventArgs e)
         {
             string helpMessage = "Departments Page Help\n\n" +

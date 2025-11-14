@@ -10,10 +10,7 @@ using System.Text;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
-    /// Interaction logic for GrievancesPage.xaml
-    /// Handles submission and management of employee grievances.
-    /// </summary>
+    
     public partial class GrievancesPage : Page
     {
         private readonly User _currentUser;

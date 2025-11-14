@@ -11,11 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
-    /// Dashboard window - main navigation interface after login
-    /// Shows collapsible sidebar menu with role-based buttons
-    /// Customized navigation for Admin, Workplace Trainer, and Employee roles
-    /// </summary>
+    
     public partial class DashboardWindow : Window
     {
         // The currently logged-in user
@@ -24,16 +20,16 @@ namespace NZFTC_EmployeeSystem.Views
         // Tracks whether the sidebar menu is collapsed (true) or expanded (false)
         private bool _isMenuCollapsed = false;
 
-        /// <summary>
+     
         /// Constructor - initializes the dashboard with user-specific navigation
-        /// </summary>
+       
         /// <param name="currentUser">The logged-in user</param>
         public DashboardWindow(User currentUser)
         {
             InitializeComponent();
             _currentUser = currentUser;
 
-            // Set welcome message with user's full name or username
+            // Set welcome message with user's full name or username so like welcome 'James Smith'
             WelcomeText.Text = $"Welcome, {_currentUser.Employee?.FullName ?? _currentUser.Username}";
 
             // Load user's profile picture if available
@@ -46,10 +42,7 @@ namespace NZFTC_EmployeeSystem.Views
             ContentFrame.Navigate(new DashboardHomePage(_currentUser));
         }
 
-        /// <summary>
-        /// Customizes the navigation menu based on user's role
-        /// Each role sees different buttons based on their permissions
-        /// </summary>
+       
         private void CustomizeMenuForRole()
         {
             // ADMIN - Full access to all features
@@ -110,10 +103,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Loads and displays the user's profile picture from the ProfilePictures folder
-        /// Shows default red circle if no picture is available
-        /// </summary>
+  
         private void LoadUserProfilePicture()
         {
             try
@@ -219,18 +209,16 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Public method to refresh the user avatar - called when avatar is changed
-        /// </summary>
+      
         public void RefreshUserAvatar()
         {
             LoadUserProfilePicture();
         }
 
-        /// <summary>
+        
         /// Constructs the full file path to the profile picture
         /// Looks in the ProfilePictures folder in the project root
-        /// </summary>
+        
         private string GetProfilePicturePath(string fileName)
         {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -239,10 +227,9 @@ namespace NZFTC_EmployeeSystem.Views
             return Path.Combine(picturesFolder, fileName);
         }
 
-        /// <summary>
         /// Updates all menu buttons to show which page is currently active
         /// Sets Tag="Active" on the current page button to apply grey background
-        /// </summary>
+      
         private void SetActiveButton(string buttonName)
         {
             // Clear all button active states first
@@ -870,9 +857,9 @@ namespace NZFTC_EmployeeSystem.Views
 
         #endregion
 
-        /// <summary>
+       
         /// Logs out the current user and returns to login screen
-        /// </summary>
+       
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             var loginWindow = new LoginWindow();

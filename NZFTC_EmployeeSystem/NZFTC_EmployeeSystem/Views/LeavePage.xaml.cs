@@ -8,9 +8,7 @@ using System.Windows.Controls;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
-    /// LeavePage - Handles leave management for employees and admins
-    /// </summary>
+    
     public partial class LeavePage : Page
     {
         private readonly User _currentUser;

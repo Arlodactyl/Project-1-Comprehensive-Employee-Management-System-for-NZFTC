@@ -11,11 +11,11 @@ using System.Windows.Input;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    /// <summary>
+   
     /// My Training Page - Shows ONLY the logged-in employee's training records
     /// This is a read-only view for employees to track their training progress
     /// Employees cannot add or edit training - only view their records
-    /// </summary>
+ 
     public partial class MyTrainingPage : Page
     {
         // The currently logged-in user
@@ -24,7 +24,6 @@ namespace NZFTC_EmployeeSystem.Views
         // Store all training records for the current employee
         private System.Collections.Generic.List<Training> _allTrainings;
 
-        /// <summary>
         /// Constructor - loads the page with the current user's training records
         /// </summary>
         /// <param name="currentUser">The logged-in employee</param>
@@ -40,10 +39,10 @@ namespace NZFTC_EmployeeSystem.Views
             LoadMyTraining();
         }
 
-        /// <summary>
+      
         /// Loads all training records for the current logged-in employee
         /// Filters by EmployeeId to show only their training
-        /// </summary>
+       
         private void LoadMyTraining()
         {
             try
@@ -77,9 +76,6 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Updates the summary cards showing total, completed, and pending training
-        /// </summary>
         private void UpdateStatistics()
         {
             if (_allTrainings == null)
@@ -141,9 +137,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Double-click handler - shows detailed information about the training record
-        /// </summary>
+        
         private void TrainingGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // Get the selected training record
