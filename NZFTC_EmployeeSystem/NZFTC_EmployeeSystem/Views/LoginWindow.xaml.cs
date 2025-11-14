@@ -83,7 +83,7 @@ namespace NZFTC_EmployeeSystem.Views
             {
                 Title = "Forgot Password",
                 Width = 450,
-                Height = 220,
+                Height = 250,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 ResizeMode = ResizeMode.NoResize,
                 Background = System.Windows.Media.Brushes.White
