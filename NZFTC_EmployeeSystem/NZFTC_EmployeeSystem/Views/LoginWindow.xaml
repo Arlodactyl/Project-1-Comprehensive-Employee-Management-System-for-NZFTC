@@ -15,7 +15,7 @@
         Background="White">
 
     <Window.Resources>
-        <!-- Text Box Style -->
+        <!-- Text-Box Style -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="40"/>
             <Setter Property="Padding" Value="10,8"/>

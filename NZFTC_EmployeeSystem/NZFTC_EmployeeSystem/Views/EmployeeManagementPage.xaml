@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="900"
+      d:DesignHeight="1600" d:DesignWidth="900"
       Title="Employee Management">
 
     <Page.Resources>
@@ -478,9 +478,13 @@
             </TabItem>
 
             <!-- Tab 3: Training Records -->
-            <TabItem Header="Training Records" FontSize="14">
+            <TabItem Header="Training Records" FontSize="14" Height="23" VerticalAlignment="Top">
                 <Grid>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="55*"/>
+                        <ColumnDefinition Width="839*"/>
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
                         <StackPanel Margin="20">
 
                             <!-- Training Section Header -->
@@ -659,7 +663,7 @@
                             CornerRadius="5"
                             Padding="20"
                             Width="380"
-                            Height="380">
+                            Height="380" Grid.Column="1">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
