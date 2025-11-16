@@ -126,11 +126,11 @@ namespace NZFTC_EmployeeSystem.Data
                 }
 
                 // Create admin user with HASHED password
-                // PasswordHasher.HashPassword() converts plain text to secure hash
+                // Password is securely hashed using BCrypt
                 adminUser = new User
                 {
                     Username = "admin",
-                    Password = PasswordHasher.HashPassword("admin123"), // Hashed password
+                    Password = PasswordHasher.HashPassword("admin123"), // BCrypt hashed
                     Role = "Admin",
                     EmployeeId = 1,
                     IsActive = true,
@@ -156,8 +156,6 @@ namespace NZFTC_EmployeeSystem.Data
                 }
 
                 Console.WriteLine("✓ Admin account created successfully");
-                Console.WriteLine("  Username: admin");
-                Console.WriteLine("  Password: admin123");
             }
             else
             {
@@ -321,14 +319,13 @@ namespace NZFTC_EmployeeSystem.Data
             );
 
             // Create a default admin user account with HASHED password
-            // PasswordHasher.HashPassword() converts "admin123" to secure BCrypt hash
-            // The hash will be stored in database, but you can still login with "admin123"
+            // Password is securely hashed using BCrypt - see documentation for credentials
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
                     Id = 1,
                     Username = "admin",
-                    Password = PasswordHasher.HashPassword("admin123"), // Hashed with BCrypt
+                    Password = PasswordHasher.HashPassword("admin123"), // BCrypt hashed
                     Role = "Admin",
                     EmployeeId = 1,
                     IsActive = true,
@@ -729,94 +726,41 @@ namespace NZFTC_EmployeeSystem.Data
                 }
             );
 
-            // Seed random test employees
+
+            // Seed essential employees (trainer only - admin is created via EnsureAdminExists)
+            // Additional employees can be added through the application's employee management interface
             modelBuilder.Entity<Employee>().HasData(
-                new Employee { Id = 2, FirstName = "James", LastName = "Smith", Email = "james.smith@nzftc.co.nz", PhoneNumber = "022-345-6789", JobTitle = "Developer", DepartmentId = 1, HireDate = new DateTime(2023, 6, 15), Salary = 75000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 3, FirstName = "Emma", LastName = "Johnson", Email = "emma.johnson@nzftc.co.nz", PhoneNumber = "022-456-7890", JobTitle = "Manager", DepartmentId = 2, HireDate = new DateTime(2022, 9, 20), Salary = 85000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 4, FirstName = "Oliver", LastName = "Williams", Email = "oliver.williams@nzftc.co.nz", PhoneNumber = "022-567-8901", JobTitle = "Analyst", DepartmentId = 3, HireDate = new DateTime(2024, 1, 10), Salary = 65000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 5, FirstName = "Sophia", LastName = "Brown", Email = "sophia.brown@nzftc.co.nz", PhoneNumber = "022-678-9012", JobTitle = "Coordinator", DepartmentId = 1, HireDate = new DateTime(2023, 4, 5), Salary = 55000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 6, FirstName = "William", LastName = "Jones", Email = "william.jones@nzftc.co.nz", PhoneNumber = "022-789-0123", JobTitle = "Specialist", DepartmentId = 2, HireDate = new DateTime(2023, 7, 12), Salary = 70000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 7, FirstName = "Ava", LastName = "Garcia", Email = "ava.garcia@nzftc.co.nz", PhoneNumber = "022-890-1234", JobTitle = "Developer", DepartmentId = 1, HireDate = new DateTime(2024, 3, 1), Salary = 72000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 8, FirstName = "Lucas", LastName = "Miller", Email = "lucas.miller@nzftc.co.nz", PhoneNumber = "022-901-2345", JobTitle = "Associate", DepartmentId = 3, HireDate = new DateTime(2022, 12, 8), Salary = 60000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 9, FirstName = "Isabella", LastName = "Davis", Email = "isabella.davis@nzftc.co.nz", PhoneNumber = "022-012-3456", JobTitle = "Consultant", DepartmentId = 2, HireDate = new DateTime(2023, 8, 25), Salary = 78000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 10, FirstName = "Mason", LastName = "Rodriguez", Email = "mason.rodriguez@nzftc.co.nz", PhoneNumber = "022-123-4567", JobTitle = "Manager", DepartmentId = 1, HireDate = new DateTime(2023, 5, 18), Salary = 88000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
-                new Employee { Id = 11, FirstName = "Mia", LastName = "Martinez", Email = "mia.martinez@nzftc.co.nz", PhoneNumber = "022-234-5678", JobTitle = "Analyst", DepartmentId = 3, HireDate = new DateTime(2023, 11, 30), Salary = 67000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true },
                 new Employee { Id = 12, FirstName = "Sarah", LastName = "Wilson", Email = "sarah.wilson@nzftc.co.nz", PhoneNumber = "022-345-6790", JobTitle = "Workplace Trainer", DepartmentId = 2, HireDate = new DateTime(2021, 3, 15), Salary = 72000, TaxRate = 17.5m, AnnualLeaveBalance = 20, SickLeaveBalance = 10, IsActive = true }
             );
 
             // Seed user accounts for test employees with HASHED passwords
-            // All test users can login with "password123" but it's stored as BCrypt hash
+
+            // Seed trainer user account (admin is created via EnsureAdminExists)
+            // Password is securely hashed using BCrypt - see documentation for credentials
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 2, Username = "james.smith", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 2, IsActive = true, CreatedDate = new DateTime(2023, 6, 15) },
-                new User { Id = 3, Username = "emma.johnson", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 3, IsActive = true, CreatedDate = new DateTime(2022, 9, 20) },
-                new User { Id = 4, Username = "oliver.williams", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 4, IsActive = true, CreatedDate = new DateTime(2024, 1, 10) },
-                new User { Id = 5, Username = "sophia.brown", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 5, IsActive = true, CreatedDate = new DateTime(2023, 4, 5) },
-                new User { Id = 6, Username = "william.jones", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 6, IsActive = true, CreatedDate = new DateTime(2023, 7, 12) },
-                new User { Id = 7, Username = "ava.garcia", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 7, IsActive = true, CreatedDate = new DateTime(2024, 3, 1) },
-                new User { Id = 8, Username = "lucas.miller", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 8, IsActive = true, CreatedDate = new DateTime(2022, 12, 8) },
-                new User { Id = 9, Username = "isabella.davis", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 9, IsActive = true, CreatedDate = new DateTime(2023, 8, 25) },
-                new User { Id = 10, Username = "mason.rodriguez", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 10, IsActive = true, CreatedDate = new DateTime(2023, 5, 18) },
-                new User { Id = 11, Username = "mia.martinez", Password = PasswordHasher.HashPassword("password123"), Role = "Employee", EmployeeId = 11, IsActive = true, CreatedDate = new DateTime(2023, 11, 30) },
                 new User { Id = 12, Username = "trainer", Password = PasswordHasher.HashPassword("password123"), Role = "Workplace Trainer", EmployeeId = 12, IsActive = true, CreatedDate = new DateTime(2021, 3, 15) }
             );
 
-            // Assign Employee role to test users
+
+            // Assign Workplace Trainer role to trainer user
             modelBuilder.Entity<UserRole>().HasData(
-                new UserRole { UserId = 2, RoleId = 2 },
-                new UserRole { UserId = 3, RoleId = 2 },
-                new UserRole { UserId = 4, RoleId = 2 },
-                new UserRole { UserId = 5, RoleId = 2 },
-                new UserRole { UserId = 6, RoleId = 2 },
-                new UserRole { UserId = 7, RoleId = 2 },
-                new UserRole { UserId = 8, RoleId = 2 },
-                new UserRole { UserId = 9, RoleId = 2 },
-                new UserRole { UserId = 10, RoleId = 2 },
-                new UserRole { UserId = 11, RoleId = 2 },
                 new UserRole { UserId = 12, RoleId = 3 }
             );
 
-            // Seed training records for testing
+
+            // Seed training records for admin only
+            // Additional training records can be added through the application
             modelBuilder.Entity<Training>().HasData(
                 new Training { Id = 1, EmployeeId = 1, TrainingType = "Ethics Training", Status = "Completed", CompletedDate = new DateTime(2024, 1, 15), SignedOffByUserId = 1, Notes = "Initial admin training" },
-                new Training { Id = 2, EmployeeId = 1, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2024, 1, 10), SignedOffByUserId = 1, Notes = "Company induction completed" },
-                new Training { Id = 3, EmployeeId = 2, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 6, 16), SignedOffByUserId = 1, Notes = "New hire induction" },
-                new Training { Id = 4, EmployeeId = 2, TrainingType = "Health and Safety", Status = "Completed", CompletedDate = new DateTime(2023, 6, 20), SignedOffByUserId = 1, Notes = "Workplace safety training" },
-                new Training { Id = 5, EmployeeId = 2, TrainingType = "Fire Safety", Status = "In Progress", Notes = "Scheduled for next week" },
-                new Training { Id = 6, EmployeeId = 3, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2022, 9, 21), SignedOffByUserId = 1 },
-                new Training { Id = 7, EmployeeId = 3, TrainingType = "Ethics Training", Status = "Completed", CompletedDate = new DateTime(2022, 10, 5), SignedOffByUserId = 1 },
-                new Training { Id = 8, EmployeeId = 3, TrainingType = "Data Privacy", Status = "Not Started", Notes = "To be scheduled" },
-                new Training { Id = 9, EmployeeId = 4, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2024, 1, 11), SignedOffByUserId = 1 },
-                new Training { Id = 10, EmployeeId = 4, TrainingType = "First Aid", Status = "In Progress", Notes = "Attending course next month" },
-                new Training { Id = 11, EmployeeId = 5, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 4, 6), SignedOffByUserId = 1 },
-                new Training { Id = 12, EmployeeId = 5, TrainingType = "Workplace Harassment", Status = "Completed", CompletedDate = new DateTime(2023, 5, 15), SignedOffByUserId = 1 },
-                new Training { Id = 13, EmployeeId = 5, TrainingType = "Ethics Training", Status = "Not Started" },
-                new Training { Id = 14, EmployeeId = 6, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 7, 13), SignedOffByUserId = 1 },
-                new Training { Id = 15, EmployeeId = 6, TrainingType = "Health and Safety", Status = "Completed", CompletedDate = new DateTime(2023, 7, 20), SignedOffByUserId = 1 },
-                new Training { Id = 16, EmployeeId = 7, TrainingType = "Induction", Status = "Not Started", Notes = "New employee - schedule induction" },
-                new Training { Id = 17, EmployeeId = 8, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2022, 12, 9), SignedOffByUserId = 1 },
-                new Training { Id = 18, EmployeeId = 8, TrainingType = "Ethics Training", Status = "Completed", CompletedDate = new DateTime(2023, 1, 20), SignedOffByUserId = 1 },
-                new Training { Id = 19, EmployeeId = 8, TrainingType = "Fire Safety", Status = "Completed", CompletedDate = new DateTime(2023, 2, 10), SignedOffByUserId = 1 },
-                new Training { Id = 20, EmployeeId = 9, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 8, 26), SignedOffByUserId = 1 },
-                new Training { Id = 21, EmployeeId = 9, TrainingType = "Data Privacy", Status = "In Progress", Notes = "Online course in progress" },
-                new Training { Id = 22, EmployeeId = 10, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 5, 19), SignedOffByUserId = 1 },
-                new Training { Id = 23, EmployeeId = 10, TrainingType = "Health and Safety", Status = "Completed", CompletedDate = new DateTime(2023, 6, 1), SignedOffByUserId = 1 },
-                new Training { Id = 24, EmployeeId = 10, TrainingType = "First Aid", Status = "Completed", CompletedDate = new DateTime(2023, 9, 15), SignedOffByUserId = 12, Notes = "Signed off by workplace trainer" },
-                new Training { Id = 25, EmployeeId = 11, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2023, 12, 1), SignedOffByUserId = 1 },
-                new Training { Id = 26, EmployeeId = 11, TrainingType = "Ethics Training", Status = "Not Started", Notes = "Scheduled for Q1 2025" }
+                new Training { Id = 2, EmployeeId = 1, TrainingType = "Induction", Status = "Completed", CompletedDate = new DateTime(2024, 1, 10), SignedOffByUserId = 1, Notes = "Company induction completed" }
             );
 
-            // Seed sample payslips for recent weeks
+
+            // Seed sample payslips for admin only
+            // Additional payslips will be generated through the payroll system
             modelBuilder.Entity<Payslip>().HasData(
                 new Payslip { Id = 1, EmployeeId = 1, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1538.46m, TaxDeduction = 461.54m, NetSalary = 1076.92m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
-                new Payslip { Id = 2, EmployeeId = 2, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1442.31m, TaxDeduction = 252.40m, NetSalary = 1189.91m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
-                new Payslip { Id = 3, EmployeeId = 3, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1634.62m, TaxDeduction = 286.06m, NetSalary = 1348.56m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
-                new Payslip { Id = 4, EmployeeId = 4, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1230.77m, TaxDeduction = 215.38m, NetSalary = 1015.39m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
-                new Payslip { Id = 5, EmployeeId = 5, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1057.69m, TaxDeduction = 185.10m, NetSalary = 872.59m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
-                new Payslip { Id = 6, EmployeeId = 1, PayPeriodStart = new DateTime(2025, 10, 20), PayPeriodEnd = new DateTime(2025, 10, 26), GrossSalary = 1538.46m, TaxDeduction = 461.54m, NetSalary = 1076.92m, GeneratedDate = new DateTime(2025, 10, 27), GeneratedByUserId = 1 },
-                new Payslip { Id = 7, EmployeeId = 2, PayPeriodStart = new DateTime(2025, 10, 20), PayPeriodEnd = new DateTime(2025, 10, 26), GrossSalary = 1442.31m, TaxDeduction = 252.40m, NetSalary = 1189.91m, GeneratedDate = new DateTime(2025, 10, 27), GeneratedByUserId = 1 },
-                new Payslip { Id = 8, EmployeeId = 3, PayPeriodStart = new DateTime(2025, 10, 20), PayPeriodEnd = new DateTime(2025, 10, 26), GrossSalary = 1716.35m, TaxDeduction = 300.36m, NetSalary = 1415.99m, GeneratedDate = new DateTime(2025, 10, 27), GeneratedByUserId = 1 },
-                new Payslip { Id = 9, EmployeeId = 6, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1346.15m, TaxDeduction = 235.58m, NetSalary = 1110.57m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 },
-                new Payslip { Id = 10, EmployeeId = 7, PayPeriodStart = new DateTime(2025, 10, 27), PayPeriodEnd = new DateTime(2025, 11, 2), GrossSalary = 1384.62m, TaxDeduction = 242.31m, NetSalary = 1142.31m, GeneratedDate = new DateTime(2025, 11, 3), GeneratedByUserId = 1 }
+                new Payslip { Id = 2, EmployeeId = 1, PayPeriodStart = new DateTime(2025, 10, 20), PayPeriodEnd = new DateTime(2025, 10, 26), GrossSalary = 1538.46m, TaxDeduction = 461.54m, NetSalary = 1076.92m, GeneratedDate = new DateTime(2025, 10, 27), GeneratedByUserId = 1 }
             );
         }
     }

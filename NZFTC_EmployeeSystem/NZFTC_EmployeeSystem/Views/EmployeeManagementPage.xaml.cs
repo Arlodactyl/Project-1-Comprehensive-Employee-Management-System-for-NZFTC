@@ -771,6 +771,7 @@ namespace NZFTC_EmployeeSystem.Views
             TaxRateTextBox.Clear();
             UsernameTextBox.Clear();
             PasswordBox.Clear();
+            ConfirmPasswordBox.Clear();
             RoleComboBox.SelectedIndex = 0;
         }
 
@@ -1514,11 +1515,36 @@ For additional help, contact your system administrator.";
                 string.IsNullOrWhiteSpace(LastNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(EmailTextBox.Text) ||
                 string.IsNullOrWhiteSpace(UsernameTextBox.Text) ||
-                string.IsNullOrWhiteSpace(PasswordBox.Password))
+                string.IsNullOrWhiteSpace(PasswordBox.Password) ||
+                string.IsNullOrWhiteSpace(ConfirmPasswordBox.Password))
             {
                 MessageBox.Show(
-                    "Please fill in all required fields:\n- First Name\n- Last Name\n- Email\n- Username\n- Password\n- Salary\n- Tax Rate",
+                    "Please fill in all required fields:\n- First Name\n- Last Name\n- Email\n- Username\n- Password\n- Confirm Password\n- Salary\n- Tax Rate",
                     "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            // Validate password confirmation
+            if (PasswordBox.Password != ConfirmPasswordBox.Password)
+            {
+                MessageBox.Show(
+                    "Passwords do not match! Please ensure both password fields are identical.",
+                    "Password Mismatch",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            // Validate password strength
+            if (PasswordBox.Password.Length < 6)
+            {
+                MessageBox.Show(
+                    "Password must be at least 6 characters long.",
+                    "Weak Password",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning
                 );
@@ -1623,7 +1649,7 @@ For additional help, contact your system administrator.";
                     var user = new User
                     {
                         Username = UsernameTextBox.Text.Trim(),
-                        Password = PasswordBox.Password,
+                        Password = PasswordHasher.HashPassword(PasswordBox.Password), // ✅ HASHED PASSWORD
                         Role = selectedRoleName,
                         EmployeeId = employee.Id,
                         IsActive = true,

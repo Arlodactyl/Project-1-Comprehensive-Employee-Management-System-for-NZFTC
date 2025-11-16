@@ -2431,6 +2431,8 @@ C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\Microsoft.Extensions.Primitives.dll
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\Microsoft.Xaml.Behaviors.dll
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\Mono.TextTemplating.dll
+C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\Newtonsoft.Json.dll
+C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\Newtonsoft.Json.Bson.dll
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\SQLitePCLRaw.batteries_v2.dll
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\SQLitePCLRaw.core.dll
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\SQLitePCLRaw.provider.e_sqlite3.dll
@@ -2571,5 +2573,3 @@ C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.pdb
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\NZFTC_EmployeeSystem.genruntimeconfig.cache
 C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\obj\Debug\net9.0-windows\ref\NZFTC_EmployeeSystem.dll
-C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\Newtonsoft.Json.dll
-C:\Users\64204\Desktop\project final\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\NZFTC_EmployeeSystem\NZFTC_EmployeeSystem\bin\Debug\net9.0-windows\Newtonsoft.Json.Bson.dll

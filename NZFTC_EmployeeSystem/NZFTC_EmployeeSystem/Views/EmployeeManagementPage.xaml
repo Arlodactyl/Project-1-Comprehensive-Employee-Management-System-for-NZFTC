@@ -366,6 +366,15 @@
                                                      BorderBrush="#BDC3C7"
                                                      BorderThickness="1"
                                                      Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Confirm Password *" FontSize="12" Margin="0,0,0,3"/>
+                                        <PasswordBox x:Name="ConfirmPasswordBox" 
+                                                     Height="32" 
+                                                     Padding="8,5"
+                                                     FontSize="13"
+                                                     BorderBrush="#BDC3C7"
+                                                     BorderThickness="1"
+                                                     Margin="0,0,0,10"/>
                                     </StackPanel>
                                 </Grid>
 
