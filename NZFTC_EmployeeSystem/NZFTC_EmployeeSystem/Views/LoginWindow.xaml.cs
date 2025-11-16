@@ -221,10 +221,11 @@ namespace NZFTC_EmployeeSystem.Views
 
             using (var db = new AppDbContext())
             {
+                // Case-insensitive username comparison
                 var user = db.Users
                     .Include(u => u.Employee)
                     .FirstOrDefault(u =>
-                        u.Username == username &&
+                        u.Username.ToLower() == username.ToLower() &&
                         u.IsActive == true
                     );
 
