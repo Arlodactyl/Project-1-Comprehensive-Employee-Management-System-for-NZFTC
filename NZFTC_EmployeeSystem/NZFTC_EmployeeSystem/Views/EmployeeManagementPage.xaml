@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:NZFTC_EmployeeSystem.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="900"
+      d:DesignHeight="1600" d:DesignWidth="900"
       Title="Employee Management">
 
     <Page.Resources>
@@ -478,11 +478,14 @@
             </TabItem>
 
             <!-- Tab 3: Training Records -->
-            <TabItem Header="Training Records" FontSize="14">
+            <TabItem Header="Training Records" FontSize="14" Height="23" VerticalAlignment="Top">
                 <Grid>
-                    <!-- Main Content with ScrollViewer -->
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                        <StackPanel Margin="20,20,420,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="55*"/>
+                        <ColumnDefinition Width="839*"/>
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
+                        <StackPanel Margin="20">
 
                             <!-- Training Section Header -->
                             <TextBlock Text="All Employee Training Records" 
@@ -579,138 +582,149 @@
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                                 <Button Content="Add Training" 
                                         Style="{StaticResource ActionButton}"
-                                        Click="AddTraining_Click"/>
-                                <Button x:Name="MarkPendingButton"
-                                        Content="Mark as Pending" 
-                                        Style="{StaticResource ToggleButton}"
-                                        Click="MarkPendingTraining_Click"
-                                        ToolTip="Employees can mark training as pending completion"/>
+                                        Click="AddTraining_Click"
+                                        Visibility="Collapsed"/>
                                 <Button x:Name="CompleteTrainingButton"
                                         Content="Complete Training" 
                                         Style="{StaticResource ExportButton}"
-                                        Click="CompleteTraining_Click"
-                                        ToolTip="Admin/Trainer signs off completed training"/>
+                                        Click="CompleteTraining_Click"/>
                                 <Button Content="Export Training Records" 
                                         Style="{StaticResource ExportButton}"
                                         Click="ExportTraining_Click"/>
+                                <Button Content="View Training Graph" 
+                                        Style="{StaticResource ActionButton}"
+                                        Click="ViewChart"
+                                        Visibility="Collapsed"/>
                             </StackPanel>
 
                             <!-- Add Training Form -->
-                            <Border x:Name="AddTrainingPanel"
-                                    BorderBrush="#BDC3C7" 
-                                    BorderThickness="1" 
-                                    Padding="20" 
-                                    Background="#F8F9FA"
-                                    CornerRadius="5"
-                                    Visibility="Collapsed">
-                                <StackPanel>
-                                    <TextBlock Text="Add New Training Record" 
-                                               FontSize="16" 
-                                               FontWeight="Bold" 
-                                               Foreground="#2C3E50"
-                                               Margin="0,0,0,15"/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-                                    <TextBlock Text="Employee *" FontSize="12" Margin="0,0,0,3"/>
-                                    <ComboBox x:Name="TrainingEmployeeComboBox" 
-                                              Style="{StaticResource ModernComboBox}" 
-                                              DisplayMemberPath="FullName"
-                                              SelectedValuePath="Id"
-                                              IsEditable="True"
-                                              IsTextSearchEnabled="True"
-                                              Margin="0,0,0,10"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="AddTrainingPanel"
+                                        BorderBrush="#BDC3C7" 
+                                        BorderThickness="1" 
+                                        Padding="20" 
+                                        Background="#F8F9FA"
+                                        CornerRadius="5"
+                                        Visibility="Visible">
+                                    <StackPanel Visibility="Visible">
+                                        <TextBlock Text="Add New Training Record" 
+                                                   FontSize="16" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#2C3E50"
+                                                   Margin="0,0,0,15"/>
 
-                                    <TextBlock Text="Training Type *" FontSize="12" Margin="0,0,0,3"/>
-                                    <ComboBox x:Name="TrainingTypeComboBox" 
-                                              Style="{StaticResource ModernComboBox}" 
-                                              Margin="0,0,0,10">
-                                        <ComboBoxItem Content="Ethics Training"/>
-                                        <ComboBoxItem Content="Induction"/>
-                                        <ComboBoxItem Content="Health and Safety"/>
-                                        <ComboBoxItem Content="Fire Safety"/>
-                                        <ComboBoxItem Content="First Aid"/>
-                                        <ComboBoxItem Content="Data Privacy"/>
-                                        <ComboBoxItem Content="Workplace Harassment"/>
-                                        <ComboBoxItem Content="Other"/>
-                                    </ComboBox>
+                                        <TextBlock Text="Employee *" FontSize="12" Margin="0,0,0,3"/>
+                                        <ComboBox x:Name="TrainingEmployeeComboBox" 
+                                                    Style="{StaticResource ModernComboBox}" 
+                                                    DisplayMemberPath="FullName"
+                                                    SelectedValuePath="Id"
+                                                    IsEditable="True"
+                                                    IsTextSearchEnabled="True"
+                                                    Margin="0,0,0,10"/>
 
-                                    <TextBlock Text="Notes" FontSize="12" Margin="0,0,0,3"/>
-                                    <TextBox x:Name="TrainingNotesTextBox" 
-                                             Style="{StaticResource ModernTextBox}" 
-                                             Height="60"
-                                             TextWrapping="Wrap"
-                                             AcceptsReturn="True"
-                                             Margin="0,0,0,15"/>
+                                        <TextBlock Text="Training Type *" FontSize="12" Margin="0,0,0,3"/>
+                                        <ComboBox x:Name="TrainingTypeComboBox" 
+                                                    Style="{StaticResource ModernComboBox}" 
+                                                    Margin="0,0,0,10">
+                                            <ComboBoxItem Content="Ethics Training"/>
+                                            <ComboBoxItem Content="Induction"/>
+                                            <ComboBoxItem Content="Health and Safety"/>
+                                            <ComboBoxItem Content="Fire Safety"/>
+                                            <ComboBoxItem Content="First Aid"/>
+                                            <ComboBoxItem Content="Data Privacy"/>
+                                            <ComboBoxItem Content="Workplace Harassment"/>
+                                            <ComboBoxItem Content="Other"/>
+                                        </ComboBox>
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="Save Training" 
-                                                Style="{StaticResource ActionButton}"
-                                                Click="SaveTraining_Click"/>
-                                        <Button Content="Cancel" 
-                                                Style="{StaticResource ToggleButton}"
-                                                Click="CancelAddTraining_Click"/>
+                                        <TextBlock Text="Notes" FontSize="12" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="TrainingNotesTextBox" 
+                                                    Style="{StaticResource ModernTextBox}" 
+                                                    Height="60"
+                                                    TextWrapping="Wrap"
+                                                    AcceptsReturn="True"
+                                                    Margin="0,0,0,15"/>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Save Training" 
+                                                    Style="{StaticResource ActionButton}"
+                                                    Click="SaveTraining_Click"/>
+                                            <Button Content="Cancel" 
+                                                    Style="{StaticResource ToggleButton}"
+                                                    Click="CancelAddTraining_Click"/>
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
-                            </Border>
+                                </Border>
+
+                                <!-- Training Statistics Pie Chart (Bottom Right) -->
+                                <Border x:Name="TrainingStatsBorder"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Margin="27,0,0,0"
+                                        Background="White"
+                                        BorderBrush="#BDC3C7"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Padding="20"
+                                        Width="400"
+                                        Height="400" Grid.Column="1">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Title -->
+                                        <TextBlock Grid.Row="0"
+                                                    Text="Training Status Overview"
+                                                    FontSize="16"
+                                                    FontWeight="Bold"
+                                                    Foreground="#2C3E50"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0,0,0,15"/>
+
+
+                                        <!-- Pie Chart Canvas -->
+                                        <Canvas x:Name="PieChartCanvas"
+                                                Grid.Row="1"
+                                                Width="260"
+                                                Height="260"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"/>
+
+                                        <!-- Legend -->
+                                        <StackPanel Grid.Row="2" 
+                                       Margin="0,15,0,0"
+                                       HorizontalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Margin="0,3">
+                                                <Border Background="#27AE60" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
+                                                <TextBlock x:Name="CompletedLegend" Text="Completed: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,3">
+                                                <Border Background="#F39C12" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
+                                                <TextBlock x:Name="PendingLegend" Text="In Progress: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,3">
+                                                <Border Background="#E74C3C" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
+                                                <TextBlock x:Name="NotCompletedLegend" Text="Not Started: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+
 
                         </StackPanel>
                     </ScrollViewer>
-
-                    <!-- Training Statistics Pie Chart (Bottom Right, Fixed Position) -->
-                    <Border x:Name="TrainingStatsBorder"
-                            Panel.ZIndex="100"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right"
-                            Margin="0,0,20,20"
-                            Background="White"
-                            BorderBrush="#BDC3C7"
-                            BorderThickness="1"
-                            CornerRadius="5"
-                            Padding="20"
-                            Width="380"
-                            Height="380">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <!-- Title -->
-                            <TextBlock Grid.Row="0"
-                                      Text="Training Status Overview"
-                                      FontSize="16"
-                                      FontWeight="Bold"
-                                      Foreground="#2C3E50"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,0,0,15"/>
-
-                            <!-- Pie Chart Canvas -->
-                            <Canvas x:Name="PieChartCanvas"
-                                   Grid.Row="1"
-                                   Width="260"
-                                   Height="260"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-
-                            <!-- Legend -->
-                            <StackPanel Grid.Row="2" 
-                                       Margin="0,15,0,0"
-                                       HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" Margin="0,3">
-                                    <Border Background="#27AE60" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
-                                    <TextBlock x:Name="CompletedLegend" Text="Completed: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,3">
-                                    <Border Background="#F39C12" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
-                                    <TextBlock x:Name="PendingLegend" Text="In Progress: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,3">
-                                    <Border Background="#E74C3C" Width="16" Height="16" CornerRadius="3" Margin="0,0,8,0"/>
-                                    <TextBlock x:Name="NotCompletedLegend" Text="Not Started: 0 (0%)" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
                 </Grid>
             </TabItem>
         </TabControl>

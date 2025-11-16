@@ -46,19 +46,17 @@ namespace NZFTC_EmployeeSystem.Views
             LoadAllTrainingRecords();
             LoadEmployeesForTraining();
 
-            AddTrainingPanel.Visibility = Visibility.Collapsed;
+            AddTrainingPanel.Visibility = Visibility.Visible;
             TrainingTypeComboBox.SelectedIndex = 0;
 
             // Set button visibility based on role
             if (_currentUser.Role == "Admin" || _currentUser.Role == "Workplace Trainer")
             {
                 CompleteTrainingButton.Visibility = Visibility.Visible;
-                MarkPendingButton.Visibility = Visibility.Collapsed; // Admins/Trainers don't need this
             }
             else
             {
                 CompleteTrainingButton.Visibility = Visibility.Collapsed;
-                MarkPendingButton.Visibility = Visibility.Visible; // Employees can mark as pending
             }
 
             LoadDepartmentsForEdit();
@@ -1187,84 +1185,13 @@ namespace NZFTC_EmployeeSystem.Views
                     MessageBoxImage.Information
                 );
 
-                AddTrainingPanel.Visibility = Visibility.Collapsed;
+                AddTrainingPanel.Visibility = Visibility.Visible;
                 LoadAllTrainingRecords();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
                     $"Error adding training: {ex.Message}",
-                    "Database Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
-            }
-        }
-
-
-        // Below allows employees to mark training as pending completion
-        private void MarkPendingTraining_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = TrainingGrid.SelectedItem as Training;
-            if (selected == null)
-            {
-                MessageBox.Show(
-                    "Please select a training record from the list.",
-                    "No Selection",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-                return;
-            }
-
-            if (selected.Status == "Completed")
-            {
-                MessageBox.Show(
-                    "This training is already completed and cannot be changed to pending.",
-                    "Already Completed",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-                return;
-            }
-
-            if (selected.Status == "In Progress")
-            {
-                MessageBox.Show(
-                    "This training is already marked as pending completion.",
-                    "Already Pending",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-                return;
-            }
-
-            try
-            {
-                using (var db = new AppDbContext())
-                {
-                    var training = db.Trainings.Find(selected.Id);
-                    if (training != null)
-                    {
-                        training.Status = "In Progress";
-                        db.SaveChanges();
-                    }
-                }
-
-                MessageBox.Show(
-                    "Training marked as pending completion!\n\n" +
-                    "An Admin or Workplace Trainer will sign it off once verified.",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-
-                LoadAllTrainingRecords();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Error updating training: {ex.Message}",
                     "Database Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
@@ -1767,6 +1694,16 @@ For additional help, contact your system administrator.";
                     MessageBoxImage.Error
                 );
             }
+        }
+
+        private void ViewChart(object sender, RoutedEventArgs e)
+        {
+            TrainingStatsBorder.Visibility = Visibility.Visible;
+        }
+
+        private void TrainingChartExit_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingStatsBorder.Visibility = Visibility.Collapsed;
         }
     }
 }

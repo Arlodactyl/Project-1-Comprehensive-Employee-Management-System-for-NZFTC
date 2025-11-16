@@ -360,6 +360,7 @@
                             <DataGridTextColumn Header="Incident Date(s)" Binding="{Binding IncidentDates}" Width="150"/>
                             <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
                             <DataGridTextColumn Header="Submitted" Binding="{Binding RequestDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                            <DataGridTextColumn Header="Response" Binding="{Binding AdminResponse}" Width="200"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
