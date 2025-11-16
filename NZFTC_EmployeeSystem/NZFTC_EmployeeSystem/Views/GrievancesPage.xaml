@@ -351,7 +351,8 @@
                               AlternatingRowBackground="#ECF0F1"
                               GridLinesVisibility="Horizontal"
                               HeadersVisibility="Column"
-                              Margin="0,0,0,15">
+                              Margin="0,0,0,15"
+                              MouseDoubleClick="AllGrievancesGrid_MouseDoubleClick">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                             <DataGridTextColumn Header="Employee" Binding="{Binding Employee.FullName}" Width="150"/>

@@ -10,7 +10,6 @@ using System.Text;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    
     public partial class GrievancesPage : Page
     {
         private readonly User _currentUser;
@@ -443,34 +442,30 @@ namespace NZFTC_EmployeeSystem.Views
         // Show information dialog about grievances in NZ context
         private void InfoButton_Click(object sender, RoutedEventArgs e)
         {
-            var infoMessage = @"What is a Grievance in New Zealand?
-
-A grievance is a formal concern or complaint raised by an employee about their employment. Under New Zealand employment law, employers must:
-
-Key Points:
-• Have a fair and reasonable process for handling grievances
-• Act in good faith when addressing employee concerns
-• Follow natural justice principles
-• Maintain confidentiality where possible
-
-Common Types of Grievances:
-• Workplace harassment or bullying
-• Discrimination
-• Unfair treatment
-• Breach of employment agreement
-• Health and safety concerns
-• Pay or entitlements disputes
-
-Your Rights:
- Raise concerns without fear of retaliation
-Have a support person present in meetings
- Receive a fair and timely response
- Escalate to mediation if unresolved
- Seek advice from Employment New Zealand
-
-For more information, visit: www.employment.govt.nz
-
-All grievances submitted through this system are treated as confidential and will be handled in accordance with your employment agreement and New Zealand employment law.";
+            var infoMessage = "What is a Grievance in New Zealand?\n\n" +
+                "A grievance is a formal concern or complaint raised by an employee about their employment. " +
+                "Under New Zealand employment law, employers must:\n\n" +
+                "Key Points:\n" +
+                "- Have a fair and reasonable process for handling grievances\n" +
+                "- Act in good faith when addressing employee concerns\n" +
+                "- Follow natural justice principles\n" +
+                "- Maintain confidentiality where possible\n\n" +
+                "Common Types of Grievances:\n" +
+                "- Workplace harassment or bullying\n" +
+                "- Discrimination\n" +
+                "- Unfair treatment\n" +
+                "- Breach of employment agreement\n" +
+                "- Health and safety concerns\n" +
+                "- Pay or entitlements disputes\n\n" +
+                "Your Rights:\n" +
+                "- Raise concerns without fear of retaliation\n" +
+                "- Have a support person present in meetings\n" +
+                "- Receive a fair and timely response\n" +
+                "- Escalate to mediation if unresolved\n" +
+                "- Seek advice from Employment New Zealand\n\n" +
+                "For more information, visit: www.employment.govt.nz\n\n" +
+                "All grievances submitted through this system are treated as confidential and will be handled " +
+                "in accordance with your employment agreement and New Zealand employment law.";
 
             MessageBox.Show(
                 infoMessage,
@@ -501,6 +496,42 @@ All grievances submitted through this system are treated as confidential and wil
                 "Upload Notes",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+        }
+
+        // Double-click on Admin grievances grid to view full details
+        private void AllGrievancesGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (AllGrievancesGrid.SelectedItem is Grievance selectedGrievance)
+            {
+                // Build detailed message
+                var details = new StringBuilder();
+                details.AppendLine("Grievance ID: " + selectedGrievance.Id);
+                details.AppendLine("Employee: " + (selectedGrievance.Employee?.FullName ?? "Unknown"));
+                details.AppendLine("Type: " + selectedGrievance.GrievanceType);
+                details.AppendLine("Title: " + selectedGrievance.Title);
+                details.AppendLine("Incident Date(s): " + selectedGrievance.IncidentDates);
+                details.AppendLine("Submitted: " + selectedGrievance.RequestDate.ToString("dd/MM/yyyy"));
+                details.AppendLine("Status: " + selectedGrievance.Status);
+                details.AppendLine();
+                details.AppendLine("DESCRIPTION:");
+                details.AppendLine(new string('-', 50));
+                details.AppendLine(selectedGrievance.Description ?? "No description provided.");
+
+                if (!string.IsNullOrWhiteSpace(selectedGrievance.AdminResponse))
+                {
+                    details.AppendLine();
+                    details.AppendLine("ADMIN RESPONSE:");
+                    details.AppendLine(new string('-', 50));
+                    details.AppendLine(selectedGrievance.AdminResponse);
+                }
+
+                // Show in message box
+                MessageBox.Show(
+                    details.ToString(),
+                    "Grievance Details - " + selectedGrievance.Title,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
         }
     }
 }
