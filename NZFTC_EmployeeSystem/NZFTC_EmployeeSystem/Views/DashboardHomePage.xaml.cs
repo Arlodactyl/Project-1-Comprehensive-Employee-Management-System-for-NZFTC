@@ -208,9 +208,41 @@ namespace NZFTC_EmployeeSystem.Views
         // Below loads statistics from database
         private void LoadSummary()
         {
+            // Total Employees - shown to all users
             TotalEmployeesText.Text = _dbContext.Employees.Count().ToString();
-            PendingLeaveText.Text = _dbContext.LeaveRequests.Count(l => l.Status == "Pending").ToString();
-            OpenGrievanceText.Text = _dbContext.Grievances.Count(g => g.Status == "Open").ToString();
+
+            // For Employees - show only their own requests
+            if (_currentUser.Role == "Employee")
+            {
+                // Update labels to be personal
+                LeaveRequestsLabel.Text = "My Leave Requests";
+                GrievancesLabel.Text = "My Grievances";
+
+                // Filter by current employee's ID only
+                PendingLeaveText.Text = _dbContext.LeaveRequests
+                    .Count(l => l.EmployeeId == _currentUser.EmployeeId && l.Status == "Pending")
+                    .ToString();
+
+                OpenGrievanceText.Text = _dbContext.Grievances
+                    .Count(g => g.EmployeeId == _currentUser.EmployeeId && g.Status == "Open")
+                    .ToString();
+            }
+            // For Admin/Trainer - show all pending requests (company-wide)
+            else
+            {
+                // Keep original labels for admins
+                LeaveRequestsLabel.Text = "Pending Leave Requests";
+                GrievancesLabel.Text = "Open Grievances";
+
+                // Show all requests across all employees
+                PendingLeaveText.Text = _dbContext.LeaveRequests
+                    .Count(l => l.Status == "Pending")
+                    .ToString();
+
+                OpenGrievanceText.Text = _dbContext.Grievances
+                    .Count(g => g.Status == "Open")
+                    .ToString();
+            }
         }
 
         // Below loads live weather data from Open-Meteo API free

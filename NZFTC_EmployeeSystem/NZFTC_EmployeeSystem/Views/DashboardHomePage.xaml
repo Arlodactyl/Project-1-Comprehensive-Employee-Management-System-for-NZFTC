@@ -269,7 +269,8 @@
                             Background="#EC7063" 
                             Style="{StaticResource StatCard}">
                         <StackPanel>
-                            <TextBlock Text="Pending Leave Requests" 
+                            <TextBlock x:Name="LeaveRequestsLabel"
+                                       Text="Pending Leave Requests" 
                                        Style="{StaticResource StatLabel}"/>
                             <TextBlock x:Name="PendingLeaveText"
                                        Text="0" 
@@ -283,7 +284,8 @@
                             Style="{StaticResource StatCard}"
                             Margin="0">
                         <StackPanel>
-                            <TextBlock Text="Open Grievances" 
+                            <TextBlock x:Name="GrievancesLabel"
+                                       Text="Open Grievances" 
                                        Style="{StaticResource StatLabel}"/>
                             <TextBlock x:Name="OpenGrievanceText"
                                        Text="0" 
