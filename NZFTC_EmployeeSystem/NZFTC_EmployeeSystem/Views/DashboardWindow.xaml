@@ -620,11 +620,11 @@
                 <!-- Logo at Bottom of Sidebar -->
                 <StackPanel x:Name="LogoPanel" 
                             Grid.Row="2" 
-                            Margin="20,0,20,30" 
+                            Margin="20,0,20,20" 
                             HorizontalAlignment="Center">
                     <Image Source="/Images/logo.png" 
-                           Height="150" 
-                           Width="220"
+                           Height="90" 
+                           Width="140"
                            Stretch="Uniform"
                            Opacity="0.8"/>
                 </StackPanel>

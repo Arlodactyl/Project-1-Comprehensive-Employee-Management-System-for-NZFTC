@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-    
+
     public partial class DashboardWindow : Window
     {
         // The currently logged-in user
@@ -20,9 +20,9 @@ namespace NZFTC_EmployeeSystem.Views
         // Tracks whether the sidebar menu is collapsed (true) or expanded (false)
         private bool _isMenuCollapsed = false;
 
-     
+
         /// Constructor - initializes the dashboard with user-specific navigation
-       
+
         /// <param name="currentUser">The logged-in user</param>
         public DashboardWindow(User currentUser)
         {
@@ -42,7 +42,7 @@ namespace NZFTC_EmployeeSystem.Views
             ContentFrame.Navigate(new DashboardHomePage(_currentUser));
         }
 
-       
+
         private void CustomizeMenuForRole()
         {
             // ADMIN - Full access to all features
@@ -103,7 +103,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-  
+
         private void LoadUserProfilePicture()
         {
             try
@@ -209,16 +209,16 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-      
+
         public void RefreshUserAvatar()
         {
             LoadUserProfilePicture();
         }
 
-        
+
         /// Constructs the full file path to the profile picture
         /// Looks in the ProfilePictures folder in the project root
-        
+
         private string GetProfilePicturePath(string fileName)
         {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -229,7 +229,7 @@ namespace NZFTC_EmployeeSystem.Views
 
         /// Updates all menu buttons to show which page is currently active
         /// Sets Tag="Active" on the current page button to apply grey background
-      
+
         private void SetActiveButton(string buttonName)
         {
             // Clear all button active states first
@@ -451,6 +451,9 @@ namespace NZFTC_EmployeeSystem.Views
                 GrievancesButtonExpanded.Visibility = Visibility.Visible;
                 GrievancesButtonCollapsed.Visibility = Visibility.Collapsed;
             }
+
+            // Show logo when menu is expanded
+            LogoPanel.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -523,6 +526,9 @@ namespace NZFTC_EmployeeSystem.Views
                 GrievancesButtonExpanded.Visibility = Visibility.Collapsed;
                 GrievancesButtonCollapsed.Visibility = Visibility.Visible;
             }
+
+            // Hide logo when menu is collapsed
+            LogoPanel.Visibility = Visibility.Collapsed;
         }
 
         #endregion
@@ -857,9 +863,9 @@ namespace NZFTC_EmployeeSystem.Views
 
         #endregion
 
-       
+
         /// Logs out the current user and returns to login screen
-       
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             var loginWindow = new LoginWindow();
