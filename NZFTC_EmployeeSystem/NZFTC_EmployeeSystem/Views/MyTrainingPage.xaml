@@ -167,7 +167,7 @@
                                    FontWeight="SemiBold" 
                                    Foreground="#2C3E50"
                                    Margin="0,0,0,5"/>
-                        <TextBlock Text="Here you can view all your training records, completion status, and who signed them off." 
+                        <TextBlock Text="Here you can view all your training records, mark them as complete when finished, and track your completion status." 
                                    FontSize="13" 
                                    Foreground="#7F8C8D"
                                    TextWrapping="Wrap"/>
@@ -250,7 +250,7 @@
                            Foreground="#2C3E50"
                            Margin="0,0,0,5"/>
 
-                <TextBlock Text="View all your training records below. You can search by training type or export your training history." 
+                <TextBlock Text="View all your training records below. Click 'Mark Complete' when you finish a training to notify your supervisor for sign-off." 
                            FontSize="12" 
                            Foreground="#7F8C8D"
                            TextWrapping="Wrap"
@@ -296,36 +296,84 @@
                           MouseDoubleClick="TrainingGrid_MouseDoubleClick">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                        <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="200"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
-                        <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="130"/>
-                        <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="150"/>
+                        <DataGridTextColumn Header="Training Type" Binding="{Binding TrainingType}" Width="180"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110"/>
+                        <DataGridTextColumn Header="Completed Date" Binding="{Binding CompletedDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                        <DataGridTextColumn Header="Signed Off By" Binding="{Binding SignedOffByUser.Username}" Width="130"/>
                         <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="*"/>
+
+                        <!-- Action Button Column -->
+                        <DataGridTemplateColumn Header="Action" Width="140">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Mark Complete" 
+                                            Background="#F39C12"
+                                            Foreground="White"
+                                            FontSize="12"
+                                            FontWeight="SemiBold"
+                                            Padding="8,4"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            Click="MarkComplete_Click"
+                                            Tag="{Binding}"
+                                            ToolTip="Mark this training as complete for admin review">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" 
+                                                                    CornerRadius="4"
+                                                                    Padding="{TemplateBinding Padding}">
+                                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                                VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#D68910"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Background" Value="#95A5A6"/>
+                                                        <Setter Property="Foreground" Value="#ECF0F1"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
 
                 <!-- Info Panel -->
-                <Border Background="#D5F4E6" 
-                        BorderBrush="#27AE60" 
+                <Border Background="#FFF3CD" 
+                        BorderBrush="#F39C12" 
                         BorderThickness="1"
                         Padding="15" 
                         CornerRadius="5">
                     <StackPanel>
-                        <TextBlock Text="Training Information" 
+                        <TextBlock Text="📋 How to Mark Training Complete" 
                                    FontSize="14" 
                                    FontWeight="SemiBold" 
-                                   Foreground="#27AE60"
+                                   Foreground="#2C3E50"
                                    Margin="0,0,0,8"/>
                         <TextBlock FontSize="12" 
                                    Foreground="#2C3E50"
                                    TextWrapping="Wrap">
-                            <Run Text="• Double-click on any training record to view full details"/>
+                            <Run Text="• When you finish a training, click 'Mark Complete' next to that training"/>
                             <LineBreak/>
-                            <Run Text="• Training is managed by your supervisor or workplace trainer"/>
+                            <Run Text="• The status will change to 'In Progress' (pending supervisor review)"/>
                             <LineBreak/>
-                            <Run Text="• Completed training will show the completion date and who signed it off"/>
+                            <Run Text="• Your supervisor or trainer will verify and officially sign it off"/>
                             <LineBreak/>
-                            <Run Text="• If you have questions about your training, contact your manager"/>
+                            <Run Text="• Once signed off, the status will show 'Completed' with the date and approver's name"/>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run Text="💡 Tip: Double-click any row to view full training details" FontStyle="Italic"/>
                         </TextBlock>
                     </StackPanel>
                 </Border>

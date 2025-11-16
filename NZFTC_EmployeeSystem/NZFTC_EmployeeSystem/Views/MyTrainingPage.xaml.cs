@@ -11,11 +11,11 @@ using System.Windows.Input;
 
 namespace NZFTC_EmployeeSystem.Views
 {
-   
+
     /// My Training Page - Shows ONLY the logged-in employee's training records
     /// This is a read-only view for employees to track their training progress
     /// Employees cannot add or edit training - only view their records
- 
+
     public partial class MyTrainingPage : Page
     {
         // The currently logged-in user
@@ -39,10 +39,10 @@ namespace NZFTC_EmployeeSystem.Views
             LoadMyTraining();
         }
 
-      
+
         /// Loads all training records for the current logged-in employee
         /// Filters by EmployeeId to show only their training
-       
+
         private void LoadMyTraining()
         {
             try
@@ -102,6 +102,109 @@ namespace NZFTC_EmployeeSystem.Views
         }
 
         /// <summary>
+        /// Allows employee to mark training as complete (sets status to "In Progress" for admin review)
+        /// </summary>
+        private void MarkComplete_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the training record from the button's Tag (which is bound to the DataContext)
+            var button = sender as Button;
+            var training = button?.Tag as Training;
+
+            if (training == null)
+            {
+                MessageBox.Show(
+                    "Could not find the training record.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+                return;
+            }
+
+            // Check if already completed
+            if (training.Status == "Completed")
+            {
+                MessageBox.Show(
+                    "This training is already completed and signed off.\n\n" +
+                    $"Signed off by: {training.SignedOffByUser?.Username ?? "Unknown"}\n" +
+                    $"Date: {training.CompletedDate?.ToString("dd/MM/yyyy") ?? "N/A"}",
+                    "Already Completed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            // Check if already in progress
+            if (training.Status == "In Progress")
+            {
+                MessageBox.Show(
+                    "This training is already marked as pending supervisor review.\n\n" +
+                    "Your supervisor or trainer will sign it off once they verify completion.",
+                    "Already Pending",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+                return;
+            }
+
+            // Confirm with the employee
+            var result = MessageBox.Show(
+                $"Are you sure you have completed the following training?\n\n" +
+                $"Training Type: {training.TrainingType}\n\n" +
+                "This will notify your supervisor for review and sign-off.",
+                "Confirm Training Completion",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
+            );
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    // Find the training record in the database
+                    var dbTraining = db.Trainings.Find(training.Id);
+
+                    if (dbTraining != null)
+                    {
+                        // Update status to "In Progress" (pending admin/trainer sign-off)
+                        dbTraining.Status = "In Progress";
+
+                        // Save changes to database
+                        db.SaveChanges();
+                    }
+                }
+
+                MessageBox.Show(
+                    "Training marked as complete! ✓\n\n" +
+                    "Status: In Progress (Pending supervisor review)\n\n" +
+                    "Your supervisor or workplace trainer will verify and officially sign off this training.",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+
+                // Reload the training records to reflect the updated status
+                LoadMyTraining();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error updating training status: {ex.Message}\n\n" +
+                    "Please try again or contact your supervisor.",
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        /// <summary>
         /// Search functionality - filters training records as the user types
         /// Searches by training type
         /// </summary>
@@ -137,7 +240,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        
+
         private void TrainingGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // Get the selected training record
@@ -242,117 +345,59 @@ namespace NZFTC_EmployeeSystem.Views
 
 HOW TO USE THIS PAGE:
 
+Mark Training Complete:
+• Click 'Mark Complete' next to any training you've finished
+• This sets the status to 'In Progress' (pending review)
+• Your supervisor will verify and officially sign it off
+• Once signed off, it shows as 'Completed' with date
+
 View Training Records:
 • This page shows all training assigned to you
-• Training is read-only (managed by your supervisor)
 • Summary cards show your progress at a glance
-
-Understanding the Summary:
-• Total Training: All courses assigned to you
-• Completed: Training you've finished
-• Pending: Not Started or In Progress
-
-Using the Training Grid:
-• Double-click any row for full details
 • Use search box to filter by training type
-• Click 'Export My Training' to save as CSV
+• Double-click any row for full details
+
+Understanding Status:
+• Not Started: Training assigned but not begun
+• In Progress: You marked it complete, awaiting sign-off
+• Completed: Officially signed off by supervisor
 
 ═══════════════════════════════════════
 
-WHAT IS WORKPLACE TRAINING?
+TRAINING WORKFLOW:
 
-Training refers to organized learning activities that help you develop job skills, meet safety requirements, and comply with regulations. Under New Zealand employment law:
+Step 1: Complete Your Training
+• Finish all required training activities
+• Make sure you understand the material
 
-Your Rights:
-• Access to necessary training for your role
-• Paid time during work hours for mandatory training
-• Training records kept confidential
-• Recognition of completed training
+Step 2: Mark as Complete
+• Click 'Mark Complete' button
+• Confirms you finished the training
 
-Your Responsibilities:
-• Complete assigned training on time
-• Attend scheduled training sessions
-• Apply what you learn in your work
-• Notify supervisor if you have questions
+Step 3: Supervisor Review
+• Your supervisor/trainer verifies completion
+• They officially sign off the training
 
-═══════════════════════════════════════
-
-TRAINING STATUS TYPES:
-
-Not Started:
-Training has been assigned but you haven't begun yet. Check with your supervisor about when to start.
-
-In Progress:
-You are currently working on this training. Continue until completion and ensure it's signed off.
-
-Completed:
-Training is finished and has been signed off by your supervisor or trainer. This creates an official record.
+Step 4: Training Completed
+• Status changes to 'Completed'
+• Completion date and approver recorded
+• Becomes part of your official record
 
 ═══════════════════════════════════════
 
-UNDERSTANDING SIGN-OFF:
+IMPORTANT NOTES:
 
-What is Sign-Off?
-When you complete training, your supervisor reviews and verifies completion. This is called 'signing off' the training.
+Self-Certification:
+When you click 'Mark Complete', you're certifying that you have genuinely completed the training. This is an important responsibility.
 
-Why It Matters:
-• Creates official record of your qualifications
-• Proves you met legal or regulatory requirements
-• Documents your professional development
-• May be required for promotions or new roles
+Cannot Undo:
+Once you mark training complete, you cannot change it back. Make sure you've actually finished before clicking.
 
-Who Signs Off:
-Training is typically signed off by your direct supervisor, workplace trainer, or training coordinator. Their name appears in the 'Signed Off By' column.
+Supervisor Approval:
+Final sign-off is done by supervisors/trainers to ensure quality and create official records.
 
-═══════════════════════════════════════
-
-TYPES OF WORKPLACE TRAINING:
-
-Health & Safety Training:
-Required for workplace safety. Examples: First Aid, Fire Safety, Manual Handling, PPE Use
-
-Compliance Training:
-Legal or regulatory requirements for your role. Examples: Privacy, Security, Industry Regulations
-
-Skills Development:
-Job-specific capabilities. Examples: Software Training, Equipment Operation, Customer Service
-
-Professional Development:
-Career advancement opportunities. Examples: Leadership, Communication, Time Management
-
-═══════════════════════════════════════
-
-WHY TRAINING MATTERS:
-
-Safety:
-Ensures you can perform your job safely without risk to yourself or others
-
-Legal Compliance:
-Some roles require specific training by law (e.g., forklift operation, food handling)
-
-Job Performance:
-Helps you work more effectively and efficiently
-
-Career Growth:
-Demonstrates your commitment to professional development and can lead to promotions
-
-Industry Standards:
-Keeps you current with best practices and new technologies
-
-═══════════════════════════════════════
-
-EXPORTING YOUR RECORDS:
-
-How to Export:
-1. Click 'Export My Training' button
-2. File saves automatically to your Downloads folder
-3. Opens as CSV file in Excel or any spreadsheet program
-
-Why Export:
-• Keep personal records for your portfolio
-• Provide proof of training for job applications
-• Track your professional development over time
-• Have backup copies for your own files
+Export Records:
+Click 'Export My Training' to save a CSV file of all your training for your personal records.
 
 ═══════════════════════════════════════
 
@@ -361,32 +406,12 @@ NEED HELP?
 Training Questions:
 • Contact your direct supervisor
 • Speak to your training coordinator
-• Ask HR about training opportunities
+• Ask HR about training requirements
 
-Cannot Access Training:
-• Report technical issues to IT support
-• Inform supervisor if materials unavailable
-• Request alternative training if needed
-
-Training Not Showing:
-• Allow time for supervisor to assign training
-• Check with HR if training seems missing
-• Ensure you're viewing the correct period
-
-═══════════════════════════════════════
-
-IMPORTANT NOTES:
-
-This is a View-Only Page:
-You cannot add, edit, or delete training records. Only supervisors and training coordinators can manage training assignments.
-
-Training is Automatic:
-New training automatically appears when assigned by your supervisor. You'll be notified when new training is available.
-
-Contact Your Supervisor:
-If you have questions about specific training, when to complete it, or how to access materials, contact your direct supervisor or training coordinator.
-
-═══════════════════════════════════════
+Technical Issues:
+• Report problems to IT support
+• Contact HR if training not showing
+• Ensure you're viewing correct page
 
 Questions? Contact your supervisor or HR department.";
 
