@@ -121,6 +121,7 @@ namespace NZFTC_EmployeeSystem.Views
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(packUri, UriKind.Absolute);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                // REMOVED: bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 bitmap.EndInit();
                 bitmap.Freeze(); // Freeze for better performance
 
@@ -301,6 +302,9 @@ namespace NZFTC_EmployeeSystem.Views
                                 "Success",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
+
+                            // Force refresh after message box (in case focus changed things)
+                            LoadProfilePicture(newPath);
                         }
                         else
                         {
@@ -440,6 +444,9 @@ namespace NZFTC_EmployeeSystem.Views
                         "Success",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
+
+                    // Force refresh after message box
+                    LoadProfilePicture(newFileName);
                 }
             }
             catch (Exception ex)

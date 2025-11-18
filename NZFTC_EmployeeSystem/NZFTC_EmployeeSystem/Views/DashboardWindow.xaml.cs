@@ -132,13 +132,13 @@ namespace NZFTC_EmployeeSystem.Views
                             {
                                 try
                                 {
-                                    // Load image file into bitmap with cache busting
+                                    // Load image file into bitmap
                                     using (var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                                     {
                                         var bitmap = new BitmapImage();
                                         bitmap.BeginInit();
                                         bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                                        bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                                        // REMOVED: bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                                         bitmap.StreamSource = stream;
                                         bitmap.EndInit();
                                         bitmap.Freeze();
@@ -149,9 +149,11 @@ namespace NZFTC_EmployeeSystem.Views
                                         DefaultUserAvatar.Visibility = Visibility.Collapsed;
                                     }
                                 }
-                                catch
+                                catch (Exception ex)
                                 {
+                                    System.Diagnostics.Debug.WriteLine($"Error loading dashboard custom picture: {ex.Message}");
                                     // If image fails to load, show default avatar
+                                    UserProfilePicture.Source = null;
                                     UserProfilePicture.Visibility = Visibility.Collapsed;
                                     DefaultUserAvatar.Visibility = Visibility.Visible;
                                 }
@@ -159,6 +161,7 @@ namespace NZFTC_EmployeeSystem.Views
                             else
                             {
                                 // File doesn't exist, show default
+                                UserProfilePicture.Source = null;
                                 UserProfilePicture.Visibility = Visibility.Collapsed;
                                 DefaultUserAvatar.Visibility = Visibility.Visible;
                             }
@@ -167,14 +170,17 @@ namespace NZFTC_EmployeeSystem.Views
                     else
                     {
                         // No picture set, show default
+                        UserProfilePicture.Source = null;
                         UserProfilePicture.Visibility = Visibility.Collapsed;
                         DefaultUserAvatar.Visibility = Visibility.Visible;
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Error in LoadUserProfilePicture: {ex.Message}");
                 // If any error occurs, show default avatar
+                UserProfilePicture.Source = null;
                 UserProfilePicture.Visibility = Visibility.Collapsed;
                 DefaultUserAvatar.Visibility = Visibility.Visible;
             }
@@ -187,23 +193,32 @@ namespace NZFTC_EmployeeSystem.Views
         {
             try
             {
+                // Clear previous image
+                UserProfilePicture.Source = null;
+
                 string actualFileName = avatarFileName.Replace("avatar_", "");
                 string packUri = $"pack://application:,,,/Images/{actualFileName}";
+
+                System.Diagnostics.Debug.WriteLine($"Loading dashboard avatar: {actualFileName}");
 
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(packUri, UriKind.Absolute);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                // REMOVED: bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 bitmap.EndInit();
                 bitmap.Freeze();
 
                 UserProfilePicture.Source = bitmap;
                 UserProfilePicture.Visibility = Visibility.Visible;
                 DefaultUserAvatar.Visibility = Visibility.Collapsed;
+
+                System.Diagnostics.Debug.WriteLine($"Dashboard avatar loaded successfully");
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Error loading dashboard avatar: {ex.Message}");
+                UserProfilePicture.Source = null;
                 UserProfilePicture.Visibility = Visibility.Collapsed;
                 DefaultUserAvatar.Visibility = Visibility.Visible;
             }
@@ -690,11 +705,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Navigates to Employee Management page
-        /// Manages all employees and their training
-        /// Available to Admin and Workplace Trainer
-        /// </summary>
+        
         private void ManageEmployees_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -709,11 +720,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Navigates to Departments page
-        /// Manages company departments
-        /// Available to Admin and Workplace Trainer
-        /// </summary>
+
         private void Departments_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -728,11 +735,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Navigates to Payroll page (full admin access)
-        /// Manages all employee payslips
-        /// Available to Admin only
-        /// </summary>
+   
         private void Payroll_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -747,11 +750,6 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Navigates to Leave Management page
-        /// Manages all employee leave requests
-        /// Available to Admin only
-        /// </summary>
         private void LeaveManagement_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -766,11 +764,6 @@ namespace NZFTC_EmployeeSystem.Views
             }
         }
 
-        /// <summary>
-        /// Navigates to Grievances page
-        /// Manages employee grievances
-        /// Available to Admin only
-        /// </summary>
         private void Grievances_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -789,73 +782,49 @@ namespace NZFTC_EmployeeSystem.Views
 
         #region Public Navigation Methods for Quick Links
 
-        /// <summary>
-        /// Public method to navigate to Leave Management
-        /// Called by DashboardHomePage quick links
-        /// </summary>
+        
         public void NavigateToLeaveManagement()
         {
             LeaveManagement_Click(this, new RoutedEventArgs());
         }
 
-        /// <summary>
-        /// Public method to navigate to Leave
-        /// Called by DashboardHomePage quick links for employees
-        /// </summary>
+       
         public void NavigateToLeave()
         {
             Leave_Click(this, new RoutedEventArgs());
         }
 
-        /// <summary>
-        /// Public method to navigate to Grievance
-        /// Called by DashboardHomePage quick links for employees
-        /// </summary>
+        
         public void NavigateToGrievance()
         {
             Grievance_Click(this, new RoutedEventArgs());
         }
 
-        /// <summary>
-        /// Public method to navigate to Payroll
-        /// Called by DashboardHomePage quick links
-        /// </summary>
+      
         public void NavigateToPayroll()
         {
             Payroll_Click(this, new RoutedEventArgs());
         }
 
-        /// <summary>
-        /// Public method to navigate to Departments
-        /// Called by DashboardHomePage quick links
-        /// </summary>
+       
         public void NavigateToDepartments()
         {
             Departments_Click(this, new RoutedEventArgs());
         }
 
-        /// <summary>
-        /// Public method to navigate to My Pay
-        /// Called by DashboardHomePage quick links for employees
-        /// </summary>
+       
         public void NavigateToMyPay()
         {
             MyPay_Click(this, new RoutedEventArgs());
         }
 
-        /// <summary>
-        /// Public method to navigate to My Training
-        /// Called by DashboardHomePage quick links for employees
-        /// </summary>
+        
         public void NavigateToMyTraining()
         {
             MyTraining_Click(this, new RoutedEventArgs());
         }
 
-        /// <summary>
-        /// Public method to navigate to Employee Management
-        /// Called by DashboardHomePage quick links for trainers
-        /// </summary>
+       
         public void NavigateToEmployeeManagement()
         {
             ManageEmployees_Click(this, new RoutedEventArgs());
