@@ -9,7 +9,7 @@ using System.Windows.Controls;
 namespace NZFTC_EmployeeSystem.Views
 {
 
-    /// This page displays a list of company holidays with countdown timers.
+    /// This page displays a list of company holidays 
 
     public partial class HolidaysPage : Page
     {
@@ -146,8 +146,7 @@ namespace NZFTC_EmployeeSystem.Views
                         DaysUntil = CalculateCountdown(h.Date)
                     }).ToList();
 
-                    // For admin grid: filter out passed holidays
-                    // For employee grid: show all holidays
+               
                     var displayHolidays = _allHolidays;
 
                     if (_currentUser.Role == "Admin")

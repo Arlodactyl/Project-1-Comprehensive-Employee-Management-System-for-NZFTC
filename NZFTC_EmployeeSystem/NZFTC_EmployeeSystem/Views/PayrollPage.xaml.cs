@@ -38,7 +38,7 @@ namespace NZFTC_EmployeeSystem.Views
                     // Start on My Payslips tab for employees (which is now index 1, but will be 0 after hiding All Payslips)
                     PayrollTabControl.SelectedItem = MyPayslipsTab;
 
-                    // ENHANCEMENT: Auto-generate missing payslips for this employee
+                    
                     AutoGenerateMissingPayslips();
                 }
                 else
@@ -155,7 +155,7 @@ namespace NZFTC_EmployeeSystem.Views
             }
             catch (Exception ex)
             {
-                // Silent fail - inform but don't block page load
+                
                 MessageBox.Show(
                     $"Note: Unable to auto-generate payslips.\n{ex.Message}",
                     "Payroll Notice",
