@@ -462,6 +462,57 @@
                                     </StackPanel>
                                 </Grid>
 
+                                <!-- Password Change Section (Admin Only) -->
+                                <Border x:Name="PasswordChangeBorder"
+                                        BorderBrush="#E8DAEF" 
+                                        BorderThickness="2" 
+                                        Padding="15" 
+                                        Background="#FAF7FB"
+                                        CornerRadius="5"
+                                        Margin="0,15,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Change Employee Password (Admin Only)" 
+                                                   FontSize="14" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#6C3483"
+                                                   Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Leave blank to keep current password" 
+                                                   FontSize="11" 
+                                                   Foreground="#7F8C8D"
+                                                   FontStyle="Italic"
+                                                   Margin="0,0,0,10"/>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="New Password" FontSize="12" Margin="0,0,0,3"/>
+                                                <PasswordBox x:Name="EditPasswordBox" 
+                                                             Height="32" 
+                                                             Padding="8,5"
+                                                             FontSize="13"
+                                                             BorderBrush="#BDC3C7"
+                                                             BorderThickness="1"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="Confirm New Password" FontSize="12" Margin="0,0,0,3"/>
+                                                <PasswordBox x:Name="EditConfirmPasswordBox" 
+                                                             Height="32" 
+                                                             Padding="8,5"
+                                                             FontSize="13"
+                                                             BorderBrush="#BDC3C7"
+                                                             BorderThickness="1"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+
                                 <!-- Save and Cancel Buttons -->
                                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                     <Button Content="Save Changes" 

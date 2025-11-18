@@ -419,6 +419,20 @@ namespace NZFTC_EmployeeSystem.Views
                     EditSickLeaveTextBox.Text = _editingEmployee.SickLeaveBalance.ToString();
                     EditIsActiveCheckBox.IsChecked = _editingEmployee.IsActive;
 
+                    // Clear password fields
+                    EditPasswordBox.Clear();
+                    EditConfirmPasswordBox.Clear();
+
+                    // Show/hide password section based on role
+                    if (_currentUser.Role == "Admin")
+                    {
+                        PasswordChangeBorder.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        PasswordChangeBorder.Visibility = Visibility.Collapsed;
+                    }
+
                     if (_editingEmployee.Department != null)
                     {
                         EditDepartmentComboBox.SelectedValue = _editingEmployee.DepartmentId;
@@ -561,6 +575,59 @@ namespace NZFTC_EmployeeSystem.Views
                 return;
             }
 
+            // Validate password change if admin is changing it
+            string newPassword = EditPasswordBox.Password;
+            string confirmPassword = EditConfirmPasswordBox.Password;
+
+            if (!string.IsNullOrWhiteSpace(newPassword) || !string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                // Only admin can change passwords
+                if (_currentUser.Role != "Admin")
+                {
+                    MessageBox.Show(
+                        "Only administrators can change employee passwords.",
+                        "Access Denied",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
+
+                // Validate password fields
+                if (string.IsNullOrWhiteSpace(newPassword))
+                {
+                    MessageBox.Show(
+                        "Please enter a new password.",
+                        "Validation Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
+
+                if (newPassword != confirmPassword)
+                {
+                    MessageBox.Show(
+                        "Passwords do not match. Please try again.",
+                        "Validation Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
+
+                if (newPassword.Length < 6)
+                {
+                    MessageBox.Show(
+                        "Password must be at least 6 characters long.",
+                        "Validation Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
+            }
+
             try
             {
                 using (var db = new AppDbContext())
@@ -606,6 +673,17 @@ namespace NZFTC_EmployeeSystem.Views
                     employee.IsActive = EditIsActiveCheckBox.IsChecked ?? true;
 
                     db.SaveChanges();
+
+                    // Update password if admin provided a new one
+                    if (!string.IsNullOrWhiteSpace(newPassword) && _currentUser.Role == "Admin")
+                    {
+                        var user = db.Users.FirstOrDefault(u => u.EmployeeId == employee.Id);
+                        if (user != null)
+                        {
+                            user.Password = PasswordHasher.HashPassword(newPassword);
+                            db.SaveChanges();
+                        }
+                    }
                 }
 
                 MessageBox.Show(

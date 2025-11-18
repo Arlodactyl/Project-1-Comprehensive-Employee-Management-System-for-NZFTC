@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\program\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj": {}
+    "C:\\Users\\64204\\Desktop\\project final\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj": {}
   },
   "projects": {
-    "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\program\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj": {
+    "C:\\Users\\64204\\Desktop\\project final\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\program\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+        "projectUniqueName": "C:\\Users\\64204\\Desktop\\project final\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
         "projectName": "NZFTC_EmployeeSystem",
-        "projectPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\program\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
-        "packagesPath": "D:\\Users\\270063836\\.nuget\\packages\\",
-        "outputPath": "D:\\Users\\270063836\\OneDrive - UP Education\\Desktop\\program\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
+        "projectPath": "C:\\Users\\64204\\Desktop\\project final\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem.csproj",
+        "packagesPath": "C:\\Users\\64204\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\64204\\Desktop\\project final\\Project-1-Comprehensive-Employee-Management-System-for-NZFTC\\NZFTC_EmployeeSystem\\NZFTC_EmployeeSystem\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "D:\\Users\\270063836\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\64204\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -107,12 +107,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.Net.Sdk.Compilers.Toolset",
-              "version": "[9.0.307, 9.0.307]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -121,7 +115,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

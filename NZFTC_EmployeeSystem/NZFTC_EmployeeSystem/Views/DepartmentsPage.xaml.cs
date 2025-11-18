@@ -26,7 +26,7 @@ namespace NZFTC_EmployeeSystem.Views
             InitializeComponent();
             _currentUser = currentUser;
 
-            if (_currentUser.Role != "Admin" && _currentUser.Role != "Trainer")
+            if (_currentUser.Role != "Admin" && _currentUser.Role != "Workplace Trainer")
             {
                 MessageBox.Show(
                     "You do not have permission to access Department Management.",
